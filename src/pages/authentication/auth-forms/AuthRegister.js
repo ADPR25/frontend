@@ -48,6 +48,9 @@ const AuthRegister = () => {
 
   const [alertOpen, setAlertOpen] = useState(false);
 
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
   useEffect(() => {
     async function fetchRolData() {
       try {
@@ -99,10 +102,26 @@ const AuthRegister = () => {
     }
   };
 
+  const isEmailValid = (email) => {
+    const emailRegex = /@soy\.sena\.edu\.co$|@sena\.edu\.co$|@misena\.edu\.co$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+    if (!isEmailValid(usuario.correo_sena)) {
+      setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
+      return;
+    } else {
+      setEmailError('');
+    }
+
+
     try {
       await createusuariorequest(usuario);
+      setAlertOpen(true);
       setusuario({
         nombre: '',
         apellido: '',
@@ -124,6 +143,25 @@ const AuthRegister = () => {
       console.error('Error al crear usuario:', error);
     }
   };
+
+  const handleEmailBlur = () => {
+    // Verificar si el correo es válido
+    if (!isEmailValid(usuario.correo_sena)) {
+      setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const hadlepassword_confirm = () => {
+    if (usuario.password !== passwordConfirmation) {
+      setPasswordError('Las contraseñas no coinciden.');
+      return;
+    } else {
+      setPasswordError('');
+    }
+  };
+
 
   const genero = [
     { value: 'seleccion', label: 'Seleccione' },
@@ -269,8 +307,10 @@ const AuthRegister = () => {
                 fullWidth
                 value={usuario.correo_sena}
                 onChange={handleChange}
+                onBlur={handleEmailBlur} // Agrega el evento onBlur aquí
               />
             </Stack>
+            <p style={{ color: 'red' }}>{emailError}</p>
           </Grid>
 
           <Grid item xs={12} md={12}>
@@ -322,7 +362,7 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="numero_telefono">Numero de telefono</InputLabel>
+              <InputLabel htmlFor="telefono">Numero de telefono</InputLabel>
               <OutlinedInput
                 id="telefono"
                 type="text"
@@ -371,6 +411,7 @@ const AuthRegister = () => {
                 value={passwordConfirmation}
                 name="confirm_password"
                 onChange={(event) => setPasswordConfirmation(event.target.value)}
+                onBlur={hadlepassword_confirm}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -386,6 +427,7 @@ const AuthRegister = () => {
                 placeholder="Confirme su contraseña"
               />
             </Stack>
+            <p style={{ color: 'red' }}>{passwordError}</p>
           </Grid>
 
           <Grid item xs={12} md={12}>
@@ -450,7 +492,7 @@ const AuthRegister = () => {
         open={alertOpen}
         autoHideDuration={6000}
         onClose={() => setAlertOpen(false)}
-        message={usuario.password !== passwordConfirmation ? "Las contraseñas no coinciden." : "Usuario registrado con éxito."}
+        message={usuario.password !== passwordConfirmation ? 'Las contraseñas no coinciden.' : 'Usuario registrado con éxito.'}
         action={
           <IconButton
             size="small"
