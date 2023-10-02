@@ -100,7 +100,6 @@ const AuthRegister = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(usuario);
     e.preventDefault();
     try {
       await createusuariorequest(usuario);
