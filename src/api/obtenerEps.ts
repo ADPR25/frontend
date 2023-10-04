@@ -1,23 +1,17 @@
-const EPS_API = 'http://localhost:4000/eps';
+export async function obtenerEPS() {
+    const url = 'https://proyecto-backend-sgbienestar.onrender.com/eps'
 
-export const buscarEps = async () => {
     try {
-        const response = await fetch(`${EPS_API}/obten`, {
-            method: 'Get',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
+        const response = await fetch(url);
         if (!response.ok) {
-            throw new Error(`Failed to fetch EPS data: ${response.status} - ${response.statusText}`);
+            throw new Error(`No se pudo obtener la lista de EPS. Estado de respuesta: ${response.status}`);
         }
-
-        // Parse the JSON response
-        const eps = await response.json();
-        return eps;
+        const data = await response.json();
+        console.log("EPS obtenidas:");
+        console.log(data);
+        return data;
     } catch (error) {
-        console.error('Error al obtener la información de las EPS:', error);
-        throw error;
+        throw new Error(`no se pueden cargar los datos de las eps: ${error.message}, ${error.status}`);
     }
-};
+
+}

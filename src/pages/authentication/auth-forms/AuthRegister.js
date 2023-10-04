@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import AutoCompleteInput from '../../../components/autocomplete';
-import { buscarEps } from '../../../api/obtenerEps.ts';
+import { obtenerEPS } from '../../../api/obtenerEps.ts';
 import { obtenerRol } from '../../../api/obtenerRol.ts';
 import { obtenerFichas } from '../../../api/obtenerFichas.ts';
 
@@ -24,7 +24,7 @@ const AuthRegister = () => {
   const [epsData, setEpsData] = useState([]);
   const [fichaData, setFichaData] = useState([]);
   const [rolData, setRolData] = useState([]);
-  const [usuario, setusuario] = useState({
+  const [usuario, setUsuario] = useState({
     nombre: '',
     apellido: '',
     eps: '',
@@ -57,7 +57,7 @@ const AuthRegister = () => {
         const rol = await obtenerRol();
         setRolData(rol);
       } catch (error) {
-        console.error('Error al cargar los datos de rol:', error);
+        console.error('Error al cargar los datos de Rol:', error);
       }
     }
 
@@ -67,7 +67,7 @@ const AuthRegister = () => {
   useEffect(() => {
     async function fetchEpsData() {
       try {
-        const eps = await buscarEps();
+        const eps = await obtenerEPS();
         setEpsData(eps);
       } catch (error) {
         console.error('Error al cargar los datos de EPS:', error);
@@ -83,7 +83,7 @@ const AuthRegister = () => {
         const ficha = await obtenerFichas();
         setFichaData(ficha);
       } catch (error) {
-        console.error('Error al cargar los datos de FICHA:', error);
+        console.error('Error al cargar los datos de Ficha:', error);
       }
     }
 
@@ -94,11 +94,11 @@ const AuthRegister = () => {
     const { name, value } = e.target;
 
     if (name === 'eps' || name === 'rol') {
-      setusuario({ ...usuario, [name]: value });
+      setUsuario({ ...usuario, [name]: value });
     } else if (name === 'numero_ficha') {
-      setusuario({ ...usuario, [name]: value.value });
+      setUsuario({ ...usuario, [name]: value.value });
     } else {
-      setusuario({ ...usuario, [name]: value });
+      setUsuario({ ...usuario, [name]: value });
     }
   };
 
@@ -110,7 +110,6 @@ const AuthRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     if (!isEmailValid(usuario.correo_sena)) {
       setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
       return;
@@ -118,16 +117,22 @@ const AuthRegister = () => {
       setEmailError('');
     }
 
+    if (usuario.password !== passwordConfirmation) {
+      setPasswordError('Las contraseñas no coinciden.');
+      return;
+    } else {
+      setPasswordError('');
+    }
 
     try {
       await createusuariorequest(usuario);
       setAlertOpen(true);
-      setusuario({
+      setUsuario({
         nombre: '',
         apellido: '',
         eps: '',
         genero: 'seleccion',
-        tipoDocumento: 'Seleccione',
+        tipo_documento: 'Seleccione',
         numero_documento: '',
         correo_sena: '',
         fecha_nacimiento: '',
@@ -139,6 +144,7 @@ const AuthRegister = () => {
         tipo_sangre: 'Seleccione',
         direccion: '',
       });
+      setPasswordConfirmation('');
     } catch (error) {
       console.error('Error al crear usuario:', error);
     }
@@ -153,15 +159,13 @@ const AuthRegister = () => {
     }
   };
 
-  const hadlepassword_confirm = () => {
+  const handlePasswordConfirm = () => {
     if (usuario.password !== passwordConfirmation) {
       setPasswordError('Las contraseñas no coinciden.');
-      return;
     } else {
       setPasswordError('');
     }
   };
-
 
   const genero = [
     { value: 'seleccion', label: 'Seleccione' },
@@ -233,14 +237,19 @@ const AuthRegister = () => {
                 id="eps"
                 name="eps"
                 fullWidth
-                value={usuario.eps ? usuario.eps._id : ''}
                 onChange={handleChange}
               >
                 {epsData.map((option) => (
-                  <MenuItem key={`eps-option-${option._id}`} value={option._id}>
+                  <MenuItem key={`eps-option-${option._id}`} value={option._id} label={option.nombre}>
                     {option.nombre}
                   </MenuItem>
                 ))}
+
+                {/* {epsData.map((option) => (
+                  <option key={`option-${option.id}`} value={option.value}>
+                    {option.nombre}
+                  </option>
+                ))} */}
               </Select>
             </Stack>
           </Grid>
@@ -288,7 +297,7 @@ const AuthRegister = () => {
               <InputLabel htmlFor="numero_documento">Número de Documento</InputLabel>
               <OutlinedInput
                 id="numero_documento"
-                type="string"
+                type="text"
                 name="numero_documento"
                 fullWidth
                 value={usuario.numero_documento}
@@ -302,7 +311,7 @@ const AuthRegister = () => {
               <InputLabel htmlFor="correo_sena">Correo Sena</InputLabel>
               <OutlinedInput
                 id="correo_sena"
-                type="string"
+                type="text"
                 name="correo_sena"
                 fullWidth
                 value={usuario.correo_sena}
@@ -332,7 +341,7 @@ const AuthRegister = () => {
               <InputLabel htmlFor="correo_personal">Correo Personal</InputLabel>
               <OutlinedInput
                 id="correo_personal"
-                type="string"
+                type="text"
                 name="correo_personal"
                 fullWidth
                 value={usuario.correo_personal}
@@ -395,13 +404,13 @@ const AuthRegister = () => {
                       {showPassword ? '🙉' : '🙈'}
                     </IconButton>
                   </InputAdornment>
-                }
+                }  
                 placeholder="Ingrese su contraseña"
               />
             </Stack>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} md={12}>
             <Stack spacing={1}>
               <InputLabel htmlFor="confirm_password">Confirme su contraseña</InputLabel>
               <OutlinedInput
@@ -411,7 +420,7 @@ const AuthRegister = () => {
                 value={passwordConfirmation}
                 name="confirm_password"
                 onChange={(event) => setPasswordConfirmation(event.target.value)}
-                onBlur={hadlepassword_confirm}
+                onBlur={handlePasswordConfirm} // Agrega el evento onBlur aquí
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
