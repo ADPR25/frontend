@@ -13,9 +13,10 @@ interface Register {
     telefono: string;
     ficha?: string;
     rh?: string;
-    direccion: string;
+    direccion: string; 
     pps: boolean;
     token?: string;
+    contrasena: string;
     activacion: boolean;
 }
 

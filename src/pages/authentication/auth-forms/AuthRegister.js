@@ -138,9 +138,10 @@ const AuthRegister = () => {
         rol: usuario.rol,
         telefono: usuario.telefono,
         ficha: usuario.ficha,
+        contrasena: usuario.contrasena,
         rh: usuario.rh,
         direccion: usuario.direccion,
-        pps: false, // Cambia esto si es necesario
+        pps: true, // Cambia esto si es necesario
         activacion: false, // Cambia esto si es necesario
       });
 
@@ -198,8 +199,8 @@ const AuthRegister = () => {
 
   const tipo_documento = [
     { value: 'Seleccione', label: 'Seleccione' },
-    { value: 'TI', label: 'Tarjeta de identidad' },
-    { value: 'cedula', label: 'Cédula' },
+    { value: 'T.I', label: 'Tarjeta de identidad' },
+    { value: 'C.C', label: 'Cédula' },
     { value: 'dni', label: 'DNI (Documento Nacional de Identidad)' },
     { value: 'licencia', label: 'Licencia de Conducir' },
     { value: 'rut', label: 'RUT (Registro Único Tributario)' },
@@ -247,7 +248,7 @@ const AuthRegister = () => {
                 name="apellidos"
                 fullWidth
                 value={usuario.apellidos}
-                onChange={handleChange}
+                 onChange={handleChange}
               />
             </Stack>
           </Grid>
@@ -466,7 +467,7 @@ const AuthRegister = () => {
               <AutoCompleteInput
                 id="ficha"
                 name="ficha"
-                label="numero de Ficha"
+                label="Numero de Ficha"
                 options={fichaData.map((option) => ({
                   value: option._id,
                   label: option.codigo,
