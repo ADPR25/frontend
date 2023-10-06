@@ -7,8 +7,6 @@ export async function obtenerEPS() {
             throw new Error(`No se pudo obtener la lista de EPS. Estado de respuesta: ${response.status}`);
         }
         const data = await response.json();
-        console.log("EPS obtenidas:");
-        console.log(data);
         return data;
     } catch (error) {
         throw new Error(`no se pueden cargar los datos de las eps: ${error.message}, ${error.status}`);

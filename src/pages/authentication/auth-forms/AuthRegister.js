@@ -18,27 +18,27 @@ import { obtenerRol } from '../../../api/obtenerRol.ts';
 import { obtenerFichas } from '../../../api/obtenerFichas.ts';
 
 // Importa la función para crear usuarios
-import { createusuariorequest } from '../../../api/usuario.ts';
+import { createUsuarioRequest } from '../../../api/usuario.ts';
 
 const AuthRegister = () => {
   const [epsData, setEpsData] = useState([]);
   const [fichaData, setFichaData] = useState([]);
   const [rolData, setRolData] = useState([]);
   const [usuario, setUsuario] = useState({
-    nombre: '',
-    apellido: '',
+    nombres: '',
+    apellidos: '',
     eps: '',
     genero: 'seleccion',
-    tipo_documento: 'Seleccione',
-    numero_documento: '',
-    correo_sena: '',
-    fecha_nacimiento: '',
-    correo_personal: '',
+    tipo_doc: 'Seleccione',
+    n_doc: '',
+    correo_inst: '',
+    nacimiento: '',
+    correo_pers: '',
     rol: 'Seleccione',
-    password: '',
+    contrasena: '',
     telefono: '',
-    numero_ficha: '', // Valor predeterminado establecido como vacío
-    tipo_sangre: 'Seleccione',
+    ficha: '', // Valor predeterminado establecido como vacío
+    rh: 'Seleccione',
     direccion: '',
   });
 
@@ -95,7 +95,7 @@ const AuthRegister = () => {
 
     if (name === 'eps' || name === 'rol') {
       setUsuario({ ...usuario, [name]: value });
-    } else if (name === 'numero_ficha') {
+    } else if (name === 'ficha') {
       setUsuario({ ...usuario, [name]: value.value });
     } else {
       setUsuario({ ...usuario, [name]: value });
@@ -110,14 +110,14 @@ const AuthRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isEmailValid(usuario.correo_sena)) {
+    if (!isEmailValid(usuario.correo_inst)) {
       setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
       return;
     } else {
       setEmailError('');
     }
 
-    if (usuario.password !== passwordConfirmation) {
+    if (usuario.contrasena !== passwordConfirmation) {
       setPasswordError('Las contraseñas no coinciden.');
       return;
     } else {
@@ -125,34 +125,56 @@ const AuthRegister = () => {
     }
 
     try {
-      await createusuariorequest(usuario);
-      setAlertOpen(true);
-      setUsuario({
-        nombre: '',
-        apellido: '',
-        eps: '',
-        genero: 'seleccion',
-        tipo_documento: 'Seleccione',
-        numero_documento: '',
-        correo_sena: '',
-        fecha_nacimiento: '',
-        correo_personal: '',
-        rol: 'Seleccione',
-        password: '',
-        telefono: '',
-        numero_ficha: '',
-        tipo_sangre: 'Seleccione',
-        direccion: '',
+      const response = await createUsuarioRequest({
+        nombres: usuario.nombres,
+        apellidos: usuario.apellidos,
+        eps: usuario.eps,
+        genero: usuario.genero,
+        tipo_doc: usuario.tipo_doc,
+        n_doc: usuario.n_doc,
+        correo_inst: usuario.correo_inst,
+        fecha_nacimiento: usuario.nacimiento,
+        correo_pers: usuario.correo_pers,
+        rol: usuario.rol,
+        telefono: usuario.telefono,
+        ficha: usuario.ficha,
+        rh: usuario.rh,
+        direccion: usuario.direccion,
+        pps: false, // Cambia esto si es necesario
+        activacion: false, // Cambia esto si es necesario
       });
-      setPasswordConfirmation('');
+
+      if (response) {
+        setAlertOpen(true);
+        setUsuario({
+          nombres: '',
+          apellidos: '',
+          eps: '',
+          genero: 'seleccion',
+          tipo_doc: 'Seleccione',
+          n_doc: '',
+          correo_inst: '',
+          nacimiento: '',
+          correo_pers: '',
+          rol: 'Seleccione',
+          contrasena: '',
+          telefono: '',
+          ficha: '',
+          rh: 'Seleccione',
+          direccion: '',
+        });
+        setPasswordConfirmation('');
+      } else {
+        console.error('Error al crear usuario:', response);
+      }
     } catch (error) {
       console.error('Error al crear usuario:', error);
     }
-  };
+  }
 
   const handleEmailBlur = () => {
     // Verificar si el correo es válido
-    if (!isEmailValid(usuario.correo_sena)) {
+    if (!isEmailValid(usuario.correo_inst)) {
       setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
     } else {
       setEmailError('');
@@ -160,7 +182,7 @@ const AuthRegister = () => {
   };
 
   const handlePasswordConfirm = () => {
-    if (usuario.password !== passwordConfirmation) {
+    if (usuario.contrasena !== passwordConfirmation) {
       setPasswordError('Las contraseñas no coinciden.');
     } else {
       setPasswordError('');
@@ -204,13 +226,13 @@ const AuthRegister = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="nombre">Nombres</InputLabel>
+              <InputLabel htmlFor="nombres">Nombres</InputLabel>
               <OutlinedInput
-                id="nombre"
-                type="text"
-                name="nombre"
+                id="nombres"
+                type="string"
+                name="nombres"
                 fullWidth
-                value={usuario.nombre}
+                value={usuario.nombres}
                 onChange={handleChange}
               />
             </Stack>
@@ -218,13 +240,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="apellido">Apellidos</InputLabel>
+              <InputLabel htmlFor="apellidos">Apellidos</InputLabel>
               <OutlinedInput
-                id="apellido"
-                type="text"
-                name="apellido"
+                id="apellidos"
+                type="string"
+                name="apellidos"
                 fullWidth
-                value={usuario.apellido}
+                value={usuario.apellidos}
                 onChange={handleChange}
               />
             </Stack>
@@ -275,16 +297,16 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="tipo_documento">Tipo de Documento</InputLabel>
+              <InputLabel htmlFor="tipo_doc">Tipo de Documento</InputLabel>
               <Select
-                id="tipo_documento"
-                name="tipo_documento"
+                id="tipo_doc"
+                name="tipo_doc"
                 fullWidth
-                value={usuario.tipo_documento}
+                value={usuario.tipo_doc}
                 onChange={handleChange}
               >
                 {tipo_documento.map((option) => (
-                  <MenuItem key={`tipo_documento-option-${option.value}`} value={option.value}>
+                  <MenuItem key={`tipo_doc-option-${option.value}`} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -294,13 +316,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="numero_documento">Número de Documento</InputLabel>
+              <InputLabel htmlFor="n_doc">Número de Documento</InputLabel>
               <OutlinedInput
-                id="numero_documento"
-                type="text"
-                name="numero_documento"
+                id="n_doc"
+                type="string"
+                name="n_doc"
                 fullWidth
-                value={usuario.numero_documento}
+                value={usuario.n_doc}
                 onChange={handleChange}
               />
             </Stack>
@@ -308,13 +330,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="correo_sena">Correo Sena</InputLabel>
+              <InputLabel htmlFor="correo_inst">Correo Sena</InputLabel>
               <OutlinedInput
-                id="correo_sena"
-                type="text"
-                name="correo_sena"
+                id="correo_inst"
+                type="string"
+                name="correo_inst"
                 fullWidth
-                value={usuario.correo_sena}
+                value={usuario.correo_inst}
                 onChange={handleChange}
                 onBlur={handleEmailBlur} // Agrega el evento onBlur aquí
               />
@@ -324,13 +346,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="fecha_nacimiento">Fecha de Nacimiento</InputLabel>
+              <InputLabel htmlFor="nacimiento">Fecha de Nacimiento</InputLabel>
               <OutlinedInput
-                id="fecha_nacimiento"
+                id="nacimiento"
                 type="date"
-                name="fecha_nacimiento"
+                name="nacimiento"
                 fullWidth
-                value={usuario.fecha_nacimiento}
+                value={usuario.nacimiento}
                 onChange={handleChange}
               />
             </Stack>
@@ -338,13 +360,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="correo_personal">Correo Personal</InputLabel>
+              <InputLabel htmlFor="correo_pers">Correo Personal</InputLabel>
               <OutlinedInput
-                id="correo_personal"
-                type="text"
-                name="correo_personal"
+                id="correo_pers"
+                type="string"
+                name="correo_pers"
                 fullWidth
-                value={usuario.correo_personal}
+                value={usuario.correo_pers}
                 onChange={handleChange}
               />
             </Stack>
@@ -374,7 +396,7 @@ const AuthRegister = () => {
               <InputLabel htmlFor="telefono">Numero de telefono</InputLabel>
               <OutlinedInput
                 id="telefono"
-                type="text"
+                type="string"
                 name="telefono"
                 fullWidth
                 value={usuario.telefono}
@@ -385,13 +407,13 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="password">Contraseña</InputLabel>
+              <InputLabel htmlFor="contrasena">Contraseña</InputLabel>
               <OutlinedInput
                 fullWidth
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={usuario.password}
-                name="password"
+                id="contrasena"
+                type={showPassword ? 'string' : 'password'}
+                value={usuario.contrasena}
+                name="contrasena"
                 onChange={handleChange}
                 endAdornment={
                   <InputAdornment position="end">
@@ -442,13 +464,13 @@ const AuthRegister = () => {
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
               <AutoCompleteInput
-                id="numero_ficha"
-                name="numero_ficha"
+                id="ficha"
+                name="ficha"
                 label="numero de Ficha"
                 options={fichaData.map((option) => ({
                   value: option._id,
                   label: option.codigo,
-                  key: `numero_ficha-option-${option._id}`,
+                  key: `ficha-option-${option._id}`,
                 }))}
                 onInputChange={handleChange}
                 onChange={handleChange}
@@ -458,12 +480,12 @@ const AuthRegister = () => {
 
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="tipo_sangre">Tipo de Sangre</InputLabel>
+              <InputLabel htmlFor="rh">Tipo de Sangre</InputLabel>
               <Select
-                id="tipo_sangre"
-                name="tipo_sangre"
+                id="rh"
+                name="rh"
                 fullWidth
-                value={usuario.tipo_sangre}
+                value={usuario.rh}
                 onChange={handleChange}
               >
                 {tipo_sangre.map((option) => (
