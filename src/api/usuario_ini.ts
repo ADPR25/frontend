@@ -1,8 +1,8 @@
-const API = 'http://localhost:4000/usuario';
+const API = 'https://proyecto-backend-sgbienestar.onrender.com/registro/login';
 
 interface Usuario {
-    correo_sena: string;
-    password: string;
+    correo_inst: string;
+    contrasena: string;
 }
 
 export const buscarusuario = (usuario: Usuario) =>

@@ -50,6 +50,7 @@ const AuthRegister = () => {
 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [passwordError2, setPasswordError2] = useState('');
 
   useEffect(() => {
     async function fetchRolData() {
@@ -97,6 +98,15 @@ const AuthRegister = () => {
       setUsuario({ ...usuario, [name]: value });
     } else if (name === 'ficha') {
       setUsuario({ ...usuario, [name]: value.value });
+    } else if (name === 'contrasena') {
+      // Validar la contraseña aquí
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+      if (!regex.test(value)) {
+        setPasswordError2('La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.');
+      } else {
+        setPasswordError2('');
+      }
+      setUsuario({ ...usuario, [name]: value });
     } else {
       setUsuario({ ...usuario, [name]: value });
     }
@@ -124,6 +134,7 @@ const AuthRegister = () => {
       setPasswordError('');
     }
 
+
     try {
       const response = await createUsuarioRequest({
         nombres: usuario.nombres,
@@ -141,8 +152,8 @@ const AuthRegister = () => {
         contrasena: usuario.contrasena,
         rh: usuario.rh,
         direccion: usuario.direccion,
-        pps: true, // Cambia esto si es necesario
-        activacion: false, // Cambia esto si es necesario
+        pps: true,
+        activacion: false,
       });
 
       if (response) {
@@ -171,7 +182,7 @@ const AuthRegister = () => {
     } catch (error) {
       console.error('Error al crear usuario:', error);
     }
-  }
+  };
 
   const handleEmailBlur = () => {
     // Verificar si el correo es válido
@@ -248,7 +259,7 @@ const AuthRegister = () => {
                 name="apellidos"
                 fullWidth
                 value={usuario.apellidos}
-                 onChange={handleChange}
+                onChange={handleChange}
               />
             </Stack>
           </Grid>
@@ -267,12 +278,6 @@ const AuthRegister = () => {
                     {option.nombre}
                   </MenuItem>
                 ))}
-
-                {/* {epsData.map((option) => (
-                  <option key={`option-${option.id}`} value={option.value}>
-                    {option.nombre}
-                  </option>
-                ))} */}
               </Select>
             </Stack>
           </Grid>
@@ -427,10 +432,11 @@ const AuthRegister = () => {
                       {showPassword ? '🙉' : '🙈'}
                     </IconButton>
                   </InputAdornment>
-                }  
+                }
                 placeholder="Ingrese su contraseña"
               />
             </Stack>
+            <p style={{ color: 'red' }}>{passwordError2}</p>
           </Grid>
 
           <Grid item xs={12} md={12}>
@@ -524,7 +530,7 @@ const AuthRegister = () => {
         open={alertOpen}
         autoHideDuration={6000}
         onClose={() => setAlertOpen(false)}
-        message={usuario.password !== passwordConfirmation ? 'Las contraseñas no coinciden.' : 'Usuario registrado con éxito.'}
+        message={usuario.password == passwordConfirmation ? '' :'Usuario registrado con éxito.'}
         action={
           <IconButton
             size="small"

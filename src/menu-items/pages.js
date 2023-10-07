@@ -20,7 +20,6 @@ const pages = {
       type: 'item',
       url: '/login',
       icon: icons.LoginOutlined,
-      target: true
     },
     {
       id: 'register1',
@@ -28,7 +27,6 @@ const pages = {
       type: 'item',
       url: '/register',
       icon: icons.ProfileOutlined,
-      target: true
     }
   ]
 };
