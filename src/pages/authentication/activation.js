@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Grid, Stack, Typography } from '@mui/material';
 
@@ -16,6 +17,10 @@ const activation = () => (
           <center>
             <Typography variant="h3">Activar cuenta</Typography>
           </center>
+         <br />
+         <Typography component={Link} to="/login" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+            Ya activaste tu cuenta inicia sesion aqui?
+          </Typography> 
         </Stack>
       </Grid>
       <Grid item xs={12}>

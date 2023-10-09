@@ -1,15 +1,15 @@
-interface activacion {
+interface Activacion {
     codigo: string
 }
 
-export const activar = async (usuario: activacion) => {
+export const activacion = async (activacion: Activacion) => {
     try {
         const response = await fetch('https://proyecto-backend-sgbienestar.onrender.com/registro/auth', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(usuario),
+            body: JSON.stringify(activacion),
         });
 
         if (!response.ok) {

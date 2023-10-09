@@ -23,7 +23,7 @@ const MainRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: '/',
+      path: '/inicio',
       element: <DashboardDefault />
     },
     {

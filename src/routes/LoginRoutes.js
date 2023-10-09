@@ -20,7 +20,7 @@ const LoginRoutes = {
       element: <Activation_acount />
     },
     {
-      path: 'login',
+      path: '/',
       element: <AuthLogin />
     },
     {

@@ -29,7 +29,7 @@ const AuthLogin = () => {
 
   const handleLogin = (token) => {
     localStorage.setItem('token', token);
-    navigate('/');
+    navigate('/inicio');
   };
 
   const handleSubmit = async (e) => {
@@ -65,12 +65,12 @@ const AuthLogin = () => {
             <InputLabel htmlFor="correo_inst">Correo Sena</InputLabel>
             <OutlinedInput
               id="correo_inst"
-              type="string"
+              type="email"
               name="correo_inst"
               fullWidth
               value={usuario.correo_inst}
               onChange={handleChange}
-              required
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
             />
           </Stack>
         </Grid>
@@ -85,7 +85,7 @@ const AuthLogin = () => {
               value={usuario.contrasena}
               name="contrasena"
               onChange={handleChange}
-              required
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { activar } from '../../../api/activacion.ts';
+import { activacion } from '../../../api/activacion.ts';
 import {
     Grid,
     InputLabel,
@@ -8,30 +8,30 @@ import {
     Button,
 } from '@mui/material';
 
-const Activation_acount = () => {
-    const [activacion, setCodigo] = useState({
+const Activation_acount  = () => {
+    const [activa, setActiva] = useState({
         codigo: '',
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCodigo({ ...activacion, [name]: value });
+        setActiva({ ...activa, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await activar(activacion);
+            const response = await activacion(activa);
 
             if (response.status === 201) { 
-                setCodigo({
+                setActiva({
                     codigo: '',
                 });
             } else {
-                setError('codigo incorrecto');
+                // Handle error here if needed
             }
         } catch (error) {
-            setError('Error al enviar el codigo');
+            // Handle error here if needed
             console.error(error);
         }
     };
@@ -42,20 +42,20 @@ const Activation_acount = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
                         <Stack spacing={1}>
-                            <InputLabel htmlFor="codigo">Ingrese el codigo que le llego al correo sena <br /> para activar la cuenta</InputLabel>
+                            <InputLabel htmlFor="codigo">Ingrese el código que le llegó al correo del Sena para activar la cuenta</InputLabel>
                             <OutlinedInput
                                 id="codigo"
                                 type="string"
                                 name="codigo"
                                 fullWidth
-                                value={activacion.codigo}
+                                value={activa.codigo}
                                 onChange={handleChange}
                                 required
                             />
                         </Stack>
                     </Grid>
                     <br />
-                    <Grid item xs={15} md={15}>
+                    <Grid item xs={12} md={12}>
                         <Stack spacing={1}>
                             <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
                                 Activar cuenta
