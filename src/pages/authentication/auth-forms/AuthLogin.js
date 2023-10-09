@@ -9,7 +9,7 @@ import {
   InputAdornment,
   IconButton,
   Button,
-  Alert, // Importa el componente de alerta de tu biblioteca de componentes
+  Alert,
 } from '@mui/material';
 
 const AuthLogin = () => {
@@ -20,11 +20,16 @@ const AuthLogin = () => {
     contrasena: '',
   });
 
-  const [error, setError] = useState(null); // Para almacenar mensajes de error
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUsuario({ ...usuario, [name]: value });
+  };
+
+  const handleLogin = (token) => {
+    localStorage.setItem('token', token);
+    navigate('/');
   };
 
   const handleSubmit = async (e) => {
@@ -33,18 +38,20 @@ const AuthLogin = () => {
       const response = await buscarusuario(usuario);
       const data = await response.json();
 
-      if (response.status === 200 && data.autenticado) {
+      if (response.status === 201 && data.token) { // Cambié 200 a 201 para reflejar la respuesta del servidor
+        // Llama a la función de inicio de sesión con el token.
+        handleLogin(data.token);
+
         setUsuario({
           correo_inst: '',
           contrasena: '',
         });
-
-        navigate('/'); // Redirige a la página de inicio después del inicio de sesión exitoso
       } else {
-        setError('Usuario o contraseña incorrectos'); // Muestra un mensaje de error si las credenciales son incorrectas
+        setError('Usuario o contraseña incorrectos');
       }
     } catch (error) {
-      setError('Error al encontrar el usuario'); // Muestra un mensaje de error si ocurre un error en la búsqueda del usuario
+      setError('Error al encontrar el usuario');
+      console.error(error);
     }
   };
 
@@ -63,6 +70,7 @@ const AuthLogin = () => {
               fullWidth
               value={usuario.correo_inst}
               onChange={handleChange}
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
             />
           </Stack>
         </Grid>
@@ -77,6 +85,7 @@ const AuthLogin = () => {
               value={usuario.contrasena}
               name="contrasena"
               onChange={handleChange}
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

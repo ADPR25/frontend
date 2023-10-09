@@ -6,11 +6,10 @@ interface Usuario {
 }
 
 export const buscarusuario = (usuario: Usuario) =>
-    fetch(`${API}/login`, {
+    fetch(`${API}`, {
         method: 'POST',
         body: JSON.stringify(usuario),
         headers: {
             'content-type': 'application/json',
         },
     });
-    
