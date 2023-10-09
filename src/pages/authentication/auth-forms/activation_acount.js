@@ -1,49 +1,69 @@
 import React, { useState } from 'react';
+import { activar } from '../../../api/activacion.ts';
 import {
-  Grid,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  InputAdornment,
-  IconButton,
-  Button,
-  Alert,
+    Grid,
+    InputLabel,
+    OutlinedInput,
+    Stack,
+    Button,
 } from '@mui/material';
 
 const Activation_acount = () => {
-    // Define state variable for the number input
-    const [numberValue, setNumberValue] = useState('');
+    const [activacion, setCodigo] = useState({
+        codigo: '',
+    });
 
-    // Define handleChange function to update the state when a number is entered
-    const handleChange = (event) => {
-        const inputValue = event.target.value;
-        
-        // Use a regular expression to allow only numbers
-        const numericValue = inputValue.replace(/\D/g, '');
-
-        // Update the state with the numeric value
-        setNumberValue(numericValue);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCodigo({ ...activacion, [name]: value });
     };
 
-    // Define handleSubmit function to handle form submission
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Your form submission logic here
-    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await activar(activacion);
 
+            if (response.status === 201) { 
+                setCodigo({
+                    codigo: '',
+                });
+            } else {
+                setError('codigo incorrecto');
+            }
+        } catch (error) {
+            setError('Error al enviar el codigo');
+            console.error(error);
+        }
+    };
+   
     return (
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="numberInput">Enter a Number:</label>
-                <input
-                    id="numberInput"
-                    type="text"
-                    name="numberInput"
-                    value={numberValue}
-                    onChange={handleChange}
-                />
-            </div>
-            <button type="submit">Submit</button> {/* Add a submit button */}
+            <center>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={12}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="codigo">Ingrese el codigo que le llego al correo sena <br /> para activar la cuenta</InputLabel>
+                            <OutlinedInput
+                                id="codigo"
+                                type="string"
+                                name="codigo"
+                                fullWidth
+                                value={activacion.codigo}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Stack>
+                    </Grid>
+                    <br />
+                    <Grid item xs={15} md={15}>
+                        <Stack spacing={1}>
+                            <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
+                                Activar cuenta
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
+            </center>
         </form>
     );
 };

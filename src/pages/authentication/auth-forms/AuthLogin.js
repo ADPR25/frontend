@@ -65,12 +65,12 @@ const AuthLogin = () => {
             <InputLabel htmlFor="correo_inst">Correo Sena</InputLabel>
             <OutlinedInput
               id="correo_inst"
-              type="email"
+              type="string"
               name="correo_inst"
               fullWidth
               value={usuario.correo_inst}
               onChange={handleChange}
-              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
+              required
             />
           </Stack>
         </Grid>
@@ -85,7 +85,7 @@ const AuthLogin = () => {
               value={usuario.contrasena}
               name="contrasena"
               onChange={handleChange}
-              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
+              required
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

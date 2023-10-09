@@ -509,7 +509,7 @@ const AuthRegister = () => {
               <InputLabel htmlFor="direccion">Dirección</InputLabel>
               <OutlinedInput
                 id="direccion"
-                type="text"
+                type="string"
                 name="direccion"
                 fullWidth
                 value={usuario.direccion}
