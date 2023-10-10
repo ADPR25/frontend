@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 // material-ui
 import { ButtonBase } from '@mui/material';
@@ -18,7 +17,6 @@ const LogoSection = ({ sx, to }) => {
   return (
     <ButtonBase
       disableRipple
-      component={Link}
       onClick={() => dispatch(activeItem({ openItem: [defaultId] }))}
       to={!to ? config.defaultPath : to}
       sx={sx}

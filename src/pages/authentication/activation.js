@@ -18,7 +18,7 @@ const activation = () => (
             <Typography variant="h3">Activar cuenta</Typography>
           </center>
          <br />
-         <Typography component={Link} to="/login" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+         <Typography component={Link} to="/" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
             Ya activaste tu cuenta inicia sesion aqui?
           </Typography> 
         </Stack>
