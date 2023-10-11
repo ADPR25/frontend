@@ -236,6 +236,7 @@ const AuthRegister = () => {
     <>
       <form>
         <Grid container spacing={2}>
+          
           <Grid item xs={12} md={6}>
             <Stack spacing={1}>
               <InputLabel htmlFor="nombres">Nombres</InputLabel>
