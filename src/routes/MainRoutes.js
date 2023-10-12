@@ -19,12 +19,17 @@ const Listar_sanciones = Loadable(lazy(() => import('pages/sanciones/listar_sanc
 const Crear_sanciones = Loadable(lazy(() => import('pages/sanciones/crear_sanciones')));
 
 
+//inplementos
+
+const CrearInplementos = Loadable(lazy(() => import('pages/inplementos/crear')));
+const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
   path: '/',
   element: <MainLayout />,
   children: [
+    
     {
       path: '/inicio',
       element: <DashboardDefault />
@@ -49,6 +54,15 @@ const MainRoutes = {
           element: <DashboardDefault />
         }
       ]
+    },
+    {
+      path: 'Inventario',
+      element: <Inventario />
+    },
+    {
+
+      path: 'CrearInplementos',
+      element: <CrearInplementos />
     },
     {
       path: 'shadow',

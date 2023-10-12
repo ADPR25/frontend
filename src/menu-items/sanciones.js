@@ -26,14 +26,14 @@ const Sanciones = {
     type: 'group',
     children: [
         {
-            id: 'crear',
+            id: 'crear_s',
             title: 'crear sanciones',
             type: 'item',
             url: '/Crear_sanciones',
             icon: icons.WarningOutlined
         },
         {
-            id: 'listar',
+            id: 'listar_s',
             title: 'listar sanciones',
             type: 'item',
             url: '/Listar_sanciones',
