@@ -29,6 +29,7 @@ const tipos = [
     { value: 'En mantenimiento', label: 'En mantenimiento' },
 
   ]
+
   const CrearInplementos = () => {
     return (
         <form>
@@ -108,7 +109,7 @@ const tipos = [
           
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <InputLabel htmlFor="tipos">tipos</InputLabel>
+              <InputLabel htmlFor="tipos">Tipos</InputLabel>
               <Select
                 id="tipos "
                 name="tipos "
@@ -156,6 +157,49 @@ const tipos = [
               </Select>
             </Stack>
           </Grid>
+
+          <Grid item xs={12} md={12}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
+                        <OutlinedInput
+                            id="cantidad"
+                            type="string"
+                            name="cantidad"
+                            fullWidth
+                            required
+                        />
+                    </Stack>
+                </Grid>
+
+            <Grid item xs={12} md={6}>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
+              <Select
+                id="detalle"
+                name="detalle"
+                fullWidth
+              >
+                {/* {.map((option) => (
+                  <MenuItem key={`detalle-option-${option.value}`} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))} */}
+              </Select>
+            </Stack>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="Caracteristicas">Caracteristicas</InputLabel>
+                        <OutlinedInput
+                            id="Caracteristicas"
+                            type="string"
+                            name="Caracteristicas"
+                            fullWidth
+                            required
+                        />
+                    </Stack>
+                </Grid>
 
         </Grid>
         </form>
