@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
 import {
-    Grid,
-    OutlinedInput,
-    InputLabel,
-    Select,
-    MenuItem,
-    Stack,
+  Grid,
+  OutlinedInput,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
 } from '@mui/material';
 
-const tipos = [
+const CrearInplementos = () => {
+  const [n_iData, setn_iData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const n_i = await obtener_inplemeto();
+        setn_iData(n_i);
+      } catch (error) {
+        console.error('Error al obtener los nombres de los implementos', error);
+      }
+    }
+
+    fetchData(); // Llama a la función fetchData en useEffect para cargar los datos al montar el componente
+  }, []); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
+
+  const tipos = [
     { value: 'seleccion', label: 'Seleccione' },
     { value: 'Implemento en uso', label: 'Implemento en uso' },
     { value: 'Implemento en mantenimiento', label: 'Implemento en mantenimiento' },
@@ -17,27 +34,22 @@ const tipos = [
   ];
   const Implementos = [
     { value: 'seleccion', label: 'Seleccione' },
-    { value: 'Implemento del gimasion', label: 'Implemento del gimasion' },
-    { value: 'Implemento de deportivo', label: 'Implemento de deportivo' },
-    { value: 'Implemento del gimasion y deportivo', label: 'Implemento disponiblesImplemento del gimasion y deportivo' }, 
+    { value: 'Implemento del gimnasio', label: 'Implemento del gimnasio' },
+    { value: 'Implemento deportivo', label: 'Implemento deportivo' },
+    { value: 'Implemento gimnasio y deportivo', label: 'Implemento gimnasio y deportivo' },
   ];
   const descripcion = [
     { value: 'seleccion', label: 'Seleccione' },
     { value: 'Estado', label: 'Estado' },
     { value: 'Solicitud', label: 'Solicitud' },
-    { value: 'En prestamo', label: 'En prestamo' },
+    { value: 'En préstamo', label: 'En préstamo' },
     { value: 'En mantenimiento', label: 'En mantenimiento' },
+  ];
 
-  ]
-
-  const CrearInplementos = () => {
     return (
         <form>
             <Grid container spacing={2}>
-
-                
-                
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="fecha">Fecha</InputLabel>
                         <OutlinedInput
@@ -50,7 +62,7 @@ const tipos = [
                     </Stack>
                 </Grid>
 
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="N_informe">Numero de informes</InputLabel>
                         <OutlinedInput
@@ -92,7 +104,7 @@ const tipos = [
                     </Stack>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={12}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="Dependecia_oficina">Dependencia u oficina </InputLabel>
                         <OutlinedInput
@@ -107,7 +119,7 @@ const tipos = [
              </Grid>
 
           
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={6}>
             <Stack spacing={1}>
               <InputLabel htmlFor="tipos">Tipos</InputLabel>
               <Select
@@ -124,7 +136,7 @@ const tipos = [
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={6}>
             <Stack spacing={1}>
               <InputLabel htmlFor="Implementos">Implemento</InputLabel>
               <Select
@@ -158,7 +170,7 @@ const tipos = [
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
                         <OutlinedInput
@@ -179,11 +191,12 @@ const tipos = [
                 name="detalle"
                 fullWidth
               >
-                {/* {.map((option) => (
-                  <MenuItem key={`detalle-option-${option.value}`} value={option.value}>
-                    {option.label}
+                {n_iData.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.nombre}
                   </MenuItem>
-                ))} */}
+                )
+                )}
               </Select>
             </Stack>
           </Grid>
