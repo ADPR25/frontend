@@ -10,12 +10,12 @@ const icons = {
 
 const Inplemento = {
     id: 'inplementos',
-    title: 'inplementos',
+    title: 'implementos',
     type: 'group',
     children: [
         {
             id: 'crear_i',
-            title: 'Inplemento en solicitud',
+            title: 'Implemento en solicitud',
             type: 'item',
             url: '/CrearInplementos',
             icon: icons.PlusCircleOutlined

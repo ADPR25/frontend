@@ -1,5 +1,5 @@
-export async function obtener_inplemeto() {
-    const url = 'https://proyecto-backend-sgbienestar.onrender.com/implementos'
+export async function estado_implemento() {
+    const url = 'https://proyecto-backend-sgbienestar.onrender.com/estado-implemento'
 
     try {
         const response = await fetch(url);

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { estado_implemento } from '../../api/estado-implemento.ts';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
 import {
   Grid,
@@ -22,8 +23,23 @@ const CrearInplementos = () => {
       }
     }
 
-    fetchData(); // Llama a la función fetchData en useEffect para cargar los datos al montar el componente
-  }, []); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
+    fetchData();
+  }, []);
+
+  const [e_iData, sete_iDate] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const e_i = await estado_implemento();
+        sete_iDate(e_i);
+      } catch (error) {
+        console.error('Error al obtener los nombres de los implementos', error);
+      }
+    }
+
+    fetchData();
+  }, []); 
 
   const tipos = [
     { value: 'seleccion', label: 'Seleccione' },
@@ -212,7 +228,25 @@ const CrearInplementos = () => {
                             required
                         />
                     </Stack>
-                </Grid>
+          </Grid>
+          
+          <Grid item xs={12} md={6}>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
+              <Select
+                id="detalle"
+                name="detalle"
+                fullWidth
+              >
+                {e_iData.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.estado}
+                  </MenuItem>
+                )
+                )}
+              </Select>
+            </Stack>
+          </Grid>
 
         </Grid>
         </form>
