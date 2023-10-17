@@ -187,6 +187,24 @@ const CrearInplementos = () => {
           </Grid>
 
           <Grid item xs={12} md={6}>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="detalle">Estado</InputLabel>
+              <Select
+                id="detalle"
+                name="detalle"
+                fullWidth
+              >
+                {e_iData.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.estado}
+                  </MenuItem>
+                )
+                )}
+              </Select>
+            </Stack>
+          </Grid>
+
+          <Grid item xs={12} md={12}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
                         <OutlinedInput
@@ -199,7 +217,9 @@ const CrearInplementos = () => {
                     </Stack>
                 </Grid>
 
-            <Grid item xs={12} md={6}>
+                
+
+            <Grid item xs={12} md={4}>
             <Stack spacing={1}>
               <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
               <Select
@@ -217,7 +237,20 @@ const CrearInplementos = () => {
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+           <Grid item xs={12} md={4}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="unidades">Unidades</InputLabel>
+                        <OutlinedInput
+                            id="unidades"
+                            type="number"
+                            name="unidades"
+                            fullWidth
+                            required
+                        />
+                    </Stack>
+             </Grid>
+
+          <Grid item xs={12} md={4}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="Caracteristicas">Caracteristicas</InputLabel>
                         <OutlinedInput
@@ -228,24 +261,6 @@ const CrearInplementos = () => {
                             required
                         />
                     </Stack>
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
-              <Select
-                id="detalle"
-                name="detalle"
-                fullWidth
-              >
-                {e_iData.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.estado}
-                  </MenuItem>
-                )
-                )}
-              </Select>
-            </Stack>
           </Grid>
 
         </Grid>

@@ -1,11 +1,15 @@
 import {
     PlusCircleOutlined,
-    OrderedListOutlined
+    OrderedListOutlined,
+    FormatPainterOutlined,
+    ZoomInOutlined
 } from '@ant-design/icons';
 
 const icons = {
     PlusCircleOutlined,
-    OrderedListOutlined
+    OrderedListOutlined,
+    FormatPainterOutlined,
+    ZoomInOutlined
 };
 
 const Inplemento = {
@@ -26,7 +30,22 @@ const Inplemento = {
             type: 'item',
             url: '/Inventario',
             icon: icons.OrderedListOutlined
-        }
+        },
+        {
+            id: 'Mantenimiento',
+            title: 'Mantenimiento',
+            type: 'item',
+            url: '/Mantenimiento',
+            icon: icons.FormatPainterOutlined
+        },
+        {
+            id: 'Uso',
+            title: 'En uso',
+            type: 'item',
+            url: '/uso',
+            icon: icons.ZoomInOutlined
+        },
+        
     ]
 };
 
