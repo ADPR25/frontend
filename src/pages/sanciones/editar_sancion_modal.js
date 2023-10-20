@@ -1,3 +1,5 @@
+// editar_sancion_modal.js
+
 import React, { useState, useEffect } from 'react';
 import {
     Dialog,
@@ -8,28 +10,17 @@ import {
     Grid,
     Stack,
     InputLabel,
-    OutlinedInput,
     TextareaAutosize,
 } from '@mui/material';
+import { actualizarSancion } from '../../api/actualizar_sancion.ts'
 
-const EditarSancionModal = ({ sancion, open, onClose, onGuardar }) => {
-    const [dias, setDias] = useState(0);
-    const [horas, setHoras] = useState(0);
-
-    useEffect(() => {
-        setHoras(dias * 24);
-    }, [dias]);
-    console.log(horas);
-
-    const handleDiasChange = (e) => {
-        setDias(e.target.value);
-    };
-
+const EditarSancionModal = ({ sancion, open, onClose }) => {
     const [descripcion, setDescripcion] = useState('');
+    const [sancionId, setSancionId] = useState(null);
 
     useEffect(() => {
-        // Verifica si sancion no es null antes de asignar valores
         if (sancion) {
+            setSancionId(sancion._id);
             setDescripcion(sancion.description || '');
         }
     }, [sancion]);
@@ -38,33 +29,28 @@ const EditarSancionModal = ({ sancion, open, onClose, onGuardar }) => {
         setDescripcion(e.target.value);
     };
 
+    // En el componente EditarSancionModal
     const handleGuardar = () => {
-        // Lógica para guardar la sanción editada
-        onGuardar(descripcion);
-        onClose();
+        if (sancionId) {
+            const sancionEditada = {
+                description: descripcion,
+                // Otras propiedades de la sanción que desees actualizar
+            };
+            actualizarSancion(sancionId, sancionEditada)
+                .then((data) => {
+                    console.log('Sanción editada:', data);
+                    onClose();
+                })
+                .catch((error) => console.error(error));
+        }
     };
+
 
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Editar Sanción</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={1}>
-                            <InputLabel htmlFor="Dias">Días</InputLabel>
-                            <OutlinedInput
-                                id="Dias"
-                                type="number"
-                                placeholder='Días a sancionar'
-                                name="dias"
-                                fullWidth
-                                value={dias}
-                                onChange={handleDiasChange}
-                                required
-                            />
-                        </Stack>
-                    </Grid>
-
                     <Grid item xs={12}>
                         <Stack spacing={1}>
                             <InputLabel htmlFor="descripcion">Descripción</InputLabel>
@@ -74,7 +60,7 @@ const EditarSancionModal = ({ sancion, open, onClose, onGuardar }) => {
                                 minRows={4}
                                 value={descripcion}
                                 onChange={handleChange}
-                                style={{ width: '100%' }}
+                                style={{ width: '600px' }}
                             />
                         </Stack>
                     </Grid>

@@ -12,6 +12,7 @@ import { Sancionar } from '../../api/crear_sancion.ts';
 import { buscar_sancionado } from '../../api/buscar.ts';
 
 const CrearSanciones = () => {
+
     const [dias, setDias] = useState(0);
     const [horas, setHoras] = useState(0);
     const [usuario, setUsuario] = useState({
@@ -105,13 +106,14 @@ const CrearSanciones = () => {
                     <Stack spacing={1}>
                         <InputLabel htmlFor="descripcion">Descripción</InputLabel>
                         <TextareaAutosize
+                            
                             id="descripcion"
                             name="description"
                             minRows={4}
                             value={usuario.description}
                             onChange={handleChange}
                             placeholder='Descripción de la sanción'
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', height: '250px' }}
                         />
                     </Stack>
                 </Grid>
