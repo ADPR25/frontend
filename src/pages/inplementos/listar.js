@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Table, TableHead, TableBody, TableRow, TableCell, InputLabel,OutlinedInput,Stack,
-} from '@mui/material';
+    Grid, Table, TableHead, TableBody, TableRow, TableCell,Stack,} from '@mui/material';
 import { inventario } from '../../api/inventario.ts';
 
 const Inventario = () => {
@@ -19,74 +18,6 @@ const Inventario = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                    <InputLabel htmlFor="fecha">Fecha</InputLabel>
-                    <OutlinedInput
-                        id="fecha"
-                        type="date"
-                        name="fecha"
-                        fullWidth
-                        required
-                    />
-                </Stack>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                    <InputLabel htmlFor="N_informe">Numero de informes</InputLabel>
-                    <OutlinedInput
-                        id="N_informe"
-                        type="string"
-                        name="n_informe"
-                        fullWidth
-                        placeholder="numero de informes"
-                        required
-                    />
-                </Stack>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                    <InputLabel htmlFor="N_funcionario">Nombre del funcionario</InputLabel>
-                    <OutlinedInput
-                        id="N_funcionario"
-                        type="string"
-                        name="N_funcionario"
-                        fullWidth
-                        placeholder="Nombre del funcionario"
-                        required
-                    />
-                </Stack>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                    <InputLabel htmlFor="N_docuemto">Documento de indentidad</InputLabel>
-                    <OutlinedInput
-                        id="N_docuemto"
-                        type="string"
-                        name="N_docuemto"
-                        fullWidth
-                        placeholder="Documento de indentidad"
-                        required
-                    />
-                </Stack>
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-                <Stack spacing={1}>
-                    <InputLabel htmlFor="Dependecia_oficina">Dependencia u oficina </InputLabel>
-                    <OutlinedInput
-                        id="Dependecia_oficina"
-                        type="string"
-                        name="Dependecia_oficina"
-                        fullWidth
-                        placeholder="Dependencia u oficina"
-                        required
-                    />
-                </Stack>
-            </Grid>
 
             <Grid item xs={12} md={12}>
                 <Stack spacing={7}></Stack>
