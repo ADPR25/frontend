@@ -116,7 +116,9 @@ const CrearSanciones = () => {
                     </Stack>
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <Button type="submit" variant="contained" color="primary">Enviar</Button>
+                    <center>
+                        <Button type="submit" variant="contained" color="primary">Enviar</Button>
+                    </center>
                 </Grid>
             </Grid>
         </form>

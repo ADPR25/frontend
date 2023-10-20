@@ -2,7 +2,6 @@ const API = 'https://proyecto-backend-sgbienestar.onrender.com/registro/usuario/
 
 interface sancion {
     correo: string
-
 }
 export const buscar_sancionado = async (usuario: sancion) => {
     try {
