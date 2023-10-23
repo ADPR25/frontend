@@ -42,6 +42,7 @@ const AuthLogin = () => {
       if (response.status === 201 && data.token) { // Cambié 200 a 201 para reflejar la respuesta del servidor
         // Llama a la función de inicio de sesión con el token.
         handleLogin(data.token);
+
         setUsuario({
           correo_inst: '',
           contrasena: '',
@@ -70,7 +71,7 @@ const AuthLogin = () => {
               fullWidth
               value={usuario.correo_inst}
               onChange={handleChange}
-              required
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
             />
           </Stack>
         </Grid>
@@ -85,7 +86,7 @@ const AuthLogin = () => {
               value={usuario.contrasena}
               name="contrasena"
               onChange={handleChange}
-              required
+              required // Agregué la propiedad "required" para hacer que los campos sean obligatorios
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -94,7 +95,7 @@ const AuthLogin = () => {
                     edge="end"
                     size="large"
                   >
-                    {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                    {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} 
                   </IconButton>
                 </InputAdornment>
               }
