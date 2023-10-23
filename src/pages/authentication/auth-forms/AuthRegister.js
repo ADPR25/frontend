@@ -11,6 +11,7 @@ import {
   Button,
   Snackbar,
 } from '@mui/material';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 import AutoCompleteInput from '../../../components/autocomplete';
 import { obtenerEPS } from '../../../api/obtenerEps.ts';
@@ -430,7 +431,7 @@ const AuthRegister = () => {
                       edge="end"
                       size="large"
                     >
-                      {showPassword ? '🙉' : '🙈'}
+                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} 
                     </IconButton>
                   </InputAdornment>
                 }
@@ -459,7 +460,7 @@ const AuthRegister = () => {
                       edge="end"
                       size="large"
                     >
-                      {showConfirmPassword ? '🙉' : '🙈'}
+                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} 
                     </IconButton>
                   </InputAdornment>
                 }
