@@ -5,10 +5,12 @@ import {
   Grid,
   OutlinedInput,
   InputLabel,
+  Button,
   Select,
   MenuItem,
   Stack,
 } from '@mui/material';
+import jsPDF from 'jspdf';
 
 const CrearInplementos = () => {
   const [n_iData, setn_iData] = useState([]);
@@ -34,12 +36,12 @@ const CrearInplementos = () => {
         const e_i = await estado_implemento();
         sete_iDate(e_i);
       } catch (error) {
-        console.error('Error al obtener los nombres de los implementos', error);
+        console.error('Error al obtener los estados de los implementos', error);
       }
     }
 
     fetchData();
-  }, []); 
+  }, []);
 
   const tipos = [
     { value: 'seleccion', label: 'Seleccione' },
@@ -62,210 +64,306 @@ const CrearInplementos = () => {
     { value: 'En mantenimiento', label: 'En mantenimiento' },
   ];
 
-    return (
-        <form>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="fecha">Fecha</InputLabel>
-                        <OutlinedInput
-                            id="fecha"
-                            type="date"
-                            name="fecha"
-                            fullWidth
-                            required
-                        />
-                    </Stack>
-                </Grid>
+  const [formData, setFormData] = useState({
+    fecha: '',
+    N_informe: '',
+    N_funcionario: '',
+    N_documento: '',
+    Dependencia_oficina: '',
+    Implementos: 'seleccion',
+    descripcion: 'seleccion',
+    detalle: 'seleccion',
+    cantidad: '',
+    unidades: '',
+    Caracteristicas: '',
+    nombre_i: 'seleccion',
+  });
 
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="N_informe">Numero de informes</InputLabel>
-                        <OutlinedInput
-                            id="N_informe"
-                            type="string"
-                            name="n_informe"
-                            fullWidth
-                            placeholder="numero de informes"
-                            required
-                        />
-                    </Stack>
-                </Grid>
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="N_funcionario">Nombre del funcionario</InputLabel>
-                        <OutlinedInput
-                            id="N_funcionario"
-                            type="string"
-                            name="N_funcionario"
-                            fullWidth
-                            placeholder="Nombre del funcionario"
-                            required
-                        />
-                    </Stack>
-                </Grid>
+  const handleDownloadPDF = () => {
+    if (
+      formData.fecha === '' ||
+      formData.N_informe === '' ||
+      formData.N_funcionario === '' ||
+      formData.N_documento === ''
+    ) {
+      alert('Por favor, complete todos los campos obligatorios antes de generar el PDF.');
+      return;
+    }
 
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="N_docuemto">Documento de indentidad</InputLabel>
-                        <OutlinedInput
-                            id="N_docuemto"
-                            type="string"
-                            name="N_docuemto"
-                            fullWidth
-                            placeholder="Documento de indentidad"
-                            required
-                        />
-                    </Stack>
-                </Grid>
+    const doc = new jsPDF();
+    doc.text('Informe de Mantenimiento de Implementos', 70, 15);
+    let yPosition = 30;
 
-                <Grid item xs={12} md={12}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="Dependecia_oficina">Dependencia u oficina </InputLabel>
-                        <OutlinedInput
-                            id="Dependecia_oficina"
-                            type="string"
-                            name="Dependecia_oficina"
-                            fullWidth
-                            placeholder="Dependencia u oficina"
-                            required
-                        />
-                    </Stack>
-             </Grid>
+    doc.text(`Fecha: ${formData.fecha}`, 20, yPosition);
+    yPosition += 10;
 
-          
-          <Grid item xs={12} md={6}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="tipos">Tipos</InputLabel>
-              <Select
-                id="tipos "
-                name="tipos "
-                fullWidth
-              >
-                {tipos .map((option) => (
-                  <MenuItem key={`tipos -option-${option.value}`} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-          </Grid>
+    doc.text(`Número de Informes: ${formData.N_informe}`, 20, yPosition);
+    yPosition += 10;
 
-          <Grid item xs={12} md={6}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="Implementos">Implemento</InputLabel>
-              <Select
-                id="Implementos"
-                name="Implementos"
-                fullWidth
-              >
-                {Implementos.map((option) => (
-                  <MenuItem key={`Implementos-option-${option.value}`} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-          </Grid>
-           
-          <Grid item xs={12} md={6}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="descripcion">Descripcion</InputLabel>
-              <Select
-                id="descripcion"
-                name="descripcion"
-                fullWidth
-              >
-                {descripcion.map((option) => (
-                  <MenuItem key={`descripcion-option-${option.value}`} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-          </Grid>
+    doc.text(`Nombre del Funcionario: ${formData.N_funcionario}`, 20, yPosition);
+    yPosition += 10;
 
-          <Grid item xs={12} md={6}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="detalle">Estado</InputLabel>
-              <Select
-                id="detalle"
-                name="detalle"
-                fullWidth
-              >
-                {e_iData.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.estado}
-                  </MenuItem>
-                )
-                )}
-              </Select>
-            </Stack>
-          </Grid>
+    doc.text(`Documento de Identidad: ${formData.N_documento}`, 20, yPosition);
+    yPosition += 10;
 
-          <Grid item xs={12} md={12}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
-                        <OutlinedInput
-                            id="cantidad"
-                            type="string"
-                            name="cantidad"
-                            fullWidth
-                            required
-                        />
-                    </Stack>
-                </Grid>
+    doc.text(`Dependencia u Oficina: ${formData.Dependencia_oficina}`, 20, yPosition);
+    yPosition += 10;
 
-                
+    doc.text(`Tipo: ${formData.Implementos === 'seleccion' ? 'No especificado' : formData.Implementos}`, 20, yPosition);
+    yPosition += 10;
 
-            <Grid item xs={12} md={4}>
-            <Stack spacing={1}>
-              <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
-              <Select
-                id="detalle"
-                name="detalle"
-                fullWidth
-              >
-                {n_iData.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.nombre}
-                  </MenuItem>
-                )
-                )}
-              </Select>
-            </Stack>
-          </Grid>
+    doc.text(`Descripción: ${formData.descripcion === 'seleccion' ? 'No especificado' : formData.descripcion}`, 20, yPosition);
+    yPosition += 10;
 
-           <Grid item xs={12} md={4}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="unidades">Unidades</InputLabel>
-                        <OutlinedInput
-                            id="unidades"
-                            type="number"
-                            name="unidades"
-                            fullWidth
-                            required
-                        />
-                    </Stack>
-             </Grid>
+    doc.text(`Estado: ${formData.detalle === 'seleccion' ? 'No especificado' : formData.detalle}`, 20, yPosition);
+    yPosition += 10;
 
-          <Grid item xs={12} md={4}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="Caracteristicas">Caracteristicas</InputLabel>
-                        <OutlinedInput
-                            id="Caracteristicas"
-                            type="string"
-                            name="Caracteristicas"
-                            fullWidth
-                            required
-                        />
-                    </Stack>
-          </Grid>
+    doc.text(`Nombre del Implemento: ${formData.nombre_i === 'seleccion' ? 'No especificado' : formData.nombre_i}`, 20, yPosition);
+    yPosition += 10;
 
+    doc.text(`Cantidad: ${formData.cantidad}`, 20, yPosition);
+    yPosition += 10;
+
+    doc.text(`Unidades: ${formData.unidades}`, 20, yPosition);
+    yPosition += 10;
+
+    doc.text(`Características: ${formData.Caracteristicas}`, 20, yPosition);
+    yPosition += 10;
+
+    doc.save('informe_mantenimiento.pdf');
+  };
+
+  return (
+    <form>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="fecha">Fecha</InputLabel>
+            <OutlinedInput
+              id="fecha"
+              type="date"
+              name="fecha"
+              fullWidth
+              value={formData.fecha}
+              onChange={handleFormChange}
+            />
+          </Stack>
         </Grid>
-        </form>
-    );
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="N_informe">Numero de informes</InputLabel>
+            <OutlinedInput
+              id="N_informe"
+              type="string"
+              name="N_informe"
+              fullWidth
+              placeholder="Número de informes"
+              value={formData.N_informe}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="N_funcionario">Nombre del funcionario</InputLabel>
+            <OutlinedInput
+              id="N_funcionario"
+              type="string"
+              name="N_funcionario"
+              fullWidth
+              placeholder="Nombre del funcionario"
+              value={formData.N_funcionario}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="N_documento">Documento de identidad</InputLabel>
+            <OutlinedInput
+              id="N_documento"
+              type="string"
+              name="N_documento"
+              fullWidth
+              placeholder="Documento de identidad"
+              value={formData.N_documento}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={12}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="Dependencia_oficina">Dependencia u oficina </InputLabel>
+            <OutlinedInput
+              id="Dependencia_oficina"
+              type="string"
+              name="Dependencia_oficina"
+              fullWidth
+              placeholder="Dependencia u oficina"
+              value={formData.Dependencia_oficina}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="tipos">Tipos</InputLabel>
+            <Select
+              id="tipos "
+              name="tipos "
+              fullWidth
+            >
+              {tipos.map((option) => (
+                <MenuItem key={`tipos -option-${option.value}`} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="Implementos">Implemento</InputLabel>
+            <Select
+              id="Implementos"
+              name="Implementos"
+              fullWidth
+              value={formData.Implementos}
+              onChange={handleFormChange}
+            >
+              {Implementos.map((option) => (
+                <MenuItem key={`Implementos-option-${option.value}`} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="descripcion">Descripción</InputLabel>
+            <Select
+              id="descripcion"
+              name="descripcion"
+              fullWidth
+              value={formData.descripcion}
+              onChange={handleFormChange}
+            >
+              {descripcion.map((option) => (
+                <MenuItem key={`descripcion-option-${option.value}`} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="detalle">Estado</InputLabel>
+            <Select
+              id="detalle"
+              name="detalle"
+              fullWidth
+              value={formData.detalle}
+              onChange={handleFormChange}
+            >
+              {e_iData.map((option) => (
+                <MenuItem key={option._id} value={option.estado}>
+                  {option.estado}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={12}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
+            <OutlinedInput
+              id="cantidad"
+              type="string"
+              name="cantidad"
+              fullWidth
+              value={formData.cantidad}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="nombre_i">Nombre del implemento</InputLabel>
+            <Select
+              id="nombre_i"
+              name="nombre_i"
+              fullWidth
+              value={formData.nombre_i}
+              onChange={handleFormChange}
+            >
+              {n_iData.map((option) => (
+                <MenuItem key={option._id} value={option.nombre}>
+                  {option.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="unidades">Unidades</InputLabel>
+            <OutlinedInput
+              id="unidades"
+              type="number"
+              name="unidades"
+              fullWidth
+              value={formData.unidades}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack spacing={1}>
+            <InputLabel htmlFor="Caracteristicas">Características</InputLabel>
+            <OutlinedInput
+              id="Caracteristicas"
+              type="string"
+              name="Caracteristicas"
+              fullWidth
+              required
+              value={formData.Caracteristicas}
+              onChange={handleFormChange}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={12}>
+          <center>
+            <Button onClick={handleDownloadPDF} variant="contained" color="primary">
+              Descargar PDF
+            </Button>
+          </center>
+        </Grid>
+      </Grid>
+    </form>
+  );
 };
 
 export default CrearInplementos;

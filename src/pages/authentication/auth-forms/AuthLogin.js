@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarusuario } from '../../../api/usuario_ini.ts';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import {
   Grid,
   InputLabel,
@@ -94,7 +95,7 @@ const AuthLogin = () => {
                     edge="end"
                     size="large"
                   >
-                    {showPassword ? '🙉' : '🙈'}
+                    {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} 
                   </IconButton>
                 </InputAdornment>
               }
