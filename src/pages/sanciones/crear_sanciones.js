@@ -8,6 +8,7 @@ import {
     Button, // Importa Button para el botón de envío
 } from '@mui/material';
 
+
 import { Sancionar } from '../../api/crear_sancion.ts';
 import { buscar_sancionado } from '../../api/buscar.ts';
 
