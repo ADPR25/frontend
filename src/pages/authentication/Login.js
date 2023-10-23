@@ -24,7 +24,7 @@ const Login = () => (
         <AuthLogin />
       </Grid>
       &nbsp; &nbsp; &nbsp; &nbsp;<Typography style={{ marginTop: "10px" }} component={Link} to="/Rest_contrasena" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
-        Cambiar contraseña
+        Recuperar contraseña
       </Typography>
     </Grid>
   </AuthWrapper>
