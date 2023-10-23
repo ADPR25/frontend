@@ -11,7 +11,7 @@ import AuthWrapper from './AuthWrapper';
 
 const Login = () => (
   <AuthWrapper>
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
         <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
           <Typography variant="h3">Iniciar sesion</Typography>
@@ -23,6 +23,9 @@ const Login = () => (
       <Grid item xs={12}>
         <AuthLogin />
       </Grid>
+      &nbsp; &nbsp; &nbsp; &nbsp;<Typography style={{ marginTop: "10px" }} component={Link} to="/Rest_contrasena" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+        Cambiar contraseña
+      </Typography>
     </Grid>
   </AuthWrapper>
 );

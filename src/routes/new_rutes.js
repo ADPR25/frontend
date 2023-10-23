@@ -15,6 +15,13 @@ const CrearInplementos = Loadable(lazy(() => import('pages/inplementos/crear')))
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 const Mantenimiento = Loadable(lazy(() => import('pages/inplementos/mantenimiento')));
 const Uso = Loadable(lazy(() => import('pages/inplementos/uso')));
+
+//prestamos
+
+const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
+const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
+
+//recuperacion
 // ==============================|| MAIN ROUTING ||============================== //
 
 const newRutes = {
@@ -45,6 +52,14 @@ const newRutes = {
             path: 'uso',
             element: <Uso />
         },
+        {
+            path: 'Lista_prestamos',
+            element: <Lista_prestamos />
+        },
+        {
+            path: 'Prestar',
+            element: <Prestar />
+        }
         
     ]
 };
