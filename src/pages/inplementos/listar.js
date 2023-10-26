@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Table, TableHead, TableBody, TableRow, TableCell,Stack,} from '@mui/material';
-import { inventario } from '../../api/inventario.ts';
-
+    Grid, Button, Table, TableHead, TableBody, TableRow, TableCell,Stack,} from '@mui/material';
+import { inventario } from '../../api/inventario.ts';   
+import AddIcon from '@mui/icons-material/Add';
+import CrearImplementoModal  from './crear-implemento-modal';
 const Inventario = () => {
+
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const handlecrear = () => {
+        setModalOpen(true);
+    };
+
     const [inventarioData, setInventarioData] = useState([]);
 
     useEffect(() => {
         // Llama a la función de API para obtener los datos del inventario
         inventario()
             .then((data) => {
-                console.log(data); // Verifica los datos en la consola
+                console.log(data); // Verifica PlusOutlinedlos datos en la consola
                 setInventarioData(data)
             })
             .catch((error) => console.error(error));
@@ -47,6 +55,15 @@ const Inventario = () => {
                     ))}
                 </TableBody>
             </Table>
+            <Grid item xs={12} md={12}>
+                <center>
+                    <Button variant="contained" color="primary">
+                        <AddIcon onClick={handlecrear} />
+                    </Button>
+                </center>
+            </Grid>
+            <CrearImplementoModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
         </Grid>
     );
 };
