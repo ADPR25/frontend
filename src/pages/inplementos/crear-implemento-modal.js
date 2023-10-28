@@ -19,6 +19,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
         cantidad: '',
         detalle: '',
     });
+    console.log('formData:', formData);
 
     useEffect(() => {
         async function fetchData() {
@@ -63,25 +64,29 @@ const CrearImplementoModal = ({ open, onClose }) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
+   
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            // You may want to perform additional validations here.
 
+        try {
             const result = await C_implemento({
                 codigo: formData.codigo,
                 nombre: formData.nombre,
                 marca: formData.marca,
-                categoria: formData.categoria,
                 descripcion: formData.descripcion,
+                categoria: [formData.categoria], // Debe ser un arreglo según el backend
                 cantidad: formData.cantidad,
-                detalle: formData.detalle,
+                img: 'ninguna',
+                estado: [formData.estado], // Debe ser un arreglo según el backend
             });
 
+            console.log(result);
+            
+
             if (result) {
-                // Perform actions for a successful implementation creation
                 console.log('Implemento creado con éxito');
-                onClose(); // Close the modal after successful creation
+                onClose();
             } else {
                 console.error('Error al crear el implemento:', result);
             }
@@ -91,11 +96,12 @@ const CrearImplementoModal = ({ open, onClose }) => {
     };
 
 
+
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Editar Sanción</DialogTitle>
             <DialogContent>
-                <Grid container spacing={5}>
+                <Grid container spacing={5} style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
                             <InputLabel htmlFor="codigo">Codigo</InputLabel>
@@ -106,7 +112,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.codigo}
                                 onChange={handleChange}
                                 fullWidth
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                             />
                         </Stack>
                     </Grid>
@@ -121,7 +127,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.nombre}
                                 onChange={handleChange}
                                 fullWidth
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                             />
                         </Stack>
                     </Grid>
@@ -135,7 +141,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.marca}
                                 onChange={handleChange}
                                 fullWidth
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                             >
                                 {marcaData.map((option) => (
                                     <MenuItem key={option._id} value={option.nombre}>
@@ -155,7 +161,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.categoria}
                                 onChange={handleChange}
                                 fullWidth
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                             >
                                 {categoriaData.map((option) => (
                                     <MenuItem key={option._id} value={option.nombre}>
@@ -175,7 +181,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.descripcion}
                                 onChange={handleChange}
                                 minRows={4}
-                                style={{ width: '95%', height: '100px' }}
+                                style={{ width: '100%', height: '100px' }}
                             />
                         </Stack>
                     </Grid>
@@ -190,7 +196,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 value={formData.cantidad}
                                 onChange={handleChange}
                                 fullWidth
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                             />
                         </Stack>
                     </Grid>
@@ -203,7 +209,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 name="detalle"
                                 value={formData.detalle}
                                 onChange={handleChange}
-                                style={{ width: '300px' }}
+                                style={{ width: '100%' }}
                                 fullWidth
                             >
                                 {e_iData.map((option) => (

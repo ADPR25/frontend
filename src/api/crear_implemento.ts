@@ -7,7 +7,7 @@ interface sancion {
     descripcion: string,
     categoria: string,
     cantidad: number,
-    img: null,
+    img: string,
     estado: string
 }
 

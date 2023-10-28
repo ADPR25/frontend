@@ -42,7 +42,7 @@ const Prestar = () => {
         e.preventDefault();
         try {
             const prestamoData = {
-                implementos: usuario.detalle,
+                implementos: [usuario.detalle],
                 fecha_inicio: usuario.fechaInicio,
                 fecha_fin: usuario.fechaDevolucion
             };
