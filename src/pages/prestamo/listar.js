@@ -41,17 +41,21 @@ const Lista_prestamos = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Implemento</TableCell>
-                        <TableCell>Fecha de inicio del prestamo</TableCell>
-                        <TableCell>Fecha final del prestamo</TableCell>
+                        <TableCell>Fecha de inicio</TableCell>
+                        <TableCell>Hora de inicio</TableCell>
+                        <TableCell>Fecha final</TableCell>
+                        <TableCell>Hora final</TableCell>
                         <TableCell>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {buscar_prestamosData.map((item) => (
                         <TableRow key={item._id}>
-                            <TableCell>{item.implementos}</TableCell>
-                            <TableCell>{item.fecha_inicio}</TableCell>
-                            <TableCell>{item.fecha_fin}</TableCell>
+                            <TableCell>{item.implementos[0].nombre}</TableCell>
+                            <TableCell>{new Date(item.fecha_inicio).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(item.fecha_inicio).toLocaleTimeString()}</TableCell>
+                            <TableCell>{new Date(item.fecha_fin).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(item.fecha_fin).toLocaleTimeString()}</TableCell>
                             <TableCell>
                                 <IconButton onClick={() => eliminar_prestamo__(item._id)}>
                                     <DeleteOutline />

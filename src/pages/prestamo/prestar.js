@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
-import { crearPrestamo } from '../../api/prestar.ts';
+
 import {
     Grid,
     Stack,
@@ -10,16 +9,37 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import { estado_implemento } from '../../api/estado-implemento.ts';
+import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
+import { crearPrestamo } from '../../api/prestar.ts';
 
 const Prestar = () => {
+
+    
+    const [e_iData, setE_iData] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const e_i = await estado_implemento();
+                setE_iData(e_i);
+            } catch (error) {
+                console.error('Error al obtener los estados de los implementos', error);
+            }
+        }
+        fetchData();
+    }, []);
+
     const [usuario, setUsuario] = useState({
         detalle: '',
         fechaInicio: '',
+        horaInicio: '',
         fechaDevolucion: '',
+        horaDevolucion: '',
+        estado: '',
     });
 
-    const [n_iData, setN_iData] = useState([]);
 
+    const [n_iData, setN_iData] = useState([]);
     useEffect(() => {
         async function fetchData() {
             try {
@@ -29,7 +49,6 @@ const Prestar = () => {
                 console.error('Error al obtener los nombres de los implementos', error);
             }
         }
-
         fetchData();
     }, []);
 
@@ -40,24 +59,43 @@ const Prestar = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!usuario.fechaInicio || !usuario.horaInicio || !usuario.fechaDevolucion || !usuario.horaDevolucion) {
+            console.error('Las fechas y horas no pueden estar vacías');
+            return;
+        }
+
         try {
+            // Formatea las fechas y horas
+            const fechaInicio = `${usuario.fechaInicio}T${usuario.horaInicio}`;
+            const fechaDevolucion = `${usuario.fechaDevolucion}T${usuario.horaDevolucion}`;
+
             const prestamoData = {
                 implementos: [usuario.detalle],
-                fecha_inicio: usuario.fechaInicio,
-                fecha_fin: usuario.fechaDevolucion
+                fecha_inicio: fechaInicio,
+                fecha_fin: fechaDevolucion,
+                estado: usuario.estado
             };
 
             await crearPrestamo(prestamoData);
-            // Realiza cualquier otra acción que desees después de enviar el préstamo
+
+            setUsuario({
+                detalle: '',
+                fechaInicio: '',
+                horaInicio: '',
+                fechaDevolucion: '',
+                horaDevolucion: '',
+                estado: '',
+            });
         } catch (error) {
             console.error('Error al enviar el préstamo', error);
         }
     };
 
+
     return (
-        <form onSubmit={handleSubmit}> {/* Cambiado de onChange a onSubmit */}
+        <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
                         <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
                         <Select
@@ -70,6 +108,25 @@ const Prestar = () => {
                             {n_iData.map((option) => (
                                 <MenuItem key={option._id} value={option._id}>
                                     {option.nombre}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Stack>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="estado">Estado</InputLabel>
+                        <Select
+                            id="estado"
+                            name="estado"
+                            fullWidth
+                            value={usuario.estado}
+                            onChange={handleChange}
+                        >
+                            {e_iData.map((option) => (
+                                <MenuItem key={option._id} value={option._id}>
+                                    {option.estado}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -92,6 +149,20 @@ const Prestar = () => {
 
                 <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
+                        <InputLabel htmlFor="fechaInicio">Hora de inicio del préstamo</InputLabel>
+                        <TextField
+                            id="horaInicio"
+                            type="time"
+                            name="horaInicio"
+                            fullWidth
+                            value={usuario.horaInicio}
+                            onChange={handleChange}
+                        />
+                    </Stack>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
                         <InputLabel htmlFor="fechaDevolucion">Fecha devolución</InputLabel>
                         <TextField
                             id="fechaDevolucion"
@@ -99,6 +170,21 @@ const Prestar = () => {
                             name="fechaDevolucion"
                             fullWidth
                             value={usuario.fechaDevolucion}
+                            onChange={handleChange}
+                        />
+                    </Stack>
+                </Grid>
+
+
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="fechaDevolucion">Hora de devolución</InputLabel>
+                        <TextField
+                            id="horaDevolucion"
+                            type="time"
+                            name="horaDevolucion"
+                            fullWidth
+                            value={usuario.horaDevolucion}
                             onChange={handleChange}
                         />
                     </Stack>
