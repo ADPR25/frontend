@@ -1,21 +1,9 @@
 import {
-    AppstoreAddOutlined,
-    AntDesignOutlined,
-    BarcodeOutlined,
-    BgColorsOutlined,
-    FontSizeOutlined,
-    LoadingOutlined,
     WarningOutlined,
     OrderedListOutlined
 } from '@ant-design/icons';
 
 const icons = {
-    FontSizeOutlined,
-    BgColorsOutlined,
-    BarcodeOutlined,
-    AntDesignOutlined,
-    LoadingOutlined,
-    AppstoreAddOutlined,
     WarningOutlined,
     OrderedListOutlined
 };

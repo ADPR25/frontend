@@ -1,23 +1,11 @@
 import {
-    AppstoreAddOutlined,
-    AntDesignOutlined,
-    BarcodeOutlined,
-    BgColorsOutlined,
-    FontSizeOutlined,
-    LoadingOutlined,
-    WarningOutlined,
-    OrderedListOutlined
+    OrderedListOutlined,
+    CalendarOutlined
 } from '@ant-design/icons';
 
 const icons = {
-    FontSizeOutlined,
-    BgColorsOutlined,
-    BarcodeOutlined,
-    AntDesignOutlined,
-    LoadingOutlined,
-    AppstoreAddOutlined,
-    WarningOutlined,
-    OrderedListOutlined
+    OrderedListOutlined,
+    CalendarOutlined
 };
 
 const Prestamo = {
@@ -30,7 +18,7 @@ const Prestamo = {
             title: 'crear prestamos',
             type: 'item',
             url: '/Prestar',
-            icon: icons.WarningOutlined
+            icon: icons.CalendarOutlined
         },
         {
             id: 'listar_p',
