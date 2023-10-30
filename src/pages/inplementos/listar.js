@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Button, Table, TableHead, TableBody, TableRow, TableCell,Stack,} from '@mui/material';
-import { inventario } from '../../api/inventario.ts';   
+    Grid, Button, Table, TableHead, TableBody, TableRow, TableCell, Stack,
+} from '@mui/material';
+import { inventario } from '../../api/inventario.ts';
 import AddIcon from '@mui/icons-material/Add';
-import CrearImplementoModal  from './crear-implemento-modal';
+import CrearImplementoModal from './CrearImplementoModal.js';
 const Inventario = () => {
 
 
@@ -18,7 +19,7 @@ const Inventario = () => {
         // Llama a la función de API para obtener los datos del inventario
         inventario()
             .then((data) => {
-                console.log(data); // Verifica PlusOutlinedlos datos en la consola
+                // console.log(data);
                 setInventarioData(data)
             })
             .catch((error) => console.error(error));

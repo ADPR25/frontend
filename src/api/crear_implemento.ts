@@ -1,17 +1,24 @@
 const API = 'https://proyecto-backend-sgbienestar.onrender.com/implementos';
 
-interface sancion {
+interface crear {
     codigo: string,
     nombre: string,
     marca: string,
-    descripcion: string,
-    categoria: string,
+    descripcion: {},
+    categoria: [string],
     cantidad: number,
     img: string,
-    estado: string
+    estado: [{
+        estado: [{
+            estado:string
+        }]
+        cantidad: number
+        apto: boolean
+    }
+    ]
 }
 
-export const C_implemento = (usuario: sancion) =>
+export const C_implemento = (usuario: crear) =>
     fetch(`${API}`, {
         method: 'POST',
         body: JSON.stringify(usuario),
@@ -21,6 +28,28 @@ export const C_implemento = (usuario: sancion) =>
     });
 
 
+// export async function C_implemento(data) {
+//     const url = 'https://proyecto-backend-sgbienestar.onrender.com/implementos';
+
+//     try {
+//         const response = await fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(data),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`No se pudo: ${response.status}`);
+//         }
+
+//         const responseData = await response.json();
+//         return responseData;
+//     } catch (error) {
+//         throw new Error(`No se pueden cargar: ${error.message}`);
+//     }
+// }
 
 
 

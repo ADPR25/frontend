@@ -14,12 +14,12 @@ const CrearImplementoModal = ({ open, onClose }) => {
         codigo: '',
         nombre: '',
         marca: '',
-        categoria: '',
-        descripcion: '',
-        cantidad: '',
-        detalle: '',
+        categoria: [''],
+        descripcion: '', 
+        cantidad: 0,
+        estado: [],
     });
-    console.log('formData:', formData);
+
 
     useEffect(() => {
         async function fetchData() {
@@ -62,38 +62,60 @@ const CrearImplementoModal = ({ open, onClose }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
-    };
-   
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+        // console.log(`Value for ${name}: ${value}`);
 
-        try {
-            const result = await C_implemento({
-                codigo: formData.codigo,
-                nombre: formData.nombre,
-                marca: formData.marca,
-                descripcion: formData.descripcion,
-                categoria: [formData.categoria], // Debe ser un arreglo según el backend
-                cantidad: formData.cantidad,
-                img: 'ninguna',
-                estado: [formData.estado], // Debe ser un arreglo según el backend
-            });
-
-            console.log(result);
-            
-
-            if (result) {
-                console.log('Implemento creado con éxito');
-                onClose();
-            } else {
-                console.error('Error al crear el implemento:', result);
-            }
-        } catch (error) {
-            console.error('Error al crear el implemento:', error);
+        if (name === 'cantidad') {
+            const numericValue = parseFloat(value);
+            setFormData({ ...formData, [name]: isNaN(numericValue) ? '' : numericValue });
+        } else if (name === 'descripcion') {
+            setFormData({ ...formData, [name]: value.toString() });
+        } else {
+            setFormData({ ...formData, [name]: value });
         }
     };
+
+
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Check if formData.cantidad is a valid number
+    if (isNaN(formData.cantidad)) {
+        console.error('La cantidad no es un número válido.');
+        return;
+    }
+
+    try {
+        const result = await C_implemento({
+            codigo: formData.codigo,
+            nombre: formData.nombre,
+            marca: formData.marca,
+            descripcion: formData.descripcion,
+            categoria: formData.categoria,
+            cantidad: formData.cantidad,
+            img: 'nn',
+            estado: [{
+                estado: [{
+                    estado: formData.estado
+                }],
+                cantidad: formData.cantidad,
+                apto: true,
+            }],
+        });
+
+        console.log(result);
+
+        if (result) {
+            // Reload the page after a successful submission
+            window.location.reload();
+        } else {
+            console.error('Error al crear el implemento:', result);
+        }
+    } catch (error) {
+        console.error('Error al crear el implemento:', error);
+    }
+}
+
 
 
 
@@ -144,7 +166,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                                 style={{ width: '100%' }}
                             >
                                 {marcaData.map((option) => (
-                                    <MenuItem key={option._id} value={option.nombre}>
+                                    <MenuItem key={option._id} value={option._id}>
                                         {option.nombre}
                                     </MenuItem>
                                 ))}
@@ -158,17 +180,18 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <Select
                                 id="categoria"
                                 name="categoria"
-                                value={formData.categoria}
+                                value={[formData.categoria]}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
                             >
                                 {categoriaData.map((option) => (
-                                    <MenuItem key={option._id} value={option.nombre}>
+                                    <MenuItem key={option._id} value={option._id}>
                                         {option.nombre}
                                     </MenuItem>
                                 ))}
                             </Select>
+
                         </Stack>
                     </Grid>
 
@@ -191,7 +214,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <InputLabel htmlFor="cantidad">Cantidad</InputLabel>
                             <OutlinedInput
                                 id="cantidad"
-                                type="number"
+                                type="number" // Asegura que el tipo sea numérico
                                 name="cantidad"
                                 value={formData.cantidad}
                                 onChange={handleChange}
@@ -203,17 +226,17 @@ const CrearImplementoModal = ({ open, onClose }) => {
 
                     <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
-                            <InputLabel htmlFor="detalle">Estado</InputLabel>
+                            <InputLabel htmlFor="estado">Estado</InputLabel>
                             <Select
-                                id="detalle"
-                                name="detalle"
-                                value={formData.detalle}
+                                id="estado"
+                                name="estado"
+                                value={[formData.estado]}
                                 onChange={handleChange}
-                                style={{ width: '100%' }}
                                 fullWidth
+                                style={{ width: '100%' }}
                             >
                                 {e_iData.map((option) => (
-                                    <MenuItem key={option._id} value={option.estado}>
+                                    <MenuItem key={option._id} value={option._id}>
                                         {option.estado}
                                     </MenuItem>
                                 ))}
