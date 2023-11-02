@@ -1,23 +1,46 @@
 import React, { useState, useEffect } from 'react';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import {
-    Grid, Table, TableHead, TableBody, TableRow, TableCell, Stack, 
+    Grid,
+    Table,
+    IconButton,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    Stack,
 } from '@mui/material';
-// import { DeleteOutline } from '@mui/icons-material';
 import { buscar_prestamos } from '../../api/buscar_prestamos.ts';
-// import { eliminar_prestamo } from '../../api/eliminar_prestamo.ts';
-
+import { eliminar_prestamo } from '../../api/eliminar_prestamo.ts';
+import EditarPrestamo from './editar_prestamo';
 const Lista_prestamos = () => {
     const [buscar_prestamosData, setbuscar_prestamosData] = useState([]);
+    const [selectedPrestamo, setSelectedPrestamo] = useState(null); // Estado para el préstamo seleccionado
+    const [modalOpen, setModalOpen] = useState(false); // Estado para controlar la apertura/cierre del modal
 
     useEffect(() => {
-        // Llama a la función de API para obtener los datos del inventario
         buscar_prestamos()
             .then((data) => {
-                // console.log(data); 
                 setbuscar_prestamosData(data);
             })
             .catch((error) => console.error(error));
     }, []);
+
+    const handleEliminarPrestamo = (id) => {
+        eliminar_prestamo(id)
+            .then(() => {
+                // Después de eliminar el préstamo, puedes volver a cargar la lista
+                buscar_prestamos()
+                    .then((data) => setbuscar_prestamosData(data))
+                    .catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+    };
+
+    const handleEditarPrestamo = (prestamo) => {
+        setSelectedPrestamo(prestamo);
+        setModalOpen(true);
+    };
 
     return (
         <Grid container spacing={2}>
@@ -33,7 +56,8 @@ const Lista_prestamos = () => {
                         <TableCell>Hora de inicio</TableCell>
                         <TableCell>Fecha final</TableCell>
                         <TableCell>Hora final</TableCell>
-                        <TableCell>Acciones</TableCell>
+                        <TableCell>Eliminar préstamo</TableCell>
+                        <TableCell>Editar préstamo</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -44,10 +68,29 @@ const Lista_prestamos = () => {
                             <TableCell>{new Date(item.fecha_inicio).toLocaleTimeString()}</TableCell>
                             <TableCell>{new Date(item.fecha_fin).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(item.fecha_fin).toLocaleTimeString()}</TableCell>
+                            <TableCell>
+                                <IconButton onClick={() => handleEliminarPrestamo(item._id)}>
+                                    <DeleteOutline />
+                                </IconButton>
+                            </TableCell>
+                            <TableCell>
+                                <IconButton onClick={() => handleEditarPrestamo(item)}>
+                                    <EditOutlined />
+                                </IconButton>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
+
+            <EditarPrestamo
+                prestamo={selectedPrestamo}
+                open={modalOpen}
+                onClose={() => {
+                    setModalOpen(false);
+                    setSelectedPrestamo(null);
+                }}
+            />
         </Grid>
     );
 };

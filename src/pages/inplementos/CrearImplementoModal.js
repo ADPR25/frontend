@@ -106,7 +106,6 @@ const CrearImplementoModal = ({ open, onClose }) => {
         console.log(result);
 
         if (result) {
-            // Reload the page after a successful submission
             window.location.reload();
         } else {
             console.error('Error al crear el implemento:', result);
@@ -115,9 +114,6 @@ const CrearImplementoModal = ({ open, onClose }) => {
         console.error('Error al crear el implemento:', error);
     }
 }
-
-
-
 
     return (
         <Dialog open={open} onClose={onClose}>
