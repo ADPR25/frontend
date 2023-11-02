@@ -76,12 +76,12 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
             onClose();
         } catch (error) {
             console.error('Error al enviar el préstamo', error);
-        }
+        }cd
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Editar Sanción</DialogTitle>
+            <DialogTitle>Editar Prestamo</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
