@@ -13,6 +13,7 @@ import {
 import { buscar_prestamos } from '../../api/buscar_prestamos.ts';
 import { eliminar_prestamo } from '../../api/eliminar_prestamo.ts';
 import EditarPrestamo from './editar_prestamo';
+
 const Lista_prestamos = () => {
     const [buscar_prestamosData, setbuscar_prestamosData] = useState([]);
     const [selectedPrestamo, setSelectedPrestamo] = useState(null); // Estado para el préstamo seleccionado
@@ -85,12 +86,14 @@ const Lista_prestamos = () => {
 
             <EditarPrestamo
                 prestamo={selectedPrestamo}
+                id={selectedPrestamo ? selectedPrestamo._id : null}
                 open={modalOpen}
                 onClose={() => {
                     setModalOpen(false);
                     setSelectedPrestamo(null);
                 }}
             />
+
         </Grid>
     );
 };

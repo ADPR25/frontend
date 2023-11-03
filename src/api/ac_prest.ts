@@ -1,16 +1,15 @@
 const API = 'https://proyecto-backend-sgbienestar.onrender.com/prestamos';
-
-export const actualizarPrestamo = (prestamoId, pretamoEditada) => {
-    return fetch(`${API}/${prestamoId}`, {
-        method: 'PATCH', // Utiliza el método HTTP PUT para actualizar la sanción
-        body: JSON.stringify(pretamoEditada),
+export const actualizarPrestamo = (Id, prestamoEditada) => {
+    return fetch(`${API}/${Id}`, {
+        method: 'PATCH', // Utiliza el método HTTP PATCH para actualizar el préstamo
+        body: JSON.stringify(prestamoEditada),
         headers: {
             'Content-Type': 'application/json',
         },
     })
-        .then(response => {
+        .then((response) => {
             if (!response.ok) {
-                throw new Error(`Error al actualizar la sanción: ${response.status}`);
+                throw new Error(`Error al actualizar el préstamo: ${response.status}`);
             }
             return response.json();
         });
