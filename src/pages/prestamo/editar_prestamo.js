@@ -21,7 +21,6 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
     });
 
     useEffect(() => {
-        // Cuando el componente se monta, establece los valores iniciales de los campos con los datos del préstamo
         if (prestamo) {
             const fechaInicio = new Date(prestamo.fecha_inicio);
             const fechaDevolucion = new Date(prestamo.fecha_fin);
@@ -52,7 +51,6 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
         }
 
         try {
-            // Formatea las fechas y horas
             const fechaInicio = `${usuario.fechaInicio}T${usuario.horaInicio}`;
             const fechaDevolucion = `${usuario.fechaDevolucion}T${usuario.horaDevolucion}`;
 
@@ -61,10 +59,7 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
                 fecha_fin: fechaDevolucion,
             };
 
-            // Call the API function to update the data
-            await actualizarPrestamo(prestamo.id, prestamoData);
-
-            // Clear the form after a successful update
+            await actualizarPrestamo(prestamo.id, prestamoData); 
             setUsuario({
                 fechaInicio: '',
                 horaInicio: '',
@@ -72,7 +67,6 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
                 horaDevolucion: '',
             });
 
-            // Close the modal
             onClose();
         } catch (error) {
             console.error('Error al enviar el préstamo', error);

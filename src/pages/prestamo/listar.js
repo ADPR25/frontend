@@ -16,8 +16,8 @@ import EditarPrestamo from './editar_prestamo';
 
 const Lista_prestamos = () => {
     const [buscar_prestamosData, setbuscar_prestamosData] = useState([]);
-    const [selectedPrestamo, setSelectedPrestamo] = useState(null); // Estado para el préstamo seleccionado
-    const [modalOpen, setModalOpen] = useState(false); // Estado para controlar la apertura/cierre del modal
+    const [modalOpen, setModalOpen] = useState(false); 
+    const [prestamoSeleccionado, setSelectedPrestamo] = useState(null);
 
     useEffect(() => {
         buscar_prestamos()
@@ -85,13 +85,9 @@ const Lista_prestamos = () => {
             </Table>
 
             <EditarPrestamo
-                prestamo={selectedPrestamo}
-                id={selectedPrestamo ? selectedPrestamo._id : null}
+                prestamo={prestamoSeleccionado}
                 open={modalOpen}
-                onClose={() => {
-                    setModalOpen(false);
-                    setSelectedPrestamo(null);
-                }}
+                onClose={() => setModalOpen(false)}
             />
 
         </Grid>
