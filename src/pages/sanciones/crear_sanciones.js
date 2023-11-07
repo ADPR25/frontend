@@ -28,7 +28,6 @@ const CrearSanciones = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Busca el ID del usuario
             const userId = await buscar_sancionado({
                 correo: usuario.correo,
             });

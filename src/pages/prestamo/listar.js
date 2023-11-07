@@ -64,7 +64,7 @@ const Lista_prestamos = () => {
                 <TableBody>
                     {buscar_prestamosData.map((item) => (
                         <TableRow key={item._id}>
-                            <TableCell>{item.implementos[0].nombre}</TableCell>
+                            <TableCell> {item.implementos[0] ? item.implementos[0].nombre : 'N/A'}</TableCell>
                             <TableCell>{new Date(item.fecha_inicio).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(item.fecha_inicio).toLocaleTimeString()}</TableCell>
                             <TableCell>{new Date(item.fecha_fin).toLocaleDateString()}</TableCell>
