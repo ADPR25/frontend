@@ -93,7 +93,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
             descripcion: formData.descripcion,
             categoria: formData.categoria,
             cantidad: formData.cantidad,
-            img: 'nn',
+            img: 'null',
             estado: [{
                 estado: [{
                     estado: formData.estado

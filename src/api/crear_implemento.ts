@@ -7,7 +7,7 @@ interface crear {
     descripcion: {},
     categoria: [string],
     cantidad: number,
-    img: string,
+    img: boolean,
     estado: [{
         estado: [{
             estado:string

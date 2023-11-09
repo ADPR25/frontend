@@ -6,19 +6,52 @@ import {
     DialogActions,
     Button,
     Grid,
+    Select,
+    MenuItem,
     Stack,
     InputLabel,
     TextField,
 } from '@mui/material';
 import { actualizarPrestamo } from '../../api/ac_prest.ts';
+import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
+import { estado_prestamo } from '../../api/estado-prestamo.ts';
 
 const EditarPrestamo = ({ prestamo, open, onClose }) => {
     const [usuario, setUsuario] = useState({
+        detalle : '',
         fechaInicio: '',
         horaInicio: '',
         fechaDevolucion: '',
         horaDevolucion: '',
+        estado: '',
     });
+
+    const [n_iData, setN_iData] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const n_i = await obtener_inplemeto();
+                setN_iData(n_i);
+            } catch (error) {
+                console.error('Error al obtener los nombres de los prestamos', error);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const [e_iData, setE_iData] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const e_i = await estado_prestamo();
+                setE_iData(e_i);
+            } catch (error) {
+                console.error('Error al obtener los estados de los implementos', error);
+            }
+        }
+        fetchData();
+    }, []);
+
 
     useEffect(() => {
         if (prestamo) {
@@ -44,7 +77,8 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
             !usuario.fechaInicio ||
             !usuario.horaInicio ||
             !usuario.fechaDevolucion ||
-            !usuario.horaDevolucion
+            !usuario.horaDevolucion ||
+            !usuario.estado 
         ) {
             console.error('Las fechas y horas no pueden estar vacías');
             return;
@@ -65,6 +99,7 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
                 horaInicio: '',
                 fechaDevolucion: '',
                 horaDevolucion: '',
+                estado: '',
             });
 
             onClose();
@@ -78,6 +113,43 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
             <DialogTitle>Editar Sanción</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
+                        <Select
+                            id="detalle"
+                            name="detalle"
+                            fullWidth
+                            value={usuario.detalle}
+                            onChange={handleChange}
+                        >
+                            {n_iData.map((option) => (
+                                <MenuItem key={option._id} value={option._id}>
+                                    {option.nombre}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Stack>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                        <InputLabel htmlFor="estado">Estado</InputLabel>
+                        <Select
+                            id="estado"
+                            name="estado"
+                            fullWidth
+                            value={usuario.estado}
+                            onChange={handleChange}
+                        >
+                            {e_iData.map((option) => (
+                                <MenuItem key={option._id} value={option._id}>
+                                    {option.nombre}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Stack>
+                </Grid>
+
                     <Grid item xs={12} md={6}>
                         <Stack spacing={1}>
                             <InputLabel htmlFor="fechaInicio">Fecha inicio del préstamo</InputLabel>
