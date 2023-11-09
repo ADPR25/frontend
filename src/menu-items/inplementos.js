@@ -31,20 +31,7 @@ const Inplemento = {
             url: '/Inventario',
             icon: icons.OrderedListOutlined
         },
-        {
-            id: 'Mantenimiento',
-            title: 'Mantenimiento',
-            type: 'item',
-            url: '/Mantenimiento',
-            icon: icons.FormatPainterOutlined
-        },
-        {
-            id: 'Uso',
-            title: 'En uso',
-            type: 'item',
-            url: '/uso',
-            icon: icons.ZoomInOutlined
-        },
+      
         
     ]
 };

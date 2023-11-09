@@ -13,8 +13,6 @@ const Crear_sanciones = Loadable(lazy(() => import('pages/sanciones/crear_sancio
 
 const CrearInplementos = Loadable(lazy(() => import('pages/inplementos/crear')));
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
-const Mantenimiento = Loadable(lazy(() => import('pages/inplementos/mantenimiento')));
-const Uso = Loadable(lazy(() => import('pages/inplementos/uso')));
 
 //prestamos
 
@@ -44,14 +42,7 @@ const newRutes = {
             path: 'CrearInplementos',
             element: <CrearInplementos />
         },
-        {
-            path: 'mantenimiento',
-            element: <Mantenimiento />
-        },
-        {
-            path: 'uso',
-            element: <Uso />
-        },
+        
         {
             path: 'Lista_prestamos',
             element: <Lista_prestamos />
