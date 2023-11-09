@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Stack, DialogContent, Select, TextareaAutosize, MenuItem, DialogActions, Dialog, DialogTitle, Button, InputLabel, OutlinedInput
+    Grid, Stack, DialogContent, Select, MenuItem, DialogActions, Dialog, DialogTitle, Button, InputLabel, OutlinedInput
 } from '@mui/material';
 import { marca, categoria, C_implemento } from '../../api/crear_implemento.ts';
 import { estado_implemento } from '../../api/estado-implemento.ts';
@@ -15,7 +15,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
         nombre: '',
         marca: '',
         categoria: [''],
-        descripcion: '', 
+        descripcion: [''], 
         cantidad: 0,
         estado: [],
     });
@@ -90,7 +90,13 @@ const CrearImplementoModal = ({ open, onClose }) => {
             codigo: formData.codigo,
             nombre: formData.nombre,
             marca: formData.marca,
-            descripcion: formData.descripcion,
+            descripcion: [{
+                peso:formData.peso,
+                color: formData.color,
+                material: formData.material,
+                detalle: formData.detalle,
+                tamano: formData.tamaño,
+            }],
             categoria: formData.categoria,
             cantidad: formData.cantidad,
             img: 'null',
@@ -193,14 +199,76 @@ const CrearImplementoModal = ({ open, onClose }) => {
 
                     <Grid item xs={12} md={12}>
                         <Stack spacing={1}>
-                            <InputLabel htmlFor="descripcion">Descripción</InputLabel>
-                            <TextareaAutosize
-                                id="descripcion"
-                                name="descripcion"
-                                value={formData.descripcion}
+                            <InputLabel htmlFor="descripcion">DESCRIPCION</InputLabel>
+                        </Stack>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="peso">Peso</InputLabel>
+                            <OutlinedInput
+                                id="peso"
+                                name="peso"
+                                value={formData.peso}
                                 onChange={handleChange}
-                                minRows={4}
-                                style={{ width: '100%', height: '100px' }}
+                                fullWidth
+                                style={{ width: '100%' }}
+                            />
+                        </Stack>
+                    </Grid>
+                    
+                    <Grid item xs={12} md={4}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="color">Color</InputLabel>
+                            <OutlinedInput
+                                id="color"
+                                name="color"
+                                value={formData.color}
+                                onChange={handleChange}
+                                fullWidth
+                                style={{ width: '100%' }}
+                            />
+                        </Stack>
+                    </Grid>
+                    
+                    <Grid item xs={12} md={4}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="material">Material</InputLabel>
+                            <OutlinedInput
+                                id="material"
+                                name="material"
+                                value={formData.material}
+                                onChange={handleChange}
+                                fullWidth
+                                style={{ width: '100%' }}
+                            />
+                        </Stack>
+                    </Grid>
+                    
+                    <Grid item xs={12} md={6}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="detalle">Detalle</InputLabel>
+                            <OutlinedInput
+                                id="detalle"
+                                name="detalle"
+                                value={formData.detalle}
+                                onChange={handleChange}
+                                fullWidth
+                                style={{ width: '100%' }}
+                            />
+                        </Stack>
+                    </Grid>
+                    
+                    <Grid item xs={12} md={6}>
+                        <Stack spacing={1}>
+                            <InputLabel htmlFor="tamaño">Tamaño</InputLabel>
+                            <OutlinedInput
+                                id="tamaño"
+                                name="tamaño"
+                                value={formData.tamaño}
+                                onChange={handleChange}
+                                fullWidth
+                                style={{ width: '100%' }}
                             />
                         </Stack>
                     </Grid>
