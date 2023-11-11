@@ -1,153 +1,144 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Stack, DialogContent, Select, MenuItem, DialogActions, Dialog, DialogTitle, Button, InputLabel, OutlinedInput
+  Grid, Stack, DialogContent, Select, MenuItem, DialogActions, Dialog, DialogTitle, Button, InputLabel, OutlinedInput
 } from '@mui/material';
 import { marca, categoria, C_implemento } from '../../api/crear_implemento.ts';
 import { estado_implemento } from '../../api/estado-implemento.ts';
 
 const CrearImplementoModal = ({ open, onClose }) => {
-    const [e_iData, sete_iDate] = useState([]);
-    const [marcaData, setmarcaData] = useState([]);
-    const [categoriaData, setcategoriaData] = useState([]);
+  const [e_iData, sete_iData] = useState([]);
+  const [marcaData, setMarcaData] = useState([]);
+  const [categoriaData, setCategoriaData] = useState([]);
 
-    const [formData, setFormData] = useState({
-        codigo: '', 
-        nombre: '',
-        marca: '',
-        categoria: [''],
-        descripcion: {
-            peso: '',
-            color: '',
-            material: '',
-            detalle: '',
-            tamano: '',
-        },
-        cantidad: 0,
-        estado: [],
-    });
+  const [formData, setFormData] = useState({
+    codigo: '',
+    nombre: '',
+    marca: '',
+    descripcion: {
+      peso: '',
+      color: '',
+      material: '',
+      detalle: '',
+      tamano: '',
+    },
+    categoria: [''],
+    cantidad: 0,
+    img: null,
+    estado: [{
+      estado: '',
+      cantidad: 0,
+      apto: true,
+    }],
+  });
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const e_i = await estado_implemento();
+        sete_iData(e_i);
+      } catch (error) {
+        console.error('Error al obtener los estados de los implementos', error);
+      }
+    }
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const e_i = await estado_implemento();
-                sete_iDate(e_i);
-            } catch (error) {
-                console.error('Error al obtener los estados de los implementos', error);
-            }
-        }
+    fetchData();
+  }, []);
 
-        fetchData();
-    }, []);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const marcas = await marca();
+        setMarcaData(marcas);
+      } catch (error) {
+        console.error('Error al obtener las marcas', error);
+      }
+    }
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const e_i = await marca();
-                setmarcaData(e_i);
-            } catch (error) {
-                console.error('Error al obtener las marcas', error);
-            }
-        }
+    fetchData();
+  }, []);
 
-        fetchData();
-    }, []);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const categorias = await categoria();
+        setCategoriaData(categorias);
+      } catch (error) {
+        console.error('Error al obtener las categorías', error);
+      }
+    }
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const e_i = await categoria();
-                setcategoriaData(e_i);
-            } catch (error) {
-                console.error('Error al obtener las categorías', error);
-            }
-        }
+    fetchData();
+  }, []);
 
-        fetchData();
-    }, []);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+  
+    if (name === 'cantidad') {
+      const numericValue = parseFloat(value);
+      setFormData({ ...formData, [name]: isNaN(numericValue) ? '' : numericValue });
+    } else if (name.startsWith('descripcion')) {
+      const descripcionField = name.split('.')[1];
+      setFormData({
+        ...formData,
+        descripcion: { ...formData.descripcion, [descripcionField]: value || 'N/A' },
+      });
+    } else if (name === 'estado') {
+      setFormData({ ...formData, [name]: { estado: value || 'N/A' } });
+    } else {
+      setFormData({ ...formData, [name]: value || 'N/A' });
+    }
+  };
+  ``
+  
+  
+  
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        // console.log(`Value for ${name}: ${value}`);
-
-        if (name === 'cantidad') {
-            const numericValue = parseFloat(value);
-            setFormData({ ...formData, [name]: isNaN(numericValue) ? '' : numericValue });
-        } else if (name === 'descripcion') {
-            setFormData({ ...formData, [name]: value.toString() });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
-    };
-
-
-
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if formData.cantidad is a valid number
     if (isNaN(formData.cantidad)) {
-        console.error('La cantidad no es un número válido.');
-        return;
+      console.error('La cantidad no es un número válido.');
+      return;
     }
+    console.log('from data: ', formData)
 
     try {
-        const result = await C_implemento({
-            codigo: formData.codigo,
-            nombre: formData.nombre,
-            marca: formData.marca,
-            descripcion: [{
-                peso: formData.peso,
-                color: formData.color,
-                material: formData.material,
-                detalle: formData.detalle,
-                tamano: formData.tamaño,
-            }],
-            categoria: formData.categoria,
-            cantidad: formData.cantidad,
-            img: 'null',
-            estado: [{
-                estado: [{
-                    estado: formData.estado
-                }],
-                cantidad: formData.cantidad,
-                apto: true,
-            }],
-        });
+      const result = await C_implemento(formData);
 
-        console.log(result);
+      console.log(result);
 
-        if (result) {
-            window.location.reload();
-        } else {
-            console.error('Error al crear el implemento:', result);
-        }
+      if (result) {
+        window.location.reload();
+      } else {
+        console.error('Error al crear el implemento:', result);
+      }
     } catch (error) {
-        console.error('Error al crear el implemento:', error);
+      console.error('Error al crear el implemento:', error);
     }
-}
+  };
 
-    return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Editar Sanción</DialogTitle>
-            <DialogContent>
-                <Grid container spacing={5} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={0}>
-                            <InputLabel htmlFor="codigo">Codigo</InputLabel>
-                            <OutlinedInput
-                                id="codigo"
-                                type="text"
-                                name="codigo"
-                                value={formData.codigo}
-                                onChange={handleChange}
-                                fullWidth
-                                style={{ width: '100%' }}
-                            />
-                        </Stack>
-                    </Grid>
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Editar Sanción</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={5} style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Grid item xs={12} md={6}>
+            <Stack spacing={0}>
+              <InputLabel htmlFor="codigo">Codigo</InputLabel>
+              <OutlinedInput
+                id="codigo"
+                type="text"
+                name="codigo"
+                value={formData.codigo}
+                onChange={handleChange}
+                fullWidth
+                style={{ width: '100%' }}
+              />
+            </Stack>
+          </Grid>
 
-                    <Grid item xs={12} md={6}>
+        
+          <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
                             <InputLabel htmlFor="nombre">Nombre</InputLabel>
                             <OutlinedInput
@@ -214,8 +205,8 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <InputLabel htmlFor="peso">Peso</InputLabel>
                             <OutlinedInput
                                 id="peso"
-                                name="peso"
-                                value={formData.peso}
+                                name="descripcion.peso"
+                                value={formData.descripcion.peso}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
@@ -228,8 +219,8 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <InputLabel htmlFor="color">Color</InputLabel>
                             <OutlinedInput
                                 id="color"
-                                name="color"
-                                value={formData.color}
+                                name="descripcion.color"
+                                value={formData.descripcion.color}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
@@ -242,8 +233,8 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <InputLabel htmlFor="material">Material</InputLabel>
                             <OutlinedInput
                                 id="material"
-                                name="material"
-                                value={formData.material}
+                                name="descripcion.material"
+                                value={formData.descripcion.material}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
@@ -256,8 +247,8 @@ const CrearImplementoModal = ({ open, onClose }) => {
                             <InputLabel htmlFor="detalle">Detalle</InputLabel>
                             <OutlinedInput
                                 id="detalle"
-                                name="detalle"
-                                value={formData.detalle}
+                                name="descripcion.detalle"
+                                value={formData.descripcion.detalle}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
@@ -269,9 +260,9 @@ const CrearImplementoModal = ({ open, onClose }) => {
                         <Stack spacing={1}>
                             <InputLabel htmlFor="tamaño">Tamaño</InputLabel>
                             <OutlinedInput
-                                id="tamaño"
-                                name="tamaño"
-                                value={formData.tamaño}
+                                id="tamano"
+                                name="descripcion.tamano"
+                                value={formData.descripcion.tamano}
                                 onChange={handleChange}
                                 fullWidth
                                 style={{ width: '100%' }}
@@ -294,35 +285,35 @@ const CrearImplementoModal = ({ open, onClose }) => {
                         </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={0}>
-                            <InputLabel htmlFor="estado">Estado</InputLabel>
-                            <Select
-                                id="estado"
-                                name="estado"
-                                value={[formData.estado]}
-                                onChange={handleChange}
-                                fullWidth
-                                style={{ width: '100%' }}
-                            >
-                                {e_iData.map((option) => (
-                                    <MenuItem key={option._id} value={option._id}>
-                                        {option.estado}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </Stack>
-                    </Grid>
-                </Grid>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose}>Close</Button>
-                <Button onClick={handleSubmit} color="primary">
-                    Guardar
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+          <Grid item xs={12} md={6}>
+            <Stack spacing={0}>
+              <InputLabel htmlFor="estado">Estado</InputLabel>
+              <Select
+                id="estado"
+                name="estado"
+                value={formData.estado.estado}
+                onChange={handleChange}
+                fullWidth
+                style={{ width: '100%' }}
+              >
+                {e_iData.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.estado}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Close</Button>
+        <Button onClick={handleSubmit} color="primary">
+          Guardar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default CrearImplementoModal;

@@ -1,67 +1,39 @@
 const API = 'https://proyecto-backend-sgbienestar.onrender.com/implementos';
 
-interface crear {
+interface Descripcion {
+    peso: string;
+    color: string;
+    material: string;
+    detalle: string;
+    tamano: string;
+}
+
+interface Estado {
+    estado: string;
+    cantidad: number;
+    apto: boolean;
+}
+
+interface CrearImplemento {
     codigo: string;
     nombre: string;
     marca: string;
-    descripcion: {
-        peso: { peso: string }[];
-        color: { color: string }[];
-        material: { material: string }[];
-        detalle: { detalle: string }[];
-        tamano: { tamano: string }[];
-    };
+    descripcion: Descripcion;
     categoria: string[];
     cantidad: number;
-    img: boolean;
-    estado: {
-        estado: { estado: string }[];
-        cantidad: number;
-        apto: boolean;
-    }[];
+    img: string | null;
+    estado: Estado[];
 }
 
-export const C_implemento = (usuario: crear) =>
+export const C_implemento = (usuario: CrearImplemento) =>
     fetch(`${API}`, {
         method: 'POST',
-        body: JSON.stringify({
-            ...usuario,
-            descripcion: {
-                peso: usuario.descripcion?.peso || null,
-                color: usuario.descripcion?.color || null,
-                material: usuario.descripcion?.material || null,
-                detalle: usuario.descripcion?.detalle || null,
-                tamano: usuario.descripcion?.tamano || null,
-            },
-        }),
+        body: JSON.stringify(usuario),
         headers: {
             'content-type': 'application/json',
         },
     });
 
-
-// export async function C_implemento(data) {
-//     const url = 'https://proyecto-backend-sgbienestar.onrender.com/implementos';
-
-//     try {
-//         const response = await fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(data),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`No se pudo: ${response.status}`);
-//         }
-
-//         const responseData = await response.json();
-//         return responseData;
-//     } catch (error) {
-//         throw new Error(`No se pueden cargar: ${error.message}`);
-//     }
-// }
 
 
 
