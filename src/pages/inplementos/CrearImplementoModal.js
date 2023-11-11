@@ -91,7 +91,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
             nombre: formData.nombre,
             marca: formData.marca,
             descripcion: [{
-                peso:formData.peso,
+                peso: formData.peso,
                 color: formData.color,
                 material: formData.material,
                 detalle: formData.detalle,
