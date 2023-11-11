@@ -30,6 +30,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
       apto: true,
     }],
   });
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -74,20 +75,28 @@ const CrearImplementoModal = ({ open, onClose }) => {
     const { name, value } = event.target;
   
     if (name === 'cantidad') {
-      const numericValue = parseFloat(value);
-      setFormData({ ...formData, [name]: isNaN(numericValue) ? '' : numericValue });
+      const valorNumerico = parseFloat(value);
+      setFormData({ ...formData, [name]: isNaN(valorNumerico) ? '' : valorNumerico });
     } else if (name.startsWith('descripcion')) {
-      const descripcionField = name.split('.')[1];
+      const campoDescripcion = name.split('.')[1];
       setFormData({
         ...formData,
-        descripcion: { ...formData.descripcion, [descripcionField]: value || 'N/A' },
+        descripcion: { ...formData.descripcion, [campoDescripcion]: value || 'N/A' },
       });
     } else if (name === 'estado') {
-      setFormData({ ...formData, [name]: { estado: value || 'N/A' } });
+      // Actualiza el campo "estado" para que sea un array de objetos
+      setFormData({
+        ...formData,
+        estado: [{
+          ...formData.estado[0],
+          estado: value || 'N/A',
+        }],
+      });
     } else {
       setFormData({ ...formData, [name]: value || 'N/A' });
     }
   };
+  
   ``
   
   
@@ -291,7 +300,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
               <Select
                 id="estado"
                 name="estado"
-                value={formData.estado.estado}
+                value={formData.estado[0].estado}
                 onChange={handleChange}
                 fullWidth
                 style={{ width: '100%' }}
