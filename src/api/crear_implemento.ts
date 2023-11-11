@@ -1,44 +1,39 @@
 const API = 'https://proyecto-backend-sgbienestar.onrender.com/implementos';
 
 interface crear {
-    codigo: string,
-    nombre: string,
-    marca: string,
-    descripcion: [{
-        peso: [{
-            peso:string
-        }]
-        color:[{
-            color:string
-        }]
-        material:[{
-            material:string
-        }]
-        detalle:[{
-            detalle:string
-        }]
-        tamano: [{
-            tamano:string
-        }]
-
-    }],
-    categoria: [string],
-    cantidad: number,
-    img: boolean,
-    estado: [{
-        estado: [{
-            estado:string
-        }]
-        cantidad: number
-        apto: boolean
-    }
-    ]
+    codigo: string;
+    nombre: string;
+    marca: string;
+    descripcion: {
+        peso: { peso: string }[];
+        color: { color: string }[];
+        material: { material: string }[];
+        detalle: { detalle: string }[];
+        tamano: { tamano: string }[];
+    };
+    categoria: string[];
+    cantidad: number;
+    img: boolean;
+    estado: {
+        estado: { estado: string }[];
+        cantidad: number;
+        apto: boolean;
+    }[];
 }
 
 export const C_implemento = (usuario: crear) =>
     fetch(`${API}`, {
         method: 'POST',
-        body: JSON.stringify(usuario),
+        body: JSON.stringify({
+            ...usuario,
+            descripcion: {
+                peso: usuario.descripcion?.peso || null,
+                color: usuario.descripcion?.color || null,
+                material: usuario.descripcion?.material || null,
+                detalle: usuario.descripcion?.detalle || null,
+                tamano: usuario.descripcion?.tamano || null,
+            },
+        }),
         headers: {
             'content-type': 'application/json',
         },

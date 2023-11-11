@@ -11,11 +11,17 @@ const CrearImplementoModal = ({ open, onClose }) => {
     const [categoriaData, setcategoriaData] = useState([]);
 
     const [formData, setFormData] = useState({
-        codigo: '',
+        codigo: '', 
         nombre: '',
         marca: '',
         categoria: [''],
-        descripcion: [''], 
+        descripcion: {
+            peso: '',
+            color: '',
+            material: '',
+            detalle: '',
+            tamano: '',
+        },
         cantidad: 0,
         estado: [],
     });
