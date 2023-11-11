@@ -4,7 +4,24 @@ interface crear {
     codigo: string,
     nombre: string,
     marca: string,
-    descripcion: {},
+    descripcion: [{
+        peso: [{
+            peso:string
+        }]
+        color:[{
+            color:string
+        }]
+        material:[{
+            material:string
+        }]
+        detalle:[{
+            detalle:string
+        }]
+        tamano: [{
+            tamano:string
+        }]
+
+    }],
     categoria: [string],
     cantidad: number,
     img: boolean,
