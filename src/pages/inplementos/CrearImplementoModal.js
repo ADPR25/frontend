@@ -5,6 +5,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { marca, categoria } from '../../api/crear_implemento.ts';
 import { estado_implemento } from '../../api/estado-implemento.ts';
+import { C_implemento  } from '../../api/crear_implemento.ts';
 
 const CrearImplementoModal = ({ open, onClose }) => {
   const [marcaData, setMarcaData] = useState([]);
