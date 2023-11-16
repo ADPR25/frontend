@@ -3,7 +3,7 @@ import {
   Grid, Stack, Typography, IconButton, DialogContent, Select, MenuItem, DialogActions, Dialog, DialogTitle, Button, InputLabel, OutlinedInput
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { marca, categoria, } from '../../api/crear_implemento.ts';
+import { marca, categoria } from '../../api/crear_implemento.ts';
 import { estado_implemento } from '../../api/estado-implemento.ts';
 
 const CrearImplementoModal = ({ open, onClose }) => {
@@ -89,8 +89,10 @@ const CrearImplementoModal = ({ open, onClose }) => {
     } else if (name.startsWith('estado')) {
       setFormData((prevData) => {
         const newEstado = prevData.estado || [];
+        const newCantidad = newEstado.reduce((total, e) => total + (parseInt(e.cantidad, 10) || 0), 0);
         return {
           ...prevData,
+          cantidad: newCantidad,
           estado: newEstado.map((e, i) =>
             i === index ? { ...e, estado: value || 'N/A' } : e
           ),
@@ -98,14 +100,20 @@ const CrearImplementoModal = ({ open, onClose }) => {
       });
     } else if (name.startsWith('cantidad')) {
       setFormData((prevData) => {
-        const newEstado = prevData.estado || [];
+        const newEstado = [...(prevData.estado || [])]; 
+
+        const updatedEstado = newEstado.map((e, i) =>
+          i === index ? { ...e, cantidad: value || '0' } : e
+        );
+
         return {
           ...prevData,
-          estado: newEstado.map((e, i) =>
-            i === index ? { ...e, cantidad: value || 0 } : e
-          ),
+          cantidad: updatedEstado.reduce((total, e) => total + parseInt(e.cantidad || '0'), 0),
+          estado: updatedEstado,
         };
       });
+
+
     } else if (name.startsWith('apto')) {
       setFormData((prevData) => {
         const newEstado = prevData.estado || [];
@@ -120,6 +128,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
       setFormData({ ...formData, [name]: value || 'N/A' });
     }
   };
+
 
   const handleAddSet = () => {
     setCantidadSets(cantidadSets + 1);
@@ -148,13 +157,13 @@ const CrearImplementoModal = ({ open, onClose }) => {
       // const result = await C_implemento(formData);
       console.log(formData);
 
-      console.log(result);
+      // console.log(result);
 
-      if (result) {
-        window.location.reload();
-      } else {
-        console.error('Error al crear el implemento:', result);
-      }
+      // if (result) {
+      //   window.location.reload();
+      // } else {
+      //   console.error('Error al crear el implemento:', result);
+      // }
     } catch (error) {
       console.error('Error al crear el implemento:', error);
     }
@@ -350,7 +359,6 @@ const CrearImplementoModal = ({ open, onClose }) => {
             </React.Fragment>
           ))}
 
-
           <Grid item xs={6} md={6}>
             <Typography variant="h5">
               Cantidad:
@@ -359,7 +367,6 @@ const CrearImplementoModal = ({ open, onClose }) => {
               </IconButton>
             </Typography>
           </Grid>
-
         </Grid>
       </DialogContent>
       <DialogActions>
