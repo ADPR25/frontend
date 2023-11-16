@@ -150,16 +150,16 @@ const CrearImplementoModal = ({ open, onClose }) => {
     }
 
     try {
-      // const result = await C_implemento(formData);
+      const result = await C_implemento(formData);
       console.log(formData);
 
       // console.log(result);
 
-      // if (result) {
-      //   window.location.reload();
-      // } else {
-      //   console.error('Error al crear el implemento:', result);
-      // }
+      if (result) {
+        window.location.reload();
+      } else {
+        console.error('Error al crear el implemento:', result);
+      }
     } catch (error) {
       console.error('Error al crear el implemento:', error);
     }
