@@ -100,20 +100,17 @@ const CrearImplementoModal = ({ open, onClose }) => {
       });
     } else if (name.startsWith('cantidad')) {
       setFormData((prevData) => {
-        const newEstado = [...(prevData.estado || [])]; 
-
+        const newEstado = [...(prevData.estado || [])];
         const updatedEstado = newEstado.map((e, i) =>
-          i === index ? { ...e, cantidad: value || '0' } : e
+          i === index ? { ...e, cantidad: parseInt(value, 10) || 0 } : e
         );
 
         return {
           ...prevData,
-          cantidad: updatedEstado.reduce((total, e) => total + parseInt(e.cantidad || '0'), 0),
+          cantidad: updatedEstado.reduce((total, e) => total + (e.cantidad || 0), 0),
           estado: updatedEstado,
         };
       });
-
-
     } else if (name.startsWith('apto')) {
       setFormData((prevData) => {
         const newEstado = prevData.estado || [];
@@ -128,7 +125,6 @@ const CrearImplementoModal = ({ open, onClose }) => {
       setFormData({ ...formData, [name]: value || 'N/A' });
     }
   };
-
 
   const handleAddSet = () => {
     setCantidadSets(cantidadSets + 1);
@@ -168,6 +164,7 @@ const CrearImplementoModal = ({ open, onClose }) => {
       console.error('Error al crear el implemento:', error);
     }
   };
+
 
   return (
     <Dialog open={open} onClose={onClose}>
