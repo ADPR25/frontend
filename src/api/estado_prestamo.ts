@@ -1,5 +1,5 @@
 export async function estado_prestamo() {
-    const url = 'https://proyecto-backend-sgbienestar.onrender.com/estado-prestamo'
+    const url = 'https://proyecto-backend-sgbienestar.onrender.com/estado-prestamo';
 
     try {
         const response = await fetch(url);

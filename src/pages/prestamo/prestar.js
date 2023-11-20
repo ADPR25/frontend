@@ -9,7 +9,7 @@ import {
     TextField,
     Button
 } from '@mui/material';
-import { estado_implemento } from '../../api/estado-implemento.ts';
+import { estado_prestamo} from '../../api/estado_prestamo.ts';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
 import { crearPrestamo } from '../../api/prestar.ts';
 
@@ -20,7 +20,7 @@ const Prestar = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const e_i = await estado_implemento();
+                const e_i = await estado_prestamo();
                 setE_iData(e_i);
             } catch (error) {
                 console.error('Error al obtener los estados de los implementos', error);
@@ -126,7 +126,7 @@ const Prestar = () => {
                         >
                             {e_iData.map((option) => (
                                 <MenuItem key={option._id} value={option._id}>
-                                    {option.estado}
+                                    {option.nombre}
                                 </MenuItem>
                             ))}
                         </Select>
