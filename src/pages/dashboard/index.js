@@ -74,7 +74,7 @@ const DashboardDefault = () => {
   const [slot, setSlot] = useState('week');
   const token = localStorage.getItem('token');
 
-  console.log(token);
+  console.log('token :', token);
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>

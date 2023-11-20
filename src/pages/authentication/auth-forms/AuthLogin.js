@@ -15,6 +15,7 @@ import {
 
 
 const AuthLogin = () => {
+
   const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState({
@@ -28,6 +29,7 @@ const AuthLogin = () => {
     const { name, value } = e.target;
     setUsuario({ ...usuario, [name]: value });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
