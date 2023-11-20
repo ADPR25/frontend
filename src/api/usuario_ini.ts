@@ -5,7 +5,7 @@ interface Usuario {
     contrasena: string;
 }
 
-export const buscarusuario = (usuario: Usuario) =>
+export const loguear = (usuario: Usuario) =>
     fetch(`${API}`, {
         method: 'POST',
         body: JSON.stringify(usuario),

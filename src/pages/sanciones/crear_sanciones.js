@@ -105,7 +105,6 @@ const CrearSanciones = () => {
                     <Stack spacing={1}>
                         <InputLabel htmlFor="descripcion">Descripción</InputLabel>
                         <TextareaAutosize
-                            
                             id="descripcion"
                             name="description"
                             minRows={4}

@@ -6,26 +6,23 @@ const Profile = () => {
   const navigate = useNavigate();
   const anchorRef = useRef();
 
-  const handleLogin = () => {
+  const handleLogout = () => {
+    localStorage.removeItem('token');
     navigate('/');
   };
 
   return (
     <Box
       sx={{
-        position: 'absolute', // Set the position to absolute
-        bottom: '16px',      // Adjust the bottom property as needed
-        right: '16px',        // Adjust the left property as needed
+        position: 'absolute',
+        bottom: '16px',
+        right: '16px',
       }}
     >
       <ButtonBase
-        aria-label="open profile"
+        aria-label="Cerrar sesión"
         ref={anchorRef}
-        aria-controls={open ? 'profile-grow' : undefined}
-        aria-haspopup="true"
-        onClick={() => {
-          handleLogin();
-        }}
+        onClick={handleLogout}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Typography variant="subtitle1">Cerrar sesión</Typography>

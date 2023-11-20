@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { buscarusuario } from '../../../api/usuario_ini.ts';
+import { loguear } from '../../../api/usuario_ini.ts';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import {
   Grid,
@@ -12,6 +12,7 @@ import {
   Button,
   Alert,
 } from '@mui/material';
+
 
 const AuthLogin = () => {
   const navigate = useNavigate();
@@ -28,31 +29,29 @@ const AuthLogin = () => {
     setUsuario({ ...usuario, [name]: value });
   };
 
-  const handleLogin = (token) => {
-    localStorage.setItem('token', token);
-    navigate('/inicio');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await buscarusuario(usuario);
-      const data = await response.json();
 
-      if (response.status === 201 && data.token) { 
-        handleLogin(data.token);
-        setUsuario({
-          correo_inst: '',
-          contrasena: '',
-        });
+    try {
+      const response = await loguear({
+        correo_inst: usuario.correo_inst,
+        contrasena: usuario.contrasena,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const { token } = data;
+        localStorage.setItem('token', token);
+        navigate('/dashboard/default');
       } else {
-        setError('Usuario o contraseña incorrectos');
+        console.error('Error al iniciar sesión:', response.statusText);
+        setError('Contraseña incorrecta. Por favor, verifica tus credenciales.');
       }
-    } catch (error) {
-      setError('Error al encontrar el usuario');
-      console.error(error);
+    } catch (e) {
+      console.error('Error al iniciar sesión:', e);
     }
   };
+
 
   const [showPassword, setShowPassword] = useState(false);
 
