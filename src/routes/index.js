@@ -51,7 +51,7 @@ const Routes = () => {
 
   const dashboardRoutes = {
     path: '/',
-    element: token ? <MainLayout /> : <Navigate to="/" />, 
+    element: token ? <MainLayout /> : <Navigate to="/" />,
     children: [
       {
         path: '/inicio',
