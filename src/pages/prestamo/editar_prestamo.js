@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { actualizarPrestamo } from '../../api/ac_prest.ts';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
-import { estado_prestamo } from '../../api/estado-prestamo.ts';
+import { estado_prestamo } from '../../api/estado_prestamo.ts';
 
 const EditarPrestamo = ({ prestamo, open, onClose }) => {
     const [usuario, setUsuario] = useState({
