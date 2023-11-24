@@ -1,45 +1,40 @@
 import React, { useState, useEffect } from 'react';
-
 import {
     Grid,
+    TextField,
+    InputLabel,
     Stack,
     MenuItem,
-    InputLabel,
+    Button,
     Select,
-    TextField,
-    Button
+    IconButton,
+    Typography,
 } from '@mui/material';
-import { estado_prestamo} from '../../api/estado_prestamo.ts';
+import AddIcon from '@mui/icons-material/Add';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
-import { crearPrestamo } from '../../api/prestar.ts';
+// import { crearPrestamo } from '../../api/prestar.ts';
 
 const Prestar = () => {
+    const token = localStorage.getItem('token');
 
-    
-    const [e_iData, setE_iData] = useState([]);
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const e_i = await estado_prestamo();
-                setE_iData(e_i);
-            } catch (error) {
-                console.error('Error al obtener los estados de los implementos', error);
-            }
-        }
-        fetchData();
-    }, []);
+    let usuario = '';
 
-    const [usuario, setUsuario] = useState({
-        detalle: '',
-        fechaInicio: '',
-        horaInicio: '',
-        fechaDevolucion: '',
-        horaDevolucion: '',
-        estado: '',
+    try {
+        const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
+        usuario = tokenData.id || '';
+    } catch (error) {
+        console.error('Error al parsear el token:', error);
+    }
+
+    const [formData, setFormData] = useState({
+        usuario: usuario,
+        implementos: [''],
+        cantidad_implementos: [0],
+        estado: '65372a7d48191d49b7466fda',
     });
 
+    const [implementoData, setN_iData] = useState([]);
 
-    const [n_iData, setN_iData] = useState([]);
     useEffect(() => {
         async function fetchData() {
             try {
@@ -52,151 +47,101 @@ const Prestar = () => {
         fetchData();
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = (e, index) => {
         const { name, value } = e.target;
-        setUsuario({ ...usuario, [name]: value });
+        const newValues = [...formData[name]];
+
+        // Convert the value to a number if it's the cantidad_implementos field
+        newValues[index] = name === 'cantidad_implementos' ? parseInt(value, 10) : value;
+
+        setFormData((prevData) => ({ ...prevData, [name]: newValues }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!usuario.fechaInicio || !usuario.horaInicio || !usuario.fechaDevolucion || !usuario.horaDevolucion) {
-            console.error('Las fechas y horas no pueden estar vacías');
-            return;
-        }
-
-        try {
-            // Formatea las fechas y horas
-            const fechaInicio = `${usuario.fechaInicio}T${usuario.horaInicio}`;
-            const fechaDevolucion = `${usuario.fechaDevolucion}T${usuario.horaDevolucion}`;
-
-            const prestamoData = {
-                implementos: [usuario.detalle],
-                fecha_inicio: fechaInicio,
-                fecha_fin: fechaDevolucion,
-                estado: usuario.estado
-            };
-
-            await crearPrestamo(prestamoData);
-
-            setUsuario({
-                detalle: '',
-                fechaInicio: '',
-                horaInicio: '',
-                fechaDevolucion: '',
-                horaDevolucion: '',
-                estado: '',
-            });
-        } catch (error) {
-            console.error('Error al enviar el préstamo', error);
-        }
+    const handleAddSet = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            implementos: [...prevData.implementos, ''],
+            cantidad_implementos: [...prevData.cantidad_implementos, 0],
+        }));
     };
 
+    const handleSubmit = () => {
+        console.log('prestamo: ', formData);
+        // Call your API or perform any other actions here
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="detalle">Nombre del implemento</InputLabel>
-                        <Select
-                            id="detalle"
-                            name="detalle"
-                            fullWidth
-                            value={usuario.detalle}
-                            onChange={handleChange}
-                        >
-                            {n_iData.map((option) => (
-                                <MenuItem key={option._id} value={option._id}>
-                                    {option.nombre}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Stack>
+        <>
+            <center>
+                <h2>CREAR PRESTAMO</h2>
+            </center>
+            <form>
+                {formData.implementos.map((_, index) => (
+                    <Grid container spacing={2} key={index} style={{ marginBottom: '15px' }}>
+                        <Grid item xs={12} md={1}></Grid>
+                        <Grid item xs={12} md={5}>
+                            <Stack spacing={0}>
+                                <InputLabel htmlFor={`implemento-${index}`}>Nombre del implemento</InputLabel>
+                                <Select
+                                    id={`implemento-${index}`}
+                                    name={`implementos`}
+                                    fullWidth
+                                    value={formData.implementos[index]}
+                                    onChange={(e) => handleChange(e, index)}
+                                >
+                                    {implementoData.map((option) => (
+                                        <MenuItem key={option._id} value={option._id}>
+                                            {option.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={5}>
+                            <Stack spacing={0}>
+                                <InputLabel htmlFor={`cantidad-${index}`}>Cantidad de implementos</InputLabel>
+                                <TextField
+                                    fullWidth
+                                    type="string"
+                                    name={`cantidad_implementos`}
+                                    value={formData.cantidad_implementos[index]}
+                                    onChange={(e) => handleChange(e, index)}
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={1}></Grid>
+                    </Grid>
+                ))}
+                <br />
+                <br />
+                <br />
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={1}></Grid>
+                    <Grid item xs={6} md={6}>
+                        <Typography variant="h5">
+                            Prestamo:
+                            <IconButton color="primary" aria-label="Añadir" onClick={handleAddSet}>
+                                <AddIcon />
+                            </IconButton>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={1}></Grid>
                 </Grid>
-
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="estado">Estado</InputLabel>
-                        <Select
-                            id="estado"
-                            name="estado"
-                            fullWidth
-                            value={usuario.estado}
-                            onChange={handleChange}
-                        >
-                            {e_iData.map((option) => (
-                                <MenuItem key={option._id} value={option._id}>
-                                    {option.nombre}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Stack>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={1}></Grid>
+                    <Grid item xs={12} md={10}>
+                        <center>
+                            <Button variant="contained" color="primary" onClick={handleSubmit}>
+                                Prestar
+                            </Button>
+                        </center>
+                    </Grid>
+                    <Grid item xs={12} md={1}></Grid>
                 </Grid>
-
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="fechaInicio">Fecha inicio del préstamo</InputLabel>
-                        <TextField
-                            id="fechaInicio"
-                            type="date"
-                            name="fechaInicio"
-                            fullWidth
-                            value={usuario.fechaInicio}
-                            onChange={handleChange}
-                        />
-                    </Stack>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="fechaInicio">Hora de inicio del préstamo</InputLabel>
-                        <TextField
-                            id="horaInicio"
-                            type="time"
-                            name="horaInicio"
-                            fullWidth
-                            value={usuario.horaInicio}
-                            onChange={handleChange}
-                        />
-                    </Stack>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="fechaDevolucion">Fecha devolución</InputLabel>
-                        <TextField
-                            id="fechaDevolucion"
-                            type="date"
-                            name="fechaDevolucion"
-                            fullWidth
-                            value={usuario.fechaDevolucion}
-                            onChange={handleChange}
-                        />
-                    </Stack>
-                </Grid>
-
-
-                <Grid item xs={12} md={6}>
-                    <Stack spacing={1}>
-                        <InputLabel htmlFor="fechaDevolucion">Hora de devolución</InputLabel>
-                        <TextField
-                            id="horaDevolucion"
-                            type="time"
-                            name="horaDevolucion"
-                            fullWidth
-                            value={usuario.horaDevolucion}
-                            onChange={handleChange}
-                        />
-                    </Stack>
-                </Grid>
-
-                <Grid item xs={12} md={12}>
-                    <center>
-                        <Button type="submit" variant="contained" color="primary">Prestar</Button>
-                    </center>
-                </Grid>
-            </Grid>
-        </form>
+            </form>
+            <br />
+            <br />
+        </>
     );
 };
 
