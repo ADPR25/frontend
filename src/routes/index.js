@@ -21,6 +21,7 @@ const CrearInplementos = Loadable(lazy(() => import('pages/inplementos/crear')))
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
+const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 
 const AuthRoutes = [
   {
@@ -81,6 +82,10 @@ const Routes = () => {
       {
         path: 'Inventario',
         element: <Inventario />,
+      },
+      {
+        path: 'Informes',
+        element: <Informes />,
       },
       {
         path: 'CrearInplementos',
