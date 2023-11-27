@@ -110,7 +110,7 @@ const EditarPrestamo = ({ prestamo, open, onClose }) => {
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Editar Sanción</DialogTitle>
+            <DialogTitle>Editar prestamo </DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>

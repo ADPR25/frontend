@@ -18,13 +18,6 @@ const Inplemento = {
     type: 'group',
     children: [
         {
-            id: 'crear_i',
-            title: 'Implemento en solicitud',
-            type: 'item',
-            url: '/CrearInplementos',
-            icon: icons.PlusCircleOutlined
-        },
-        {
             id: 'listar_i',
             title: 'inventario',
             type: 'item',

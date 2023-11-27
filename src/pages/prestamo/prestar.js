@@ -72,9 +72,6 @@ const Prestar = () => {
 
     return (
         <>
-            <center>
-                <h2>CREAR PRESTAMO</h2>
-            </center>
             <form>
                 {formData.implementos.map((_, index) => (
                     <Grid container spacing={2} key={index} style={{ marginBottom: '15px' }}>

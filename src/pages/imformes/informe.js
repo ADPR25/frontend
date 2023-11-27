@@ -112,10 +112,7 @@ const Informes = () => {
 
     return (
         <>
-            <center>
-                <h1>Crear informes</h1>
-            </center>
-
+           
             <form>
                 <Grid container spacing={2} style={{ marginBottom: '15px' }}>
                     <Grid item xs={12} md={1}></Grid>
