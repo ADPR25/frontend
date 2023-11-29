@@ -12,21 +12,19 @@ const icons = {
     ZoomInOutlined
 };
 
-const Inplemento = {
-    id: 'inplementos',
-    title: 'implementos',
+const Imagen = {
+    id: 'Imagen',
+    title: 'Imagen',
     type: 'group',
     children: [
         {
-            id: 'listar_i',
-            title: 'inventario',
+            id: 'crear_img',
+            title: 'Crear imagen',
             type: 'item',
-            url: '/Inventario',
-            icon: icons.OrderedListOutlined
+            url: '/Imagenes',
+            icon: icons.PlusCircleOutlined
         },
-      
-        
     ]
 };
 
-export default Inplemento;
+export default Imagen;

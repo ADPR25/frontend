@@ -17,11 +17,11 @@ const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
 const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 const Listar_sanciones = Loadable(lazy(() => import('pages/sanciones/listar_sanciones')));
 const Crear_sanciones = Loadable(lazy(() => import('pages/sanciones/crear_sanciones')));
-const CrearInplementos = Loadable(lazy(() => import('pages/inplementos/crear')));
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
+const Imagenes = Loadable(lazy(() => import('pages/inagen/imagen')));
 
 const AuthRoutes = [
   {
@@ -86,10 +86,10 @@ const Routes = () => {
       {
         path: 'Informes',
         element: <Informes />,
-      },
+      }, 
       {
-        path: 'CrearInplementos',
-        element: <CrearInplementos />,
+        path: 'Imagenes',
+        element: <Imagenes />,
       },
       {
         path: 'shadow',
