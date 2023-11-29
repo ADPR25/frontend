@@ -12,11 +12,10 @@ import { activeItem } from 'store/reducers/menu';
 
 // ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
-const NavItem = ({ item, level }) => {
+const NavItem = ({ item, level, usuario }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
 
   let itemTarget = '_self';
@@ -37,13 +36,19 @@ const NavItem = ({ item, level }) => {
   const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : false;
 
   const isSelected = openItem.findIndex((id) => id === item.id) > -1;
-  // active menu item on page load
+  const tienePermiso = usuario === 'Administrador' || (usuario === 'Instructor' && item.permisos.includes('Instructor')) || (usuario === 'Aprendiz' && item.permisos.includes('Aprendiz'));
+
   useEffect(() => {
+    // Coloca la lógica condicional aquí
+    if (!tienePermiso) {
+      return; // Si el usuario no tiene permisos, no hace nada en el efecto
+    }
+
     if (pathname.includes(item.url)) {
       dispatch(activeItem({ openItem: [item.id] }));
     }
     // eslint-disable-next-line
-  }, [pathname]);
+  }, [pathname, item.url, dispatch, item.id, tienePermiso]);
 
   const textColor = 'text.primary';
   const iconSelectedColor = 'primary.main';
@@ -102,11 +107,11 @@ const NavItem = ({ item, level }) => {
             }),
             ...(!drawerOpen &&
               isSelected && {
-                bgcolor: 'primary.lighter',
-                '&:hover': {
-                  bgcolor: 'primary.lighter'
-                }
-              })
+              bgcolor: 'primary.lighter',
+              '&:hover': {
+                bgcolor: 'primary.lighter'
+              }
+            })
           }}
         >
           {itemIcon}
@@ -136,7 +141,8 @@ const NavItem = ({ item, level }) => {
 
 NavItem.propTypes = {
   item: PropTypes.object,
-  level: PropTypes.number
+  level: PropTypes.number,
+  usuario: PropTypes.string,
 };
 
 export default NavItem;

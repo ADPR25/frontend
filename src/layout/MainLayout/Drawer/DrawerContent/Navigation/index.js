@@ -1,14 +1,32 @@
-// material-ui
-import { Box, Typography } from '@mui/material';
-
-// project import
+import menuItems from '../../../../../menu-items/index';
 import NavGroup from './NavGroup';
-import menuItem from 'menu-items';
+import { Typography, Box } from '@mui/material';
 
-// ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
+// Define la función obtenerRolDelToken
+const obtenerRolDelToken = () => {
+  const token = localStorage.getItem('token');
+
+  console.log('Token:', token);
+
+  let usuario = '';
+
+  try {
+    const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
+    console.log('Token Data:', tokenData);
+    usuario = tokenData.rol || ''; // Aquí cambia de tokenData.rol?.nombre a tokenData.rol
+  } catch (error) {
+    console.error('Error al parsear el token:', error);
+  }
+
+  return usuario;
+};
 
 const Navigation = () => {
-  const navGroups = menuItem.items.map((item) => {
+  const role = obtenerRolDelToken();
+
+  const { items } = menuItems(role);
+
+  const navGroups = items.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;
