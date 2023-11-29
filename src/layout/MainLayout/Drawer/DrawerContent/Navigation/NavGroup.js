@@ -9,7 +9,7 @@ import NavItem from './NavItem';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
 
-const NavGroup = ({ item }) => {
+const NavGroup = ({ item, usuario }) => {
   const menu = useSelector((state) => state.menu);
   const { drawerOpen } = menu;
 
@@ -22,7 +22,7 @@ const NavGroup = ({ item }) => {
           </Typography>
         );
       case 'item':
-        return <NavItem key={menuItem.id} item={menuItem} level={1} />;
+        return <NavItem key={menuItem.id} item={menuItem} level={1} usuario={usuario} />;
       default:
         return (
           <Typography key={menuItem.id} variant="h6" color="error" align="center">
@@ -53,7 +53,8 @@ const NavGroup = ({ item }) => {
 };
 
 NavGroup.propTypes = {
-  item: PropTypes.object
+  item: PropTypes.object,
+  usuario: PropTypes.string,
 };
 
 export default NavGroup;

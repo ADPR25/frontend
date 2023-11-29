@@ -23,6 +23,32 @@ const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 const Imagenes = Loadable(lazy(() => import('pages/inagen/imagen')));
 
+// Simula la decodificación del token (ajusta según tu implementación real)
+const decodeToken = (token) => {
+  try {
+    // Decodificación básica del token (¡ajusta según tu necesidad!)
+    const decoded = atob(token.split('.')[1]);
+    return JSON.parse(decoded);
+  } catch (error) {
+    console.error('Error al decodificar el token:', error);
+    return null;
+  }
+};
+
+const obtenerRolDelToken = (token) => {
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const decodedToken = decodeToken(token);
+    return decodedToken?.rol || null;
+  } catch (error) {
+    console.error('Error al decodificar el token:', error);
+    return null;
+  }
+};
+
 const AuthRoutes = [
   {
     path: 'Rest_contrasena',
@@ -44,79 +70,104 @@ const AuthRoutes = [
 
 const Routes = () => {
   const token = localStorage.getItem('token');
+  const usuario = obtenerRolDelToken(token);
 
   const authRoutes = AuthRoutes.map((route) => ({
     ...route,
     element: token ? <Navigate to="/inicio" /> : route.element,
   }));
 
-  const dashboardRoutes = {
-    path: '/',
-    element: token ? <MainLayout /> : <Navigate to="/" />,
-    children: [
-      {
-        path: '/inicio',
-        element: <DashboardDefault />,
-      },
-      {
-        path: 'color',
-        element: <Color />,
-      },
-      {
-        path: 'Listar_sanciones',
-        element: <Listar_sanciones />,
-      },
-      {
-        path: 'Crear_sanciones',
-        element: <Crear_sanciones />,
-      },
-      {
-        path: 'dashboard',
-        children: [
-          {
-            path: 'default',
-            element: <DashboardDefault />,
-          },
-        ],
-      },
-      {
-        path: 'Inventario',
-        element: <Inventario />,
-      },
-      {
-        path: 'Informes',
-        element: <Informes />,
-      }, 
-      {
-        path: 'Imagenes',
-        element: <Imagenes />,
-      },
-      {
-        path: 'shadow',
-        element: <Shadow />,
-      },
-      {
-        path: 'typography',
-        element: <Typography />,
-      },
-      {
-        path: 'icons/ant',
-        element: <AntIcons />,
-      },
-      {
-        path: 'Lista_prestamos',
-        element: <Lista_prestamos />,
-      },
-      {
-        path: 'Prestar',
-        element: <Prestar />,
-      },
-    ],
-  };
+  let dashboardRoutes;
+
+  if (usuario === 'Aprendiz' || usuario === 'Instructor') {
+    dashboardRoutes = {
+      path: '/',
+      element: token ? <MainLayout /> : <Navigate to="/" />,
+      children: [
+        {
+          path: 'dashboard',
+          children: [
+            {
+              path: 'default',
+              element: <DashboardDefault />,
+            },
+          ],
+        },
+        {
+          path: 'Prestar',
+          element: <Prestar />,
+        },
+      ],
+    };
+  } else if (usuario === 'Administrador') {
+    dashboardRoutes = {
+      path: '/',
+      element: token ? <MainLayout /> : <Navigate to="/" />,
+      children: [
+        {
+          path: '/inicio',
+          element: <DashboardDefault />,
+        },
+        {
+          path: 'color',
+          element: <Color />,
+        },
+        {
+          path: 'Listar_sanciones',
+          element: <Listar_sanciones />,
+        },
+        {
+          path: 'Crear_sanciones',
+          element: <Crear_sanciones />,
+        },
+        {
+          path: 'dashboard',
+          children: [
+            {
+              path: 'default',
+              element: <DashboardDefault />,
+            },
+          ],
+        },
+        {
+          path: 'Inventario',
+          element: <Inventario />,
+        },
+        {
+          path: 'Informes',
+          element: <Informes />,
+        },
+        {
+          path: 'Imagenes',
+          element: <Imagenes />,
+        },
+        {
+          path: 'shadow',
+          element: <Shadow />,
+        },
+        {
+          path: 'typography',
+          element: <Typography />,
+        },
+        {
+          path: 'icons/ant',
+          element: <AntIcons />,
+        },
+        {
+          path: 'Lista_prestamos',
+          element: <Lista_prestamos />,
+        },
+        {
+          path: 'Prestar',
+          element: <Prestar />,
+        },
+      ],
+    };
+  }
 
   const combinedRoutes = {
     path: '/',
-    children: [...authRoutes, dashboardRoutes],
+    children: [...authRoutes, dashboardRoutes].filter(Boolean),
   };
 
   return useRoutes([combinedRoutes]);
