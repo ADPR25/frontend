@@ -1,5 +1,5 @@
 interface Activacion {
-    correo: string
+    correo: string; 
 }
 
 export const activacion = async (activacion: Activacion) => {

@@ -8,9 +8,9 @@ import {
     Button,
 } from '@mui/material';
 
-const Restablecer  = () => {
+const Restablecer = () => {
     const [activa, setActiva] = useState({
-        codigo: '',
+        correo: '', 
     });
 
     const handleChange = (e) => {
@@ -21,34 +21,34 @@ const Restablecer  = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await activacion(activa);
+            const correo = activa.correo; 
+            const response = await activacion({ correo });
 
-            if (response.status === 201) { 
+            if (response.status === 201) {
                 setActiva({
-                    codigo: '',
+                    correo: '',
                 });
             } else {
-                // Handle error here if needed
+                console.error('Error occurred');
             }
         } catch (error) {
-            // Handle error here if needed
             console.error(error);
         }
     };
-   
+
     return (
         <form onSubmit={handleSubmit}>
             <center>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
                         <Stack spacing={1}>
-                            <InputLabel htmlFor="codigo">Ingresa tu correo institucional</InputLabel>
+                            <InputLabel htmlFor="correo">Ingresa tu correo institucional</InputLabel>
                             <OutlinedInput
-                                id="codigo"
-                                type="string"
-                                name="codigo"
+                                id="correo"
+                                type="email"
+                                name="correo" 
                                 fullWidth
-                                value={activa.codigo}
+                                value={activa.correo} 
                                 onChange={handleChange}
                                 required
                             />
