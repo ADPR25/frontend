@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
-// import { crearPrestamo } from '../../api/prestar.ts';
+import { crearPrestamo } from '../../api/prestar.ts';
 
 const Prestar = () => {
     const token = localStorage.getItem('token');
@@ -51,7 +51,6 @@ const Prestar = () => {
         const { name, value } = e.target;
         const newValues = [...formData[name]];
 
-        // Convert the value to a number if it's the cantidad_implementos field
         newValues[index] = name === 'cantidad_implementos' ? parseInt(value, 10) : value;
 
         setFormData((prevData) => ({ ...prevData, [name]: newValues }));
@@ -65,10 +64,15 @@ const Prestar = () => {
         }));
     };
 
-    const handleSubmit = () => {
-        console.log('prestamo: ', formData);
-        // Call your API or perform any other actions here
+    const handleSubmit = async () => {
+        try {
+            const response = await crearPrestamo(formData);
+            console.log('Response from API:', response);
+        } catch (error) {
+            console.error('Error creating loan:', error);
+        }
     };
+
 
     return (
         <>
