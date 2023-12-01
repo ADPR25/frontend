@@ -64,14 +64,16 @@ const Prestar = () => {
         }));
     };
 
-    const handleSubmit = async () => {
+   const handleSubmit = async () => {
         try {
             const response = await crearPrestamo(formData);
             console.log('Response from API:', response);
         } catch (error) {
-            console.error('Error creating loan:', error);
-        }
+           console.error('Error creating loan:', error);
+       }
     };
+    
+
 
 
     return (
