@@ -8,6 +8,7 @@ import Prestamo from './prestamo';
 import informe from './informe';
 import Imagen from './imagen';
 import LPrestamo from './listar';
+import Roles from './rol';
 
 const menuItems = (usuario) => {
   let items = [];
@@ -15,7 +16,7 @@ const menuItems = (usuario) => {
   if (usuario === 'Aprendiz' || usuario === 'Instructor') {
     items = [Prestamo];
   } else if (usuario === 'Administrador') {
-    items = [dashboard, Imagen, informe , Prestamo,LPrestamo, Sanciones, Inplemento, utilities];
+    items = [dashboard,Roles, Imagen, informe , Prestamo,LPrestamo, Sanciones, Inplemento, utilities];
   }
 
   return { items };

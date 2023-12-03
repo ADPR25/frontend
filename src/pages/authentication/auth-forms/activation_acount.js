@@ -8,7 +8,7 @@ import {
     Button,
 } from '@mui/material';
 
-const Activation_acount  = () => {
+const Activation_acount = () => {
     const [activa, setActiva] = useState({
         codigo: '',
     });
@@ -20,22 +20,23 @@ const Activation_acount  = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const response = await activacion(activa);
 
-            if (response.status === 201) { 
+            if (response.status === 202) {
                 setActiva({
                     codigo: '',
                 });
             } else {
-                // Handle error here if needed
+                //h
             }
+            alert("Se ha activado la cuenta");
         } catch (error) {
-            // Handle error here if needed
             console.error(error);
         }
     };
-   
+
     return (
         <form onSubmit={handleSubmit}>
             <center>

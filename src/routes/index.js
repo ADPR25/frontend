@@ -22,6 +22,7 @@ const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 const Imagenes = Loadable(lazy(() => import('pages/inagen/imagen')));
+const Rol = Loadable(lazy(() => import('pages/roles/rol')));
 
 // Simula la decodificación del token (ajusta según tu implementación real)
 const decodeToken = (token) => {
@@ -111,6 +112,10 @@ const Routes = () => {
         {
           path: 'color',
           element: <Color />,
+        },
+        {
+          path: 'rol',
+          element: <Rol />,
         },
         {
           path: 'Listar_sanciones',
