@@ -1,3 +1,5 @@
+
+
 import {
     OrderedListOutlined,
     CalendarOutlined
@@ -8,9 +10,8 @@ const icons = {
     CalendarOutlined
 };
 
-const Prestamo = {
-    id: 'prestamo',
-    title: 'Prestamo',
+const LPrestamo2 = {
+    id: 'prestamo2',
     type: 'group',
     children: [
         {
@@ -23,4 +24,8 @@ const Prestamo = {
     ]
 };
 
-export default Prestamo;
+export default LPrestamo2;
+
+
+
+

@@ -7,11 +7,14 @@ import {
     MenuItem,
     Button,
     Select,
+    IconButton,
+    Typography,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
 import { crearPrestamo } from '../../api/prestar.ts';
 
-const Prestar = () => {
+const Prestar_admin = () => {
 
     function obtenerFechaActual() {
         const fechaActual = new Date();
@@ -64,10 +67,21 @@ const Prestar = () => {
         fetchData();
     }, []);
 
-    const handleChange = (e) => {
-        const { name } = e.target;
+    const handleChange = (e, index) => {
+        const { name, value } = e.target;
+        const newValues = [...formData[name]];
+
+        newValues[index] = name === 'cantidad_implementos' ? parseInt(value, 10) : value;
 
         setFormData((prevData) => ({ ...prevData, [name]: newValues }));
+    };
+
+    const handleAddSet = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            implementos: [...prevData.implementos, ''],
+            cantidad_implementos: [...prevData.cantidad_implementos, 0],
+        }));
     };
 
     const handleSubmit = async () => {
@@ -84,17 +98,18 @@ const Prestar = () => {
     return (
         <>
             <form>
-                    <Grid container spacing={2} style={{ marginBottom: '15px' }}>
+                {formData.implementos.map((_, index) => (
+                    <Grid container spacing={2} key={index} style={{ marginBottom: '15px' }}>
                         <Grid item xs={12} md={1}></Grid>
                         <Grid item xs={12} md={5}>
                             <Stack spacing={0}>
-                                <InputLabel htmlFor={`implemento-`}>Nombre del implemento</InputLabel>
+                                <InputLabel htmlFor={`implemento-${index}`}>Nombre del implemento</InputLabel>
                                 <Select
-                                    id={`implemento`}
+                                    id={`implemento-${index}`}
                                     name={`implementos`}
                                     fullWidth
-                                    value={formData.implementos}
-                                    onChange={(e) => handleChange(e)}
+                                    value={formData.implementos[index]}
+                                    onChange={(e) => handleChange(e, index)}
                                 >
                                     {implementoData.map((option) => (
                                         <MenuItem key={option._id} value={option._id}>
@@ -106,22 +121,34 @@ const Prestar = () => {
                         </Grid>
                         <Grid item xs={12} md={5}>
                             <Stack spacing={0}>
-                                <InputLabel htmlFor={`cantidad-`}>Cantidad de implementos</InputLabel>
+                                <InputLabel htmlFor={`cantidad-${index}`}>Cantidad de implementos</InputLabel>
                                 <TextField
                                     fullWidth
                                     type="string"
                                     name={`cantidad_implementos`}
-                                    value={formData.cantidad_implementos}
-                                    onChange={(e) => handleChange(e)}
+                                    value={formData.cantidad_implementos[index]}
+                                    onChange={(e) => handleChange(e, index)}
                                 />
                             </Stack>
                         </Grid>
                         <Grid item xs={12} md={1}></Grid>
                     </Grid>
+                ))}
                 <br />
                 <br />
                 <br />
-                                        
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={1}></Grid>
+                    <Grid item xs={6} md={6}>
+                        <Typography variant="h5">
+                            Prestamo:
+                            <IconButton color="primary" aria-label="Añadir" onClick={handleAddSet}>
+                                <AddIcon />
+                            </IconButton>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={1}></Grid>
+                </Grid>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={1}></Grid>
                     <Grid item xs={12} md={10}>
@@ -140,4 +167,4 @@ const Prestar = () => {
     );
 };
 
-export default Prestar;
+export default Prestar_admin;

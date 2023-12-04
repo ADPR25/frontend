@@ -8,8 +8,9 @@ const icons = {
     CalendarOutlined
 };
 
-const LPrestamo = {
+const Prestamo = {
     id: 'prestamo',
+    title: 'Prestamo',
     type: 'group',
     children: [
         {
@@ -18,8 +19,15 @@ const LPrestamo = {
             type: 'item',
             url: '/Lista_prestamos',
             icon: icons.OrderedListOutlined
+        },
+        {
+            id: 'listar_p',
+            title: 'Prestamos',
+            type: 'item',
+            url: '/Prestar_admin',
+            icon: icons.OrderedListOutlined
         }
     ]
 };
 
-export default LPrestamo;
+export default Prestamo;
