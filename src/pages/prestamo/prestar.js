@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid,
+    Grid,   
     TextField,
     InputLabel,
     Stack,
@@ -15,6 +15,24 @@ import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
 import { crearPrestamo } from '../../api/prestar.ts';
 
 const Prestar = () => {
+
+    function obtenerFechaActual() {
+        const fechaActual = new Date();
+        const dia = fechaActual.getDate();
+        const mes = fechaActual.getMonth() + 1; 
+        const anio = fechaActual.getFullYear();
+        const horas = '00';
+        const minutos = '00';
+        const segundos = '00';
+    
+        const fechaFormateada = `${anio}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia} ${horas}:${minutos}:${segundos}`;
+    
+        return fechaFormateada;
+    }
+    
+    const fechaActual = obtenerFechaActual();
+    
+      
     const token = localStorage.getItem('token');
 
     let usuario = '';
@@ -31,6 +49,8 @@ const Prestar = () => {
         implementos: [''],
         cantidad_implementos: [0],
         estado: '65372a7d48191d49b7466fda',
+        fecha_inicio : fechaActual,
+        fecha_fin : fechaActual
     });
 
     const [implementoData, setN_iData] = useState([]);
@@ -71,6 +91,7 @@ const Prestar = () => {
         } catch (error) {
             console.error('Error creating loan:', error);
         }
+        // console.log(formData);
     };
 
 
