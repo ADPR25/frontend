@@ -21,7 +21,7 @@ const Prestamo = {
             icon: icons.OrderedListOutlined
         },
         {
-            id: 'listar_p',
+            id: 'Crear_p2',
             title: 'Prestamos',
             type: 'item',
             url: '/Prestar_admin',

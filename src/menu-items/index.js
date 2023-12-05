@@ -16,7 +16,7 @@ const menuItems = (usuario) => {
   if (usuario === 'Aprendiz' || usuario === 'Instructor') {
     items = [LPrestamo2];
   } else if (usuario === 'Administrador') {
-    items = [dashboard,Roles, Imagen, informe , Prestamo,LPrestamo, Sanciones, Inplemento, utilities];
+    items = [dashboard,Roles, Imagen, informe ,LPrestamo, Sanciones, Inplemento, utilities];
   }
 
   return { items };
