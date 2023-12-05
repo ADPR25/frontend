@@ -21,7 +21,7 @@ const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
-const Imagenes = Loadable(lazy(() => import('pages/inagen/imagen')));
+const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
 const Prestar_admin = Loadable(lazy(() => import('pages/prestamo/admin_prestamo')));
 
