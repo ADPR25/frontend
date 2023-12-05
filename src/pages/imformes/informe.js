@@ -1,216 +1,149 @@
 import React, { useState, useEffect } from 'react';
-
 import {
     Grid,
-    Select,
     Stack,
     InputLabel,
-    MenuItem,
     TextField,
     Button,
     TextareaAutosize
 } from '@mui/material';
-import { Tipo_informe } from '../../api/tipo_informe.ts';
-import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
-import { estado_implemento } from '../../api/estado-implemento.ts';
-// import { informes } from '../../api/informe.ts'; 
+import { informes } from '../../api/informe.ts';
 
 const Informes = () => {
-    const handleFormChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    // const handleGuardarInforme = async () => {
-    //     try {
-    //         await informes(formData);
-    //         setFormData({
-    //             tipo_informe: '',
-    //             usuario: usuario,
-    //             dependencia: '',
-    //             implemento: '',
-    //             estado_implemento: '',
-    //             estado: '',
-    //             usuarios: '',
-    //             observaciones: ''
-    //         });
-    //     } catch (error) {
-    //         console.error('Error al guardar el informe', error);
-    //     }
-    // };
-
-    const handleGuardarInforme = () => {
-        console.log(formData);
-    };
-
-    const token = localStorage.getItem('token');
-
-    let usuario = '';
-
-    try {
-        const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
-        usuario = tokenData.id || '';
-    } catch (error) {
-        console.error('Error al parsear el token:', error);
-    }
-
     const [formData, setFormData] = useState({
-        tipo_informe: '',
-        usuario: usuario,
+        tipo_informe: '6543a1b131f287853861d968',
+        usuario: '', 
         dependencia: '',
-        implemento: '',
-        estado_implemento: '',
-        usuarios: '',
-        estado: '',
+        implemento: {
+            nombre: '',
+            cantidad: 0,
+            caracteristicas: '',
+        },
         observaciones: ''
     });
 
-    const [informeData, setinformeData] = useState([]);
     useEffect(() => {
-        async function fetchData() {
+        const loadUserId = async () => {
             try {
-                const inform = await Tipo_informe();
-                setinformeData(inform);
+                const token = localStorage.getItem('token');
+                const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
+                const userId = tokenData.id || '';
+                setFormData({
+                    ...formData,
+                    usuario: userId,
+                });
             } catch (error) {
-                console.error('Error al obtener los nombres de los implementos', error);
+                console.error('Error al cargar el ID del usuario:', error);
             }
+        };
+
+        loadUserId();
+    }, []); // el [] asegura que este efecto se ejecute solo una vez al montar el componente
+
+    const handleFormChange = (event) => {
+        const { name, value } = event.target;
+
+        if (name.startsWith("implemento.")) {
+            const implementoField = name.split(".")[1];
+            setFormData({
+                ...formData,
+                implemento: {
+                    ...formData.implemento,
+                    [implementoField]: implementoField === 'cantidad' ? Number(value) : value,
+                },
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
         }
-        fetchData();
-    }, []);
+    };
 
-    const [implementoData, setN_iData] = useState([]);
+    const handleGuardarInforme = async () => {
+        console.log(formData);
+        try {
+            const response = await informes(formData);
+            console.log('Informe guardado con éxito:', response);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const n_i = await obtener_inplemeto();
-                setN_iData(n_i);
-            } catch (error) {
-                console.error('Error al obtener los nombres de los implementos', error);
-            }
+            setFormData({
+                tipo_informe: '6543a1b131f287853861d968',
+                usuario: formData.usuario, // mantener el ID del usuario
+                dependencia: '',
+                implemento: [{
+                    nombre: '',
+                    cantidad: 0,
+                    caracteristicas: '',
+                }],
+                observaciones: ''
+            });
+
+        } catch (error) {
+            console.error('Error al guardar el informe:', error);
         }
-        fetchData();
-    }, []);
-
-    const [estadoData, setestadoData] = useState([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const estado = await estado_implemento();
-                setestadoData(estado);
-            } catch (error) {
-                console.error('Error al obtener los nombres de los implementos', error);
-            }
-        }
-        fetchData();
-    }, []);
-
-
+    };
     return (
         <>
-           
             <form>
                 <Grid container spacing={2} style={{ marginBottom: '15px' }}>
-                    <Grid item xs={12} md={1}></Grid>
-                    <Grid item xs={12} md={5}>
-                        <Stack spacing={1}>
-                            <InputLabel htmlFor="tipo_informe">Tipo de informe</InputLabel>
-                            <Select
-                                id="tipo_informe"
-                                name="tipo_informe"
-                                fullWidth
-                                onChange={handleFormChange}
-                            >
-                                {informeData.map((option) => (
-                                    <MenuItem key={`tipo_informe-option-${option._id}`} value={option._id}>
-                                        {option.nombre}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
                             <InputLabel htmlFor="dependencia">Dependencia</InputLabel>
                             <TextField
                                 fullWidth
                                 type="string"
-                                name={`dependencia`}
+                                name="dependencia"
                                 value={formData.dependencia}
                                 onChange={handleFormChange}
                             />
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} md={1}></Grid>
 
-                    <Grid item xs={12} md={1}></Grid>
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
-                            <InputLabel htmlFor='implemento'>Inplemento</InputLabel>
-                            <Select
-                                id="implemento"
-                                name="implemento"
-                                fullWidth
-                                onChange={handleFormChange}
-                            >
-                                {implementoData.map((option) => (
-                                    <MenuItem key={option._id} value={option._id}>
-                                        {option.nombre}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={12} md={5}>
-                        <Stack spacing={0}>
-                            <InputLabel htmlFor='estado_implemento'>Estado del implemento</InputLabel>
-                            <Select
-                                id="estado_iplemento"
-                                name="estado_implemento"
-                                fullWidth
-                                onChange={handleFormChange}
-                            >
-                                {estadoData.map((option) => (
-                                    <MenuItem key={option._id} value={option._id}>
-                                        {option.estado}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={12} md={1}></Grid>
-
-                    <Grid item xs={12} md={1}></Grid>
-                    <Grid item xs={12} md={5}>
-                        <Stack spacing={1}>
-                            <InputLabel htmlFor="estado">Estado</InputLabel>
+                            <InputLabel htmlFor="implemento.nombre">Nombre</InputLabel>
                             <TextField
                                 fullWidth
                                 type="string"
-                                name={`estado`}
-                                value={formData.estado}
+                                name="implemento.nombre"
+                                value={formData.implemento.nombre}
                                 onChange={handleFormChange}
                             />
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} md={5}>
+
+                    <Grid item xs={12} md={6}>
                         <Stack spacing={0}>
-                            {/* usuarios supuestamente */}
+                            <InputLabel htmlFor="implemento.cantidad">Cantidad</InputLabel>
+                            <TextField
+                                fullWidth
+                                type="number"
+                                name="implemento.cantidad"
+                                value={formData.implemento.cantidad}
+                                onChange={handleFormChange}
+                            />
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} md={1}></Grid>
 
-                    <Grid item xs={12} md={1}></Grid>
-                    <Grid item xs={12} md={10}>
+                    <Grid item xs={12} md={6}>
+                        <Stack spacing={0}>
+                            <InputLabel htmlFor="implemento.caracteristicas">Características</InputLabel>
+                            <TextField
+                                fullWidth
+                                type="string"
+                                name="implemento.caracteristicas"
+                                value={formData.implemento.caracteristicas}
+                                onChange={handleFormChange}
+                            />
+                        </Stack>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
                         <Stack spacing={1}>
-                            <InputLabel htmlFor="observaciones">observaciones</InputLabel>
+                            <InputLabel htmlFor="observaciones">Observaciones</InputLabel>
                             <TextareaAutosize
                                 id="observaciones"
-                                name={`observaciones`}
+                                name="observaciones"
                                 minRows={4}
                                 value={formData.observaciones}
                                 onChange={handleFormChange}
@@ -219,18 +152,14 @@ const Informes = () => {
                             />
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} md={1}></Grid>
 
-                    <Grid item xs={12} md={1}></Grid>
-                    <Grid item xs={12} md={10}>
+                    <Grid item xs={12} md={12}>
                         <center>
                             <Button variant="contained" color="primary" onClick={handleGuardarInforme}>
                                 Guardar informe
                             </Button>
                         </center>
                     </Grid>
-                    <Grid item xs={12} md={1}></Grid>
-
                 </Grid>
             </form>
         </>
