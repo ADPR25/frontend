@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { DeleteOutline } from '@mui/icons-material';
 import {
     Grid,
     Table,
@@ -12,12 +12,9 @@ import {
 } from '@mui/material';
 import { buscar_prestamos } from '../../api/buscar_prestamos.ts';
 import { eliminar_prestamo } from '../../api/eliminar_prestamo.ts';
-import EditarPrestamo from './editar_prestamo';
 
 const Lista_prestamos = () => {
     const [buscar_prestamosData, setbuscar_prestamosData] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false); 
-    const [prestamoSeleccionado, setSelectedPrestamo] = useState(null);
 
     useEffect(() => {
         buscar_prestamos()
@@ -36,11 +33,6 @@ const Lista_prestamos = () => {
                     .catch((error) => console.error(error));
             })
             .catch((error) => console.error(error));
-    };
-
-    const handleEditarPrestamo = (prestamo) => {
-        setSelectedPrestamo(prestamo);
-        setModalOpen(true);
     };
 
     return (
@@ -74,22 +66,10 @@ const Lista_prestamos = () => {
                                     <DeleteOutline />
                                 </IconButton>
                             </TableCell>
-                            <TableCell>
-                                <IconButton onClick={() => handleEditarPrestamo(item)}>
-                                    <EditOutlined />
-                                </IconButton>
-                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-
-            <EditarPrestamo
-                prestamo={prestamoSeleccionado}
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-            />
-
         </Grid>
     );
 };
