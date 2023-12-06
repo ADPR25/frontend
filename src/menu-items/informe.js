@@ -19,9 +19,16 @@ const informe = {
     children: [
         {
             id: 'crear_i',
-            title: 'Crear informes',
+            title: 'Crear informes implemento',
             type: 'item',
             url: '/Informes',
+            icon: icons.PlusCircleOutlined
+        },
+        {
+            id: 'crear_i2',
+            title: 'Crear informes inventario',
+            type: 'item',
+            url: '/Informes2',
             icon: icons.PlusCircleOutlined
         },
     ]
