@@ -13,6 +13,7 @@ import { informes } from '../../api/informe.ts';
 import {estado_implemento} from '../../api/estado-implemento.ts'
 
 const Informes2 = () => {
+    
     const [formData, setFormData] = useState({
         tipo_informe: '65374b884d00eddbedad40fe',
         usuario: '', 
@@ -37,17 +38,27 @@ const Informes2 = () => {
         };
 
         loadUserId();
-    }, []); // el [] asegura que este efecto se ejecute solo una vez al montar el componente
-
+    }, []); 
+    
+  
     const handleFormChange = (event) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        })
-    };
-    const [estadoData, setestadoData] = useState([]);
 
+        // Special handling for 'estado_implemento' field
+        if (name === 'estado_implemento') {
+            const selectedValues = Array.isArray(value) ? value : [value];
+            setFormData({
+                ...formData,
+                [name]: selectedValues.map(id => id._id),
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
+    };
+    
     useEffect(() => {
         async function fetchData() {
             try {
