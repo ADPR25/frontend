@@ -11,8 +11,9 @@ export const informes = async (informe) => {
         });
 
         if (!response.ok) {
-            // Si la respuesta no es exitosa, arrojamos un error
-            throw new Error('Error en la solicitud. Código de estado: ' + response.status);
+            // Si la respuesta no es exitosa, arrojamos un error con detalles del servidor
+            const errorDetails = await response.json();
+            throw new Error('Error en la solicitud. Detalles: ' + JSON.stringify(errorDetails));
         }
 
         const data = await response.json();
@@ -23,7 +24,7 @@ export const informes = async (informe) => {
     } catch (error) {
         console.error('Error en la función informes:', error);
 
-        // Devolvemos un objeto de error con un mensaje específico
-        return { error: 'Error al actualizar el archivo XLSX', details: error.message };
+        // Devolvemos un objeto de error con el mensaje de la excepción
+        return { error: 'Error al actualizar el informe', details: error.message };
     }
 };
