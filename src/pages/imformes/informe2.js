@@ -48,7 +48,7 @@ const Informes2 = () => {
             const selectedValues = Array.isArray(value) ? value : [value];
             setFormData({
                 ...formData,
-                [name]: selectedValues.map((id) => id._id),
+                [name]: selectedValues,  // No need to map to _id, just use selectedValues directly
             });
         } else {
             setFormData({
