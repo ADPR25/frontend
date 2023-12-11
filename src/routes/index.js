@@ -22,6 +22,7 @@ const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 const Informes2 = Loadable(lazy(() => import('pages/imformes/informe2')));
+const Informes3 = Loadable(lazy(() => import('pages/imformes/informe3')));
 
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
@@ -152,6 +153,10 @@ const Routes = () => {
         {
           path: 'Informes2',
           element: <Informes2 />,
+        },
+        {
+          path: 'Informes3',
+          element: <Informes3 />,
         },
         {
           path: 'Imagenes',

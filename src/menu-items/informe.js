@@ -31,6 +31,13 @@ const informe = {
             url: '/Informes2',
             icon: icons.PlusCircleOutlined
         },
+        {
+            id: 'crear_i3',
+            title: 'Crear informes usuario',
+            type: 'item',
+            url: '/Informes3',
+            icon: icons.PlusCircleOutlined
+        },
     ]
 };
 
