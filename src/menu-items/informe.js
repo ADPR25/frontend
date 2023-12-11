@@ -38,6 +38,13 @@ const informe = {
             url: '/Informes3',
             icon: icons.PlusCircleOutlined
         },
+        {
+            id: 'crear_i4',
+            title: 'Crear informes sanciones',
+            type: 'item',
+            url: '/Informes4',
+            icon: icons.PlusCircleOutlined
+        },
     ]
 };
 
