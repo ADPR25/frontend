@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import {
-    Grid,   
+    Grid,
     TextField,
     InputLabel,
     Stack,
@@ -8,30 +9,28 @@ import {
     Button,
     Select,
 } from '@mui/material';
-import { obtener_inplemeto } from '../../api/nombre-inplemento.ts';
+import { obtener_inplemeto_id } from '../../api/inventario2.ts';
 import { crearPrestamo } from '../../api/prestar.ts';
+import { categoria } from '../../api/crear_implemento.ts';
 
 const Prestar = () => {
-
     function obtenerFechaActual() {
         const fechaActual = new Date();
         const dia = fechaActual.getDate();
-        const mes = fechaActual.getMonth() + 1; 
+        const mes = fechaActual.getMonth() + 1;
         const anio = fechaActual.getFullYear();
         const horas = '00';
         const minutos = '00';
         const segundos = '00';
-    
+
         const fechaFormateada = `${anio}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia} ${horas}:${minutos}:${segundos}`;
-    
+
         return fechaFormateada;
     }
-    
-    const fechaActual = obtenerFechaActual();
-    
-      
-    const token = localStorage.getItem('token');
 
+    const fechaActual = obtenerFechaActual();
+
+    const token = localStorage.getItem('token');
     let usuario = '';
 
     try {
@@ -46,17 +45,18 @@ const Prestar = () => {
         implementos: [''],
         cantidad_implementos: [0],
         estado: '65372a7d48191d49b7466fda',
-        fecha_inicio : fechaActual,
-        fecha_fin : fechaActual
+        fecha_inicio: fechaActual,
+        fecha_fin: fechaActual,
     });
 
-    const [implementoData, setN_iData] = useState([]);
+    const [implementoData, setImplementoData] = useState([]);
+    const [categoriaData, setCategoriaData] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const n_i = await obtener_inplemeto();
-                setN_iData(n_i);
+                const n_i = await obtener_inplemeto_id();
+                setImplementoData(n_i);
             } catch (error) {
                 console.error('Error al obtener los nombres de los implementos', error);
             }
@@ -64,29 +64,73 @@ const Prestar = () => {
         fetchData();
     }, []);
 
-    const handleChange = (e) => {
-        const { name } = e.target;
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const categorias = await categoria();
+                setCategoriaData(categorias);
+            } catch (error) {
+                console.error('Error al obtener las categorías', error);
+            }
+        }
 
-        setFormData((prevData) => ({ ...prevData, [name]: newValues }));
+        fetchData();
+    }, []);
+
+    const obtenerImplementosPorCategoria = async (categoriaId) => {
+        try {
+            const implementos = await obtener_inplemeto_id(categoriaId);
+            setImplementoData(implementos); 
+        } catch (error) {
+            console.error('Error al obtener los implementos por categoría', error);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'categoria') {
+            obtenerImplementosPorCategoria(value); 
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     };
 
     const handleSubmit = async () => {
         try {
-            const response = await crearPrestamo(formData);
-            console.log('Response from API:', response);
+            await crearPrestamo(formData);
         } catch (error) {
             console.error('Error creating loan:', error);
         }
-        // console.log(formData);
     };
-
 
     return (
         <>
             <form>
                     <Grid container spacing={2} style={{ marginBottom: '15px' }}>
-                        <Grid item xs={12} md={1}></Grid>
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={0}>
+                            <InputLabel htmlFor="categoria">Categoría</InputLabel>
+                            <Select
+                                id="categoria"
+                                name="categoria"
+                                value={formData.categoria}
+                                onChange={(e) => handleChange(e)}
+                                fullWidth
+                                style={{ width: '100%' }}
+                            >
+                                {categoriaData.map((option) => (
+                                <MenuItem key={option._id} value={option._id}>
+                                    {option.nombre}
+                                </MenuItem>
+                                ))}
+                            </Select>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
                             <Stack spacing={0}>
                                 <InputLabel htmlFor={`implemento-`}>Nombre del implemento</InputLabel>
                                 <Select
@@ -104,7 +148,7 @@ const Prestar = () => {
                                 </Select>
                             </Stack>
                         </Grid>
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={12} md={12}>
                             <Stack spacing={0}>
                                 <InputLabel htmlFor={`cantidad-`}>Cantidad de implementos</InputLabel>
                                 <TextField
@@ -116,7 +160,6 @@ const Prestar = () => {
                                 />
                             </Stack>
                         </Grid>
-                        <Grid item xs={12} md={1}></Grid>
                     </Grid>
                 <br />
                 <br />
