@@ -50,7 +50,6 @@ const Lista_prestamos = () => {
                         <TableCell>Fecha final</TableCell>
                         <TableCell>Hora final</TableCell>
                         <TableCell>Eliminar préstamo</TableCell>
-                        <TableCell>Editar préstamo</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

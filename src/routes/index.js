@@ -11,10 +11,6 @@ const AuthRegister = Loadable(lazy(() => import('pages/authentication/Register')
 const Activation_acount = Loadable(lazy(() => import('pages/authentication/activation')));
 const Rest_contrasena = Loadable(lazy(() => import('pages/authentication/Rest_pass')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
-const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
-const Color = Loadable(lazy(() => import('pages/components-overview/Color')));
-const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
-const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 const Listar_sanciones = Loadable(lazy(() => import('pages/sanciones/listar_sanciones')));
 const Crear_sanciones = Loadable(lazy(() => import('pages/sanciones/crear_sanciones')));
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
@@ -119,10 +115,6 @@ const Routes = () => {
           element: <Prestar_admin />,
         },
         {
-          path: 'color',
-          element: <Color />,
-        },
-        {
           path: 'rol',
           element: <Rol />,
         },
@@ -166,18 +158,6 @@ const Routes = () => {
         {
           path: 'Imagenes',
           element: <Imagenes />,
-        },
-        {
-          path: 'shadow',
-          element: <Shadow />,
-        },
-        {
-          path: 'typography',
-          element: <Typography />,
-        },
-        {
-          path: 'icons/ant',
-          element: <AntIcons />,
         },
         {
           path: 'Lista_prestamos',

@@ -2,7 +2,6 @@
 
 import dashboard from './dashboard';
 import Sanciones from './sanciones';
-import utilities from './utilities';
 import Inplemento from './inplementos';
 import informe from './informe';
 import Imagen from './imagen';
@@ -16,7 +15,7 @@ const menuItems = (usuario) => {
   if (usuario === 'Aprendiz' || usuario === 'Instructor') {
     items = [LPrestamo2];
   } else if (usuario === 'Administrador') {
-    items = [dashboard,Roles, Imagen, informe ,LPrestamo, Sanciones, Inplemento, utilities];
+    items = [dashboard,Roles, Imagen, informe ,LPrestamo, Sanciones, Inplemento];
   }
 
   return { items };
