@@ -8,7 +8,7 @@ const icons = {
 
 const Roles = {
     id: 'rol',
-    title: 'Rol',
+    title: 'Crear',
     type: 'group',
     children: [
         {
@@ -16,6 +16,20 @@ const Roles = {
             title: 'crear roles',
             type: 'item',
             url: '/rol',
+            icon: icons.PlusCircleOutlined
+        },
+        {
+            id: 'crearEps',
+            title: 'crear eps',
+            type: 'item',
+            url: '/EPS',
+            icon: icons.PlusCircleOutlined
+        },
+        {
+            id: 'crearjornada',
+            title: 'crear jornada',
+            type: 'item',
+            url: '/Jornada',
             icon: icons.PlusCircleOutlined
         },
     ]

@@ -20,6 +20,9 @@ const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 const Informes2 = Loadable(lazy(() => import('pages/imformes/informe2')));
 const Informes3 = Loadable(lazy(() => import('pages/imformes/informe3')));
 const Informes4 = Loadable(lazy(() => import('pages/imformes/informe4')));
+const EPS = Loadable(lazy(() => import('pages/eps/eps')));
+const Jornada = Loadable(lazy(() => import('pages/jornada/jornada')));
+
 
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
@@ -119,8 +122,16 @@ const Routes = () => {
           element: <Rol />,
         },
         {
+          path: 'jornada',
+          element: <Jornada />,
+        },
+        {
           path: 'Listar_sanciones',
           element: <Listar_sanciones />,
+        },
+        {
+          path: 'EPS',
+          element: <EPS />,
         },
         {
           path: 'Crear_sanciones',
