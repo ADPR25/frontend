@@ -32,6 +32,20 @@ const Roles = {
             url: '/Jornada',
             icon: icons.PlusCircleOutlined
         },
+        {
+            id: 'crearnivelformacion',
+            title: 'crear nivel formacion',
+            type: 'item',
+            url: '/NivelFormacion',
+            icon: icons.PlusCircleOutlined
+        },
+        {
+            id: 'crearestadoImplemento',
+            title: 'crear estado implemento',
+            type: 'item',
+            url: '/EstadoImplemento',
+            icon: icons.PlusCircleOutlined
+        },
     ]
 };
 
