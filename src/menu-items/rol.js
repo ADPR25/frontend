@@ -46,6 +46,13 @@ const Roles = {
             url: '/EstadoImplemento',
             icon: icons.PlusCircleOutlined
         },
+        {
+            id: 'marca',
+            title: 'crear marcas',
+            type: 'item',
+            url: '/MARCA',
+            icon: icons.PlusCircleOutlined
+        },
     ]
 };
 

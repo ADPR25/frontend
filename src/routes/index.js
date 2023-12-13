@@ -24,7 +24,7 @@ const EPS = Loadable(lazy(() => import('pages/eps/eps')));
 const Jornada = Loadable(lazy(() => import('pages/jornada/jornada')));
 const NivelFormacion = Loadable(lazy(() => import('pages/nivel_formacion/nivel_formacion')));
 const EstadoImplemento = Loadable(lazy(() => import('pages/estado_implemento/estado_implemento')));
-
+const MARCA = Loadable(lazy(() => import('pages/marca/Marca')));
 
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
@@ -122,6 +122,10 @@ const Routes = () => {
         {
           path: 'rol',
           element: <Rol />,
+        },
+        {
+          path: 'MARCA',
+          element: <MARCA />,
         },
         {
           path: 'NivelFormacion',
