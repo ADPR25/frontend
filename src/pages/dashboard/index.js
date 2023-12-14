@@ -1,32 +1,36 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Paper } from '@mui/material';
+import { styled } from '@mui/system';
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  textAlign: 'center',
+  height: '100%', // Ocupa toda la altura del contenedor padre
+}));
 
-
-const backgroundImage = {
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  position: 'fixed',
-  width: '80%',
-  height: '90%',
-  // opacity: 0.5, 
-};
-
+const StyledWelcomeText = styled(Typography)(({ theme }) => ({
+  fontFamily: 'Roboto',
+  fontWeight: 'bold',
+  color: theme.palette.primary.main,
+  marginBottom: theme.spacing(2),
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '2rem', // Ajusta el tamaño de letra para tamaños de pantalla pequeños
+  },
+}));
 
 const DashboardDefault = () => {
-  const token = localStorage.getItem('token');
-
-  console.log('token:', token);
-
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      <Grid item xs={12} sx={backgroundImage}>
-        <Typography variant="h4" color="primary" align="center">
-          
-        </Typography>
+    <Grid container rowSpacing={40.5} columnSpacing={20.75} justifyContent="center" alignItems="center" height="100vh">
+      <Grid item xs={12} sm={8} md={6}>
+        <StyledPaper elevation={3}>
+          <StyledWelcomeText variant="h1">
+            ¡Bienvenido a la plataforma!
+          </StyledWelcomeText>
+          <Typography variant="body1">
+            <h3>Prestamos y otros servicios de bienestar.</h3>
+          </Typography>
+        </StyledPaper>
       </Grid>
-      {/* Additional content goes here */}
     </Grid>
   );
 };
