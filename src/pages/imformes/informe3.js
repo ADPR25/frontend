@@ -8,9 +8,11 @@ import {
     TextareaAutosize
 } from '@mui/material';
 import { informes } from '../../api/informe.ts';
-import { estado_implemento } from '../../api/estado-implemento.ts';
+import * as html2pdf from 'html2pdf.js';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
-const Informes2 = () => {
+const Informes3 = () => {
     const [formData, setFormData] = useState({
         tipo_informe: '65374b934d00eddbedad4100',
         usuario: '',
@@ -18,7 +20,7 @@ const Informes2 = () => {
         observaciones: ''
     });
 
-    const [ setEstadoData] = useState([]); // Define estadoData state
+    const [setEstadoData] = useState([]); // Define estadoData state
 
     useEffect(() => {
         const loadUserId = async () => {
@@ -92,11 +94,36 @@ const Informes2 = () => {
         }
     };
 
+    const handleDescargarPDF = () => {
+        const pdfElement = document.getElementById('pdf-container-informes2');
+        html2pdf(pdfElement);
+    };
+
+    const handleDescargarExcel = () => {
+        const ws = XLSX.utils.aoa_to_sheet([
+            ['tipo_informe', 'usuario', 'dependencia', 'observaciones'],
+            [
+                'informe de usuario',
+                formData.usuario,
+                formData.dependencia,
+                formData.observaciones
+            ]
+        ]);
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Informe');
+
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+        const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(data, 'Informe.xlsx');
+    };
+
     return (
         <>
-            <form>
+            <form id="pdf-container-informes2">
                 <Grid container spacing={2} style={{ marginBottom: '15px' }}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={12}>
                         <Stack spacing={0}>
                             <InputLabel htmlFor="dependencia">Dependencia</InputLabel>
                             <TextField
@@ -129,6 +156,12 @@ const Informes2 = () => {
                             <Button variant="contained" color="primary" onClick={handleGuardarInforme}>
                                 Guardar informe
                             </Button>
+                            <Button variant="contained" color="secondary" onClick={handleDescargarPDF} style={{ marginLeft: '10px' }}>
+                                Descargar PDF
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={handleDescargarExcel} style={{ marginLeft: '10px' }}>
+                                Descargar Excel
+                            </Button>
                         </center>
                     </Grid>
                 </Grid>
@@ -137,4 +170,4 @@ const Informes2 = () => {
     );
 };
 
-export default Informes2;
+export default Informes3;

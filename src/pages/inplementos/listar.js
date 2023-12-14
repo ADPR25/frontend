@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Grid, Button, Table, TableHead, TableBody, TableRow, TableCell, Stack, IconButton
+    Grid, Button, Card, CardContent, CardActions, Typography,  IconButton
 } from '@mui/material';
 import { inventario } from '../../api/inventario.ts';
 import { DeleteOutline, EditOutlined } from '@mui/icons-material';
@@ -10,9 +10,8 @@ import { eliminarImplemento } from '../../api/eliminar_inpl.ts'
 import EditarImplementoModal from './editar_implemento_modal.js';
 
 const Inventario = () => {
-
     const [implementoselecciomnado, setimplementoselecciomnado] = useState(null);
-    const [ setimplemento] = useState([]);
+    const [inventarioData, setInventarioData] = useState([]);
     const [crearModalOpen, setCrearModalOpen] = useState(false);
     const [editarModalOpen, setEditarModalOpen] = useState(false);
 
@@ -29,17 +28,7 @@ const Inventario = () => {
 
     useEffect(() => {
         inventario()
-            .then((data) => setimplemento(data))
-            .catch((error) => console.error(error));
-    }, []);
-
-    const [inventarioData, setInventarioData] = useState([]);
-
-    useEffect(() => {
-        inventario()
-            .then((data) => {
-                setInventarioData(data)
-            })
+            .then((data) => setInventarioData(data))
             .catch((error) => console.error(error));
     }, []);
 
@@ -54,43 +43,38 @@ const Inventario = () => {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={12}>
-                    <Stack spacing={7}></Stack>
-                </Grid>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Marca</TableCell>
-                            <TableCell>Categoría</TableCell>
-                            <TableCell>Cantidad Nuevo</TableCell>
-                            <TableCell>Cantidad Malos</TableCell>
-                            <TableCell>Cantidad Disponible</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {inventarioData.map((item) => (
-                            <TableRow key={item._id}>
-                                <TableCell>{item.nombre}</TableCell>
-                                <TableCell>{item.marca && item.marca.nombre}</TableCell>
-                                <TableCell>{item.categoria[0] && item.categoria[0].nombre}</TableCell>
-                                <TableCell>{item.estado[0] && item.estado[0].cantidad}</TableCell>
-                                <TableCell>{item.estado[2] && item.estado[2].cantidad}</TableCell>
-                                <TableCell>{item.estado[1] && item.estado[1].cantidad}</TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleEditarImplemento(item)}>
-                                        <EditOutlined />
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleEliminarImplemento(item._id)}>
-                                        <DeleteOutline />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                {inventarioData.map((item) => (
+                    <Grid item key={item._id} xs={12} md={6} lg={4}>
+                        <Card>
+                            <CardContent>
+                                <Typography variant="h6">{item.nombre}</Typography>
+                                <Typography>
+                                    <strong>Marca:</strong> {item.marca && item.marca.nombre}
+                                </Typography>
+                                <Typography>
+                                    <strong>Categoría:</strong> {item.categoria[0] && item.categoria[0].nombre}
+                                </Typography>
+                                <Typography>
+                                    <strong>Cantidad Nuevo:</strong> {item.estado[0] && item.estado[0].cantidad}
+                                </Typography>
+                                <Typography>
+                                    <strong>Cantidad Malos:</strong> {item.estado[2] ? item.estado[2].cantidad : 0}
+                                </Typography>
+                                <Typography>
+                                    <strong>Cantidad Disponible:</strong> {item.estado[0] && item.estado[0].cantidad}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <IconButton onClick={() => handleEditarImplemento(item)}>
+                                    <EditOutlined />
+                                </IconButton>
+                                <IconButton onClick={() => handleEliminarImplemento(item._id)}>
+                                    <DeleteOutline />
+                                </IconButton>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
                 <Grid item xs={12} md={12}>
                     <center>
                         <Button variant="contained" color="primary" onClick={handleCrear}>

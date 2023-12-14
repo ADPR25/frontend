@@ -1,11 +1,9 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 
-import logo from '../../assets/images/logo.png';
 
 
 const backgroundImage = {
-  backgroundImage: `url(${logo})`,
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   backgroundPosition: 'center',

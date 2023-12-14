@@ -4,20 +4,19 @@ import {
     Stack,
     InputLabel,
     OutlinedInput,
-    TextareaAutosize, // Importa TextareaAutosize para el campo de descripción
-    Button, // Importa Button para el botón de envío
+    TextareaAutosize,
+    Button,
 } from '@mui/material';
 
 import { Sancionar } from '../../api/crear_sancion.ts';
 import { buscar_sancionado } from '../../api/buscar.ts';
 
 const CrearSanciones = () => {
-
     const [dias, setDias] = useState(0);
     const [horas, setHoras] = useState(0);
     const [usuario, setUsuario] = useState({
         correo: '',
-        description: '', // Corrige el nombre del campo 'description'
+        description: '',
     });
 
     const handleChange = (e) => {
@@ -28,20 +27,19 @@ const CrearSanciones = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const userId = await buscar_sancionado({
+            const userResponse = await buscar_sancionado({
                 correo: usuario.correo,
             });
 
-            if (userId) {
+            if (userResponse && userResponse._id) {
                 const response = await Sancionar({
-                    usuario: userId, 
+                    usuario: userResponse._id,
                     description: usuario.description,
                     duracion: horas,
                     estado: true,
                 });
 
                 if (response) {
-                    // Realiza la lógica que corresponda cuando la sanción se completa con éxito
                     console.log('Sanción exitosa');
                     setUsuario({
                         correo: '',

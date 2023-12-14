@@ -53,6 +53,13 @@ const Roles = {
             url: '/MARCA',
             icon: icons.PlusCircleOutlined
         },
+        {
+            id: 'dominio',
+            title: 'crear dominio sena',
+            type: 'item',
+            url: '/DOMINIO',
+            icon: icons.PlusCircleOutlined
+        },
     ]
 };
 

@@ -42,12 +42,13 @@ const Prestar = () => {
 
     const [formData, setFormData] = useState({
         usuario: usuario,
-        implementos: [''],
-        cantidad_implementos: [0],
+        implementos: [''], 
+        cantidad_implementos: [0], 
         estado: '65372a7d48191d49b7466fda',
         fecha_inicio: fechaActual,
         fecha_fin: fechaActual,
     });
+
 
     const [implementoData, setImplementoData] = useState([]);
     const [categoriaData, setCategoriaData] = useState([]);
@@ -90,14 +91,15 @@ const Prestar = () => {
         const { name, value } = e.target;
 
         if (name === 'categoria') {
-            obtenerImplementosPorCategoria(value); 
+            obtenerImplementosPorCategoria(value);
         } else {
             setFormData((prevData) => ({
                 ...prevData,
-                [name]: value,
+                [name]: name === 'implementos' || name === 'cantidad_implementos' ? [value] : value,
             }));
         }
     };
+
 
     const handleSubmit = async () => {
         try {

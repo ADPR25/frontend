@@ -10,22 +10,18 @@ const icons = {
     CalendarOutlined
 };
 
-const LPrestamo2 = {
-    id: 'prestamo2',
+const sancion_user = {
+    id: 'sancion',
     type: 'group',
     children: [
         {
-            id: 'crear_p',
-            title: 'crear prestamos',
+            id: 'Sancion',
+            title: 'Mis sanciones',
             type: 'item',
-            url: '/Prestar',
+            url: '/Sancion',
             icon: icons.CalendarOutlined
         },
-    ],
+    ]
 };
 
-export default LPrestamo2;
-
-
-
-
+export default sancion_user;

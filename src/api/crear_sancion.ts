@@ -1,17 +1,17 @@
 const API = 'https://proyecto-backend-sgbienestar.onrender.com/sanciones';
 
-interface sancion {
-    usuario: string
-    duracion: number
-    description: string
-    estado: boolean
+interface Sancion {
+    usuario: string;
+    description: string;
+    estado: boolean;
+    duracion: number;
 }
 
-export const Sancionar = (usuario: sancion) =>
-    fetch(`${API}`, {
+export const Sancionar = (sancion: Sancion) =>
+    fetch(API, {
         method: 'POST',
-        body: JSON.stringify(usuario),
+        body: JSON.stringify(sancion),
         headers: {
-            'content-type': 'application/json',
+            'Content-Type': 'application/json',
         },
     });

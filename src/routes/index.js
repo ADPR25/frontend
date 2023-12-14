@@ -25,15 +25,16 @@ const Jornada = Loadable(lazy(() => import('pages/jornada/jornada')));
 const NivelFormacion = Loadable(lazy(() => import('pages/nivel_formacion/nivel_formacion')));
 const EstadoImplemento = Loadable(lazy(() => import('pages/estado_implemento/estado_implemento')));
 const MARCA = Loadable(lazy(() => import('pages/marca/Marca')));
+const DOMINIO = Loadable(lazy(() => import('pages/dominio/Dominio')));
+const Sancion = Loadable(lazy(() => import('pages/sanciones/sancion')));
 
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
 const Prestar_admin = Loadable(lazy(() => import('pages/prestamo/admin_prestamo')));
 
-// Simula la decodificación del token (ajusta según tu implementación real)
+
 const decodeToken = (token) => {
   try {
-    // Decodificación básica del token (¡ajusta según tu necesidad!)
     const decoded = atob(token.split('.')[1]);
     return JSON.parse(decoded);
   } catch (error) {
@@ -104,6 +105,10 @@ const Routes = () => {
           path: 'Prestar',
           element: <Prestar />,
         },
+        {
+          path: 'Sancion',
+          element: <Sancion />,
+        }
       ],
     };
   } else if (usuario === 'Administrador') {
@@ -122,6 +127,10 @@ const Routes = () => {
         {
           path: 'rol',
           element: <Rol />,
+        },
+        {
+          path: 'DOMINIO',
+          element: <DOMINIO />,
         },
         {
           path: 'MARCA',

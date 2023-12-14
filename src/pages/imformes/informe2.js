@@ -11,6 +11,9 @@ import {
 } from '@mui/material';
 import { informes } from '../../api/informe.ts';
 import { estado_implemento } from '../../api/estado-implemento.ts';
+import * as html2pdf from 'html2pdf.js';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const Informes2 = () => {
     const [formData, setFormData] = useState({
@@ -96,6 +99,37 @@ const Informes2 = () => {
         }
     };
 
+
+    const handleDescargarPDF = () => {
+        const pdfElement = document.getElementById('pdf-container-informes2');
+        html2pdf(pdfElement);
+    };
+
+    const handleDescargarExcel = () => {
+        const { nombres, apellidos } = extractNamesFromToken();
+
+        const nombreCompleto = `${nombres} ${apellidos}`;
+
+        const ws = XLSX.utils.aoa_to_sheet([
+            ['tipo_informe', 'usuario', 'dependencia', 'estado_implemento', 'observaciones'],
+            [
+                'informe de implemento',
+                nombreCompleto,
+                formData.dependencia,
+                formData.estado_implemento[0] && formData.estado_implemento[0].estado,
+                formData.observaciones
+            ]
+        ]);
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Informe');
+
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+        const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(data, 'Informe.xlsx');
+    };
+
     return (
         <>
             <form>
@@ -151,6 +185,12 @@ const Informes2 = () => {
                         <center>
                             <Button variant="contained" color="primary" onClick={handleGuardarInforme}>
                                 Guardar informe
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={handleDescargarPDF} style={{ marginLeft: '10px' }}>
+                                Descargar PDF
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={handleDescargarExcel} style={{ marginLeft: '10px' }}>
+                                Descargar Excel
                             </Button>
                         </center>
                     </Grid>
