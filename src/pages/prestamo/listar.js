@@ -10,10 +10,11 @@ import {
 } from '@mui/material';
 import { buscar_prestamos } from '../../api/buscar_prestamos.ts';
 import { eliminar_prestamo } from '../../api/eliminar_prestamo.ts';
-import { aprobar_prestamo } from '../../api/aprobar.ts';
+import { aprobar_prestamo, completar_prestamos } from '../../api/aprobar.ts';
 
 const Lista_Prestamos = () => {
     const [buscarPrestamosData, setBuscarPrestamosData] = useState([]);
+    
 
     useEffect(() => {
         buscar_prestamos()
@@ -43,12 +44,28 @@ const Lista_Prestamos = () => {
             .catch((error) => console.error(error));
     };
 
+    const handleCompletar = (id) => {
+        console.log('ID: ', id)
+        completar_prestamos(id)
+            .then(() => {
+                buscar_prestamos()
+                    .then((data) => setBuscarPrestamosData(data))
+                    .catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+    };
+
+
+
     return (
         <Grid container spacing={2}>
             {buscarPrestamosData.map((item) => (
                 <Grid item key={item._id} xs={12} md={6} lg={4}>
                     <Card>
                         <CardContent>
+                            <Typography variant="h6">
+                                {item.usuario && item.usuario.nombres}
+                            </Typography>
                             <Typography variant="h6">
                                 {item.implementos[0] ? item.implementos[0].nombre : 'N/A'}
                             </Typography>
@@ -71,7 +88,7 @@ const Lista_Prestamos = () => {
                             <IconButton onClick={() => handleEliminarPrestamo(item._id)}>
                                 <DeleteOutline />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => handleCompletar(item._id)}>
                                 <Close />
                             </IconButton>
                             <IconButton onClick={() => handleAprobar(item._id)}>

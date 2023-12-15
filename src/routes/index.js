@@ -7,6 +7,7 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 
 const AuthLogin = Loadable(lazy(() => import('pages/authentication/Login')));
+const Cambio = Loadable(lazy(() => import('pages/authentication/cambio')));
 const AuthRegister = Loadable(lazy(() => import('pages/authentication/Register')));
 const Activation_acount = Loadable(lazy(() => import('pages/authentication/activation')));
 const Rest_contrasena = Loadable(lazy(() => import('pages/authentication/Rest_pass')));
@@ -16,6 +17,7 @@ const Crear_sanciones = Loadable(lazy(() => import('pages/sanciones/crear_sancio
 const Inventario = Loadable(lazy(() => import('pages/inplementos/listar')));
 const Lista_prestamos = Loadable(lazy(() => import('pages/prestamo/listar')));
 const Prestar = Loadable(lazy(() => import('pages/prestamo/prestar')));
+const Prestamos = Loadable(lazy(() => import('pages/prestamo/prestamos')));
 const Informes = Loadable(lazy(() => import('pages/imformes/informe')));
 const Informes2 = Loadable(lazy(() => import('pages/imformes/informe2')));
 const Informes3 = Loadable(lazy(() => import('pages/imformes/informe3')));
@@ -31,7 +33,8 @@ const Profile = Loadable(lazy(() => import('pages/user/user')));
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
 const Prestar_admin = Loadable(lazy(() => import('pages/prestamo/admin_prestamo')));
-
+const Correo = Loadable(lazy(() => import('pages/email/correos')));
+const Comentarios = Loadable(lazy(() => import('pages/email/comentarios')));
 
 const decodeToken = (token) => {
   try {
@@ -74,6 +77,10 @@ const AuthRoutes = [
     path: 'register',
     element: <AuthRegister />,
   },
+  {
+    path: 'Cambio',
+    element: <Cambio />,
+  }
 ];
 
 const Routes = () => {
@@ -106,12 +113,20 @@ const Routes = () => {
           element: <Prestar />,
         },
         {
+          path: 'Prestamos',
+          element: <Prestamos />,
+        },
+        {
           path: 'Sancion',
           element: <Sancion />,
         },
         {
           path: 'Profile',
           element: <Profile />,
+        },
+        {
+          path: 'Correo',
+          element: <Correo />,
         }
       ],
     };
@@ -163,6 +178,10 @@ const Routes = () => {
         {
           path: 'Crear_sanciones',
           element: <Crear_sanciones />,
+        },
+        {
+          path: 'comentarios',
+          element: <Comentarios />,
         },
         {
           path: 'dashboard',
@@ -218,7 +237,13 @@ const Routes = () => {
     children: [...authRoutes, dashboardRoutes].filter(Boolean),
   };
 
-  return useRoutes([combinedRoutes]);
+  return useRoutes([
+    combinedRoutes,
+    {
+      path: '*',
+      element: <Navigate to="/" />,
+    },
+  ]);
 };
 
 export default Routes;

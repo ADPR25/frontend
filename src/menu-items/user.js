@@ -10,6 +10,7 @@ const icons = {
 
 const user = {
     id: 'user',
+    title: 'User',
     type: 'group',
     children: [
         {

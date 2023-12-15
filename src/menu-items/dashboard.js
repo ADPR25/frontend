@@ -6,12 +6,11 @@ const icons = {
 
 const dashboard = {
   id: 'group-dashboard',
-  title: 'Informacion',
   type: 'group',
   children: [
     {
       id: 'dashboard',
-      title: 'Dashboard',
+      title: 'Inincio',
       type: 'item',
       url: '/dashboard/default',
       icon: icons.DashboardOutlined,

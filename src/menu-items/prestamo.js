@@ -21,6 +21,13 @@ const LPrestamo2 = {
             url: '/Prestar',
             icon: icons.CalendarOutlined
         },
+        {
+            id: 'M_prestamos',
+            title: 'Mi Prestamo',
+            type: 'item',
+            url: '/Prestamos',
+            icon: icons.CalendarOutlined
+        },
     ],
 };
 

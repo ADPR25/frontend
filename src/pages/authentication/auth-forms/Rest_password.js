@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { activacion } from '../../../api/recuperacion.ts';
 import {
     Grid,
@@ -9,8 +10,9 @@ import {
 } from '@mui/material';
 
 const Restablecer = () => {
+    const navigate = useNavigate();
     const [activa, setActiva] = useState({
-        correo: '', 
+        correo: '',
     });
 
     const handleChange = (e) => {
@@ -21,20 +23,26 @@ const Restablecer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const correo = activa.correo; 
+            const correo = activa.correo;
             const response = await activacion({ correo });
 
-            if (response.status === 201) {
+            if (response.status === 202) {
                 setActiva({
                     correo: '',
                 });
+                console.log('Correo enviado. Redirigiendo...');
             } else {
-                console.error('Error occurred');
+                console.log('Respuesta inesperada:', response);
+            }
+            if (response.statusCode === 202) {
+                navigate('/Cambio'); 
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error en el envío del formulario:', error);
         }
     };
+
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -46,9 +54,9 @@ const Restablecer = () => {
                             <OutlinedInput
                                 id="correo"
                                 type="email"
-                                name="correo" 
+                                name="correo"
                                 fullWidth
-                                value={activa.correo} 
+                                value={activa.correo}
                                 onChange={handleChange}
                                 required
                             />
