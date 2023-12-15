@@ -1,5 +1,3 @@
-// CombinedRoutes.js
-
 import React from 'react';
 import { useRoutes, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
