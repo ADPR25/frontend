@@ -151,6 +151,28 @@ const AuthRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const isRoleInstructor = usuario.rol === '65373e1f6c11b0f186ccef08'; // ID of the "Instructor" role
+
+    const userData = {
+      nombres: usuario.nombres,
+      apellidos: usuario.apellidos,
+      eps: usuario.eps,
+      genero: usuario.genero,
+      tipo_doc: usuario.tipo_doc,
+      n_doc: usuario.n_doc,
+      correo_inst: usuario.correo_inst,
+      fecha_nacimiento: usuario.nacimiento,
+      correo_pers: usuario.correo_pers,
+      rol: usuario.rol,
+      telefono: usuario.telefono,
+      rh: usuario.rh,
+      direccion: usuario.direccion,
+    };
+
+    if (!isRoleInstructor) {
+      userData.ficha = usuario.ficha;
+    }
+
     if (!isEmailValid(usuario.correo_inst)) {
       setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
       return;
@@ -165,24 +187,10 @@ const AuthRegister = () => {
       setPasswordError('');
     }
 
-
     try {
       const response = await createUsuarioRequest({
-        nombres: usuario.nombres,
-        apellidos: usuario.apellidos,
-        eps: usuario.eps,
-        genero: usuario.genero,
-        tipo_doc: usuario.tipo_doc,
-        n_doc: usuario.n_doc,
-        correo_inst: usuario.correo_inst,
-        fecha_nacimiento: usuario.nacimiento,
-        correo_pers: usuario.correo_pers,
-        rol: usuario.rol,
-        telefono: usuario.telefono,
-        ficha: usuario.ficha,
+        ...userData,
         contrasena: usuario.contrasena,
-        rh: usuario.rh,
-        direccion: usuario.direccion,
         pps: true,
         activacion: false,
       });
@@ -214,9 +222,7 @@ const AuthRegister = () => {
       console.error('Error al crear usuario:', error);
     }
   };
-
   const handleEmailBlur = () => {
-    // Verificar si el correo es válido
     if (!isEmailValid(usuario.correo_inst)) {
       setEmailError('Correo no válido. Utilice una dirección de correo permitida.');
     } else {
@@ -421,9 +427,11 @@ const AuthRegister = () => {
                 onChange={handleChange}
               >
                 {rolData.map((option) => (
-                  <MenuItem key={`rol-option-${option._id}`} value={option._id}>
-                    {option.nombre}
-                  </MenuItem>
+                  option.nombre !== 'Administrador' && (
+                    <MenuItem key={`rol-option-${option._id}`} value={option._id}>
+                      {option.nombre}
+                    </MenuItem>
+                  )
                 ))}
               </Select>
             </Stack>
