@@ -10,12 +10,16 @@ import {
     Stack,
     InputLabel,
     OutlinedInput,
-    Button,
+    Button
 } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
 import { crearjornada, eliminar_jornada, obtenerjornada } from '../../api/jornada.ts';
+import EditarJornadaModal from './editar_jornada_modal.js';
+import { EditOutlined } from '@mui/icons-material';
 
 const Jornada = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [jornadaSeleccionado, setjornadaSeleccionado] = useState(null);
     const [jornadas, setJornadas] = useState([]);
     const [nuevaJornada, setNuevaJornada] = useState({
         nombre: '',
@@ -53,6 +57,10 @@ const Jornada = () => {
         eliminar_jornada(id)
             .then(() => cargarJornadas())
             .catch(error => console.error('Error al eliminar jornada:', error));
+    };
+    const handleEditarjornada = (jornada) => {
+        setjornadaSeleccionado(jornada);
+        setModalOpen(true);
     };
 
     return (
@@ -95,6 +103,7 @@ const Jornada = () => {
                             <TableCell></TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Eliminar</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -107,11 +116,22 @@ const Jornada = () => {
                                         <DeleteOutline />
                                     </IconButton>
                                 </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEditarjornada(jornada)}>
+                                        <EditOutlined />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarJornadaModal
+                eps={jornadaSeleccionado}
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onejornadaActualizado={() => obtenerjornada().then((data) => setJornadas(data))}
+            />
         </>
     );
 };

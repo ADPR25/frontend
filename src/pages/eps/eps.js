@@ -14,10 +14,14 @@ import {
 } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
 import { obtenerEPS } from '../../api/obtenerEps.ts'; // Importa las funciones necesarias desde tu archivo de API
-import {  creareps, eliminar_eps } from '../../api/eps.ts'; // Importa las funciones necesarias desde tu archivo de API
+import { creareps, eliminar_eps } from '../../api/eps.ts';// Importa las funciones necesarias desde tu archivo de API
+import EditarEpsModal from './editar_eps_modal.js';
+import { EditOutlined } from '@mui/icons-material';
 
 
 const EPS = () => {
+    const [epsSeleccionado, setepsSeleccionado] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
     const [eps, setEps] = useState([]);
     const [nuevaEps, setNuevaEps] = useState({
         nombre: '',
@@ -42,7 +46,7 @@ const EPS = () => {
         creareps(nuevaEps)
             .then(response => {
                 if (response.error) {
-                    throw new Error(response.error); 
+                    throw new Error(response.error);
                 }
                 setNuevaEps({ nombre: '' });
                 cargarEps();
@@ -55,6 +59,10 @@ const EPS = () => {
         eliminar_eps(id)
             .then(() => cargarEps())
             .catch(error => console.error('Error al eliminar EPS:', error));
+    };
+    const handleEditarEps = (eps) => {
+        setepsSeleccionado(eps);
+        setModalOpen(true);
     };
 
     return (
@@ -110,11 +118,22 @@ const EPS = () => {
                                         <DeleteOutline />
                                     </IconButton>
                                 </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEditarEps(eps)}>
+                                        <EditOutlined />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarEpsModal
+                eps={epsSeleccionado}
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onepsActualizado={() => obtenerEPS().then((data) => seteps(data))}
+            />
         </>
     );
 };

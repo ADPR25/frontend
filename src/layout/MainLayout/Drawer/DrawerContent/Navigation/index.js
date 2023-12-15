@@ -6,13 +6,11 @@ import { Typography, Box } from '@mui/material';
 const obtenerRolDelToken = () => {
   const token = localStorage.getItem('token');
 
-  console.log('Token:', token);
 
   let usuario = '';
 
   try {
     const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
-    console.log('Token Data:', tokenData);
     usuario = tokenData.rol || ''; // Aquí cambia de tokenData.rol?.nombre a tokenData.rol
   } catch (error) {
     console.error('Error al parsear el token:', error);

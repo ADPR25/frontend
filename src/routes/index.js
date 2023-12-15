@@ -27,7 +27,7 @@ const EstadoImplemento = Loadable(lazy(() => import('pages/estado_implemento/est
 const MARCA = Loadable(lazy(() => import('pages/marca/Marca')));
 const DOMINIO = Loadable(lazy(() => import('pages/dominio/Dominio')));
 const Sancion = Loadable(lazy(() => import('pages/sanciones/sancion')));
-
+const Profile = Loadable(lazy(() => import('pages/user/user')));
 const Imagenes = Loadable(lazy(() => import('pages/imagen/imagen')));
 const Rol = Loadable(lazy(() => import('pages/roles/rol')));
 const Prestar_admin = Loadable(lazy(() => import('pages/prestamo/admin_prestamo')));
@@ -108,6 +108,10 @@ const Routes = () => {
         {
           path: 'Sancion',
           element: <Sancion />,
+        },
+        {
+          path: 'Profile',
+          element: <Profile />,
         }
       ],
     };
@@ -201,6 +205,10 @@ const Routes = () => {
           path: 'Prestar',
           element: <Prestar />,
         },
+        {
+          path: 'Profile',
+          element: <Profile />,
+        }
       ],
     };
   }

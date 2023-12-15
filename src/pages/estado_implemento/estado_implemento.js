@@ -12,19 +12,22 @@ import {
     OutlinedInput,
     Button,
 } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { crearestadoImplemento, eliminar_estadoImplemento, obtenerestadoImplemento } from '../../api/estadoImplemento.ts';
+import EditarEstadoImplementoModal from './editar.js';
 
-const EstadoImplemento= () => {
-    const [estadoImplemento, setestadoImplemento] = useState([]);
-    const [nuevaestadoImplemento, setNuevaestadoImplemento] = useState({
+const EstadoImplemento = () => {
+    const [estadoImplemento, setEstadoImplemento] = useState([]);
+    const [nuevaEstadoImplemento, setNuevaEstadoImplemento] = useState({
         estado: '',
     });
+    const [modalOpen, setModalOpen] = useState(false);
+    const [estadoImplementoSeleccionado, setEstadoImplementoSeleccionado] = useState(null);
 
     const cargarestadoImplemento = () => {
         obtenerestadoImplemento()
-            .then(data => setestadoImplemento(data))
-            .catch(error => console.error('Error al obtener jornada:', error));
+            .then(data => setEstadoImplemento(data))
+            .catch(error => console.error('Error al obtener estado implemento:', error));
     };
 
     useEffect(() => {
@@ -33,16 +36,16 @@ const EstadoImplemento= () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setNuevaestadoImplemento({ ...nuevaestadoImplemento, [name]: value });
+        setNuevaEstadoImplemento({ ...nuevaEstadoImplemento, [name]: value });
     };
 
     const handleCrearestadoImplemento = () => {
-        crearestadoImplemento(nuevaestadoImplemento)
+        crearestadoImplemento(nuevaEstadoImplemento)
             .then(response => {
                 if (response.error) {
                     throw new Error(response.error);
                 }
-                setNuevaestadoImplemento({ codigo: '' });
+                setNuevaEstadoImplemento({ estado: '' });
                 cargarestadoImplemento();
                 window.location.reload();
             })
@@ -55,11 +58,25 @@ const EstadoImplemento= () => {
             .catch(error => console.error('Error al eliminar estado implemento:', error));
     };
 
+    const handleEditarEstadoImplemento = (estadoImplemento) => {
+        setEstadoImplementoSeleccionado(estadoImplemento);
+        setModalOpen(true);
+    };
+
+    const handleCerrarModal = () => {
+        setModalOpen(false);
+    };
+
+    const handleEstadoImplementoActualizado = () => {
+        cargarestadoImplemento();
+        handleCerrarModal();
+    };
+
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                    <center><h2>Crear estado formacion </h2></center>
+                    <center><h2>Crear estado formacion</h2></center>
                     <br />
                     <br />
                     <Grid item xs={12} md={12}>
@@ -69,7 +86,7 @@ const EstadoImplemento= () => {
                                 id="estado"
                                 type="text"
                                 name="estado"
-                                value={nuevaestadoImplemento.estado}
+                                value={nuevaEstadoImplemento.estado}
                                 onChange={handleChange}
                                 required
                             />
@@ -80,7 +97,7 @@ const EstadoImplemento= () => {
                     <Grid item xs={12} md={12}>
                         <center>
                             <Button variant="contained" color="primary" onClick={handleCrearestadoImplemento}>
-                                Crear jornada
+                                Crear estado
                             </Button>
                         </center>
                     </Grid>
@@ -95,17 +112,22 @@ const EstadoImplemento= () => {
                             <TableCell></TableCell>
                             <TableCell>Estado</TableCell>
                             <TableCell>Eliminar</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {estadoImplemento.map((estadoImplemento) => (
-                            <TableRow key={estadoImplemento._id}>
+                        {estadoImplemento.map((estadoImplementoItem) => (
+                            <TableRow key={estadoImplementoItem._id}>
                                 <TableCell></TableCell>
-                                <TableCell>{estadoImplemento.estado}</TableCell>
+                                <TableCell>{estadoImplementoItem.estado}</TableCell>
                                 <TableCell>
-                                    {/* Fix the typo here, change 'jornada' to 'estadoImplemento' */}
-                                    <IconButton onClick={() => handleEliminarestadoImplemento(estadoImplemento._id)}>
+                                    <IconButton onClick={() => handleEliminarestadoImplemento(estadoImplementoItem._id)}>
                                         <DeleteOutline />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEditarEstadoImplemento(estadoImplementoItem)}>
+                                        <EditOutlined />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -113,6 +135,12 @@ const EstadoImplemento= () => {
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarEstadoImplementoModal
+                estadoImplemento={estadoImplementoSeleccionado}
+                open={modalOpen}
+                onClose={handleCerrarModal}
+                onEstadoImplementoActualizado={handleEstadoImplementoActualizado}
+            />
         </>
     );
 };

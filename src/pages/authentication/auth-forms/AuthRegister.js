@@ -17,14 +17,16 @@ import AutoCompleteInput from '../../../components/autocomplete';
 import { obtenerEPS } from '../../../api/obtenerEps.ts';
 import { obtenerRol } from '../../../api/obtenerRol.ts';
 import { obtenerFichas } from '../../../api/obtenerFichas.ts';
-
-// Importa la función para crear usuarios
+import { obtenerdominio } from '../../../api/dominio.ts';
 import { createUsuarioRequest } from '../../../api/usuario.ts';
 
 const AuthRegister = () => {
   const [epsData, setEpsData] = useState([]);
   const [fichaData, setFichaData] = useState([]);
   const [rolData, setRolData] = useState([]);
+  const [dominioData, setDominioData] = useState([]);
+  const [emailRegex, setEmailRegex] = useState(/your-default-email-regex/); // Replace with your actual default regex
+
   const [usuario, setUsuario] = useState({
     nombres: '',
     apellidos: '',
@@ -38,7 +40,7 @@ const AuthRegister = () => {
     rol: 'Seleccione',
     contrasena: '',
     telefono: '',
-    ficha: '', // Valor predeterminado establecido como vacío
+    ficha: '',
     rh: 'Seleccione',
     direccion: '',
   });
@@ -52,6 +54,22 @@ const AuthRegister = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordError2, setPasswordError2] = useState('');
+
+  useEffect(() => {
+    async function fetchDominioData() {
+      try {
+        const dominios = await obtenerdominio();
+        const domainRegexPattern = dominios.map(domain => domain.nombre).join('|');
+        const updatedEmailRegex = new RegExp(`^(?=.*[a-zA-Z0-9._%+-]+@(${domainRegexPattern}))`);
+        setEmailRegex(updatedEmailRegex);
+        setDominioData(dominios);
+      } catch (error) {
+        console.error('Error al cargar los datos de dominio:', error);
+      }
+    }
+
+    fetchDominioData();
+  }, []);
 
   useEffect(() => {
     async function fetchRolData() {
@@ -114,9 +132,21 @@ const AuthRegister = () => {
   };
 
   const isEmailValid = (email) => {
-    const emailRegex = /@soy\.sena\.edu\.co$|@sena\.edu\.co$|@misena\.edu\.co$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email) || dominioData.some(domain => email.endsWith(domain.nombre));
   };
+
+  useEffect(() => {
+    async function fetchDominioData() {
+      try {
+        const dominios = await obtenerdominio();
+        setDominioData(dominios);
+      } catch (error) {
+        console.error('Error al cargar los datos de dominio:', error);
+      }
+    }
+
+    fetchDominioData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
