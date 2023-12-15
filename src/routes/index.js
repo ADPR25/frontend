@@ -235,13 +235,7 @@ const Routes = () => {
     children: [...authRoutes, dashboardRoutes].filter(Boolean),
   };
 
-  return useRoutes([
-    combinedRoutes,
-    {
-      path: '*',
-      element: <Navigate to="/" />,
-    },
-  ]);
+  return useRoutes([combinedRoutes]);
 };
 
 export default Routes;

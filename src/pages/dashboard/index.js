@@ -5,16 +5,16 @@ import { styled } from '@mui/system';
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   textAlign: 'center',
-  height: '100%', // Ocupa toda la altura del contenedor padre
+  height: '100%',
 }));
 
 const StyledWelcomeText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Roboto',
+  fontFamily: 'Cedarville Cursive', // Cambiado a Cedarville Cursive
   fontWeight: 'bold',
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(2),
   [theme.breakpoints.down('sm')]: {
-    fontSize: '2rem', // Ajusta el tamaño de letra para tamaños de pantalla pequeños
+    fontSize: '2rem',
   },
 }));
 
@@ -36,3 +36,4 @@ const DashboardDefault = () => {
 };
 
 export default DashboardDefault;
+
