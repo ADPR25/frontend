@@ -12,15 +12,17 @@ import {
     OutlinedInput,
     Button,
 } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, Edit } from '@mui/icons-material';
 import { creardominio, eliminar_dominio, obtenerdominio } from '../../api/dominio.ts';
+import EditarDominioModal from './modal.js';
 
 const DOMINIO = () => {
-
     const [dominio, setDominio] = useState([]);
     const [nuevadominio, setNuevadominio] = useState({
         nombre: '',
     });
+    const [modalOpen, setModalOpen] = useState(false);
+    const [dominioSeleccionado, setDominioSeleccionado] = useState(null);
 
     const cargardominio = () => {
         obtenerdominio()
@@ -48,12 +50,31 @@ const DOMINIO = () => {
                 window.location.reload();
             })
             .catch(error => console.error('Error al crear dominio:', error.message));
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
 
     const handleEliminardominio = (id) => {
         eliminar_dominio(id)
             .then(() => cargardominio())
             .catch(error => console.error('Error al eliminar dominio:', error));
+    };
+
+    const handleAbrirModal = (dominio) => {
+        setDominioSeleccionado(dominio);
+        setModalOpen(true);
+    };
+
+    const handleCerrarModal = () => {
+        setDominioSeleccionado(null);
+        setModalOpen(false);
+    };
+
+    const handleGuardarEdicion = (dominioActualizado) => {
+        const dominioActualizadoLista = dominio.map(d => (d._id === dominioActualizado._id ? dominioActualizado : d));
+        setDominio(dominioActualizadoLista);
+        handleCerrarModal();
     };
 
     return (
@@ -93,19 +114,23 @@ const DOMINIO = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell></TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Eliminar</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {dominio.map((dominio) => (
                             <TableRow key={dominio._id}>
-                                <TableCell></TableCell>
                                 <TableCell>{dominio.nombre}</TableCell>
                                 <TableCell>
                                     <IconButton onClick={() => handleEliminardominio(dominio._id)}>
                                         <DeleteOutline />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleAbrirModal(dominio)}>
+                                        <Edit />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -113,6 +138,12 @@ const DOMINIO = () => {
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarDominioModal
+                dominio={dominioSeleccionado}
+                open={modalOpen}
+                onClose={handleCerrarModal}
+                onDominioActualizado={handleGuardarEdicion}
+            />
         </>
     );
 };

@@ -8,21 +8,26 @@ export const eliminar_eps = (id) =>
         },
     });
 
-export const actualizareps = (epsId, epsEditada) => {
-    return fetch(`${API}/${epsId}`, {
-        method: 'PUT', // Utiliza el método HTTP PUT para actualizar el rol
-        body: JSON.stringify(epsEditada),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al actualizar el rol: ${response.status}`);
-            }
-            return response.json();
-        });
-};
+const api2 ='https://proyecto-backend-sgbienestar.onrender.com/eps/eps'
+    export const actualizareps = (epsId, epsEditada) => {
+        return fetch(`${api2}/${epsId}`, {
+            method: 'PUT',
+            body: JSON.stringify(epsEditada),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error al actualizar el rol: ${response.status} - ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error updating EPS:', error);
+                throw error;
+            });
+    };
 
 
 

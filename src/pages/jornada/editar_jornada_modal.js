@@ -25,26 +25,24 @@ const EditarJornadaModal = ({ jornada, open, onClose, onJornadaActualizado }) =>
         const { value } = e.target;
         setNombre(value);
     };
-    
 
-    const handleGuardar = () => {
-        if (jornada && jornada._id) {
-            const jornadaEditado = {
-                nombre,
-            };
-            actualizarjornada(jornada._id, jornadaEditado)
-                .then(() => {
-                    console.log('Nombre del jornada editado con éxito');
-                    onJornadaActualizado(); // Call the prop function here
-                    onClose();
-                })
-                .catch((error) => console.error(error));
+    const handleGuardar = async () => {
+        try {
+            if (jornada?._id) {
+                const response = await actualizarjornada(jornada._id, { nombre });
+                console.log('Response from actualizarjornada:', response);
+                onJornadaActualizado();
+                onClose();
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>Editar Jornada </DialogTitle>
+            <DialogTitle>Editar Jornada</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

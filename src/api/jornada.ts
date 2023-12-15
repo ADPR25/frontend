@@ -8,21 +8,32 @@ export const eliminar_jornada = (id) =>
         },
     });
 
-export const actualizarjornada = (jornadaId, jornadaEditada) => {
-    return fetch(`${API}/${jornadaId}`, {
-        method: 'PUT', // Utiliza el método HTTP PUT para actualizar el rol
-        body: JSON.stringify(jornadaEditada),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al actualizar el jornada: ${response.status}`);
-            }
-            return response.json();
+
+    
+export const actualizarjornada = async (jornadaId, { nombre }) => {
+    try {
+        const response = await fetch(`${API}/${jornadaId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nombre }),
         });
+
+        if (!response.ok) {
+            throw new Error(`Error updating jornada: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Updated jornada:', data);
+
+        return data;
+    } catch (error) {
+        console.error('Error updating jornada:', error.message);
+        throw error;
+    }
 };
+
 
 
 

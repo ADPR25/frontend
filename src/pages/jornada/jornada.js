@@ -51,6 +51,10 @@ const Jornada = () => {
                 window.location.reload();
             })
             .catch(error => console.error('Error al crear jornada:', error.message));
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
 
     const handleEliminarJornada = (id) => {
@@ -58,6 +62,7 @@ const Jornada = () => {
             .then(() => cargarJornadas())
             .catch(error => console.error('Error al eliminar jornada:', error));
     };
+
     const handleEditarjornada = (jornada) => {
         setjornadaSeleccionado(jornada);
         setModalOpen(true);
@@ -127,11 +132,12 @@ const Jornada = () => {
                 </Table>
             </Grid>
             <EditarJornadaModal
-                eps={jornadaSeleccionado}
+                jornada={jornadaSeleccionado}
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                onejornadaActualizado={() => obtenerjornada().then((data) => setJornadas(data))}
+                onJornadaActualizado={() => obtenerjornada().then((data) => setJornadas(data))}
             />
+
         </>
     );
 };

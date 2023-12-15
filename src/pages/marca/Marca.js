@@ -1,3 +1,4 @@
+// MARCA.js
 import React, { useState, useEffect } from 'react';
 import {
     Grid,
@@ -12,54 +13,64 @@ import {
     OutlinedInput,
     Button,
 } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { crearmarca, eliminar_marca, obtenermarca } from '../../api/marca.ts';
+import EditarMarcaModal from './modal.js'; // Adjust the path accordingly
 
 const MARCA = () => {
-    const [marca, setmarca] = useState([]);
-    const [nuevamarca, setNuevamarca] = useState({
+    const [marca, setMarca] = useState([]);
+    const [nuevaMarca, setNuevaMarca] = useState({
         nombre: '',
     });
+    const [modalOpen, setModalOpen] = useState(false);
+    const [marcaSeleccionada, setMarcaSeleccionada] = useState(null);
 
-    const cargarmarca = () => {
+    const cargarMarca = () => {
         obtenermarca()
-            .then(data => setmarca(data))
-            .catch(error => console.error('Error al obtener marca:', error));
+            .then((data) => setMarca(data))
+            .catch((error) => console.error('Error al obtener marca:', error));
     };
 
     useEffect(() => {
-        cargarmarca();
+        cargarMarca();
     }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setNuevamarca({ ...nuevamarca, [name]: value });
+        setNuevaMarca({ ...nuevaMarca, [name]: value });
     };
 
-    const handleCrearmarca = () => {
-        crearmarca(nuevamarca)
-            .then(response => {
+    const handleCrearMarca = () => {
+        crearmarca(nuevaMarca)
+            .then((response) => {
                 if (response.error) {
                     throw new Error(response.error);
                 }
-                setNuevamarca({ nombre: '' });
-                cargarmarca();
+                setNuevaMarca({ nombre: '' });
+                cargarMarca();
                 window.location.reload();
             })
-            .catch(error => console.error('Error al crear marca:', error.message));
+            .catch((error) => console.error('Error al crear marca:', error.message));
     };
 
-    const handleEliminarmarca = (id) => {
+    const handleEliminarMarca = (id) => {
         eliminar_marca(id)
-            .then(() => cargarmarca())
-            .catch(error => console.error('Error al eliminar marca:', error));
+            .then(() => cargarMarca())
+            .catch((error) => console.error('Error al eliminar marca:', error));
+    };
+
+    const handleEditarMarca = (marca) => {
+        setMarcaSeleccionada(marca);
+        setModalOpen(true);
     };
 
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                    <center><h2>Crear marca </h2></center>
+                    <center>
+                        <h2>Crear marca </h2>
+                    </center>
                     <br />
                     <br />
                     <Grid item xs={12} md={12}>
@@ -69,7 +80,7 @@ const MARCA = () => {
                                 id="nombre"
                                 type="text"
                                 name="nombre"
-                                value={nuevamarca.nombre}
+                                value={nuevaMarca.nombre}
                                 onChange={handleChange}
                                 required
                             />
@@ -79,7 +90,7 @@ const MARCA = () => {
                     <br />
                     <Grid item xs={12} md={12}>
                         <center>
-                            <Button variant="contained" color="primary" onClick={handleCrearmarca}>
+                            <Button variant="contained" color="primary" onClick={handleCrearMarca}>
                                 Crear marca
                             </Button>
                         </center>
@@ -95,6 +106,7 @@ const MARCA = () => {
                             <TableCell></TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Eliminar</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -103,8 +115,13 @@ const MARCA = () => {
                                 <TableCell></TableCell>
                                 <TableCell>{marca.nombre}</TableCell>
                                 <TableCell>
-                                    <IconButton onClick={() => handleEliminarmarca(marca._id)}>
+                                    <IconButton onClick={() => handleEliminarMarca(marca._id)}>
                                         <DeleteOutline />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEditarMarca(marca)}>
+                                        <EditOutlined />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -112,6 +129,12 @@ const MARCA = () => {
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarMarcaModal
+                marca={marcaSeleccionada}
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onMarcaActualizado={() => cargarMarca()}
+            />
         </>
     );
 };

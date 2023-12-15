@@ -1,3 +1,4 @@
+// EditarMarcaModal.js
 import React, { useState, useEffect } from 'react';
 import {
     Dialog,
@@ -10,43 +11,39 @@ import {
     InputLabel,
     OutlinedInput,
 } from '@mui/material';
-import { actualizareps } from '../../api/eps.ts';
+import { actualizarMarca } from '../../api/marca.ts';
 
-const EditarEpsModal = ({ eps, open, onClose, onEpsActualizado }) => {
+const EditarMarcaModal = ({ marca, open, onClose, }) => {
     const [nombre, setNombre] = useState('');
 
     useEffect(() => {
-        if (eps) {
-            setNombre(eps.nombre || '');
+        if (marca) {
+            setNombre(marca.nombre || '');
         }
-    }, [eps]);
+    }, [marca]);
 
-    const handleChange = (e) => {
-        const { value } = e.target;
-        setNombre(value);
-    };
 
     const handleGuardar = () => {
-        if (eps && eps._id) {
-            const epsEditado = {
-                nombre,
-            };
-            actualizareps(eps._id, epsEditado)
-                .then(() => {
-                    console.log('Nombre del eps editado con éxito');
-                    onEpsActualizado(); 
-                    onClose();
-                })
-                .catch((error) => console.error(error));
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        }
+        const marcaActualizada = {
+            nombre: nombre,
+        };
+        actualizarMarca(marca._id, marcaActualizada)
+            .then((data) => {
+                onClose();
+                onMarcaActualizada(data);
+            })
+            .catch((error) => {
+               console.error('Error al actualizar la marca', error);
+            });
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>Editar Eps</DialogTitle>
+            <DialogTitle>Editar Marca</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -57,7 +54,7 @@ const EditarEpsModal = ({ eps, open, onClose, onEpsActualizado }) => {
                                 name="nombre"
                                 fullWidth
                                 value={nombre}
-                                onChange={handleChange}
+                                onChange={(e) => setNombre(e.target.value)}
                                 required
                             />
                         </Stack>
@@ -74,4 +71,4 @@ const EditarEpsModal = ({ eps, open, onClose, onEpsActualizado }) => {
     );
 };
 
-export default EditarEpsModal;
+export default EditarMarcaModal;

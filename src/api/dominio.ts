@@ -6,13 +6,20 @@ export const eliminar_dominio = (id) => {
         headers: {
             'Content-Type': 'application/json',
         },
-    });
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al eliminar el dominio: ${response.status}`);
+            }
+            return response.json();
+        });
 };
 
-export const actualizardominio = (dominioId, dominioEditada) => {
-    return fetch(`${API}/${dominioId}`, {
+const api0 = 'https://proyecto-backend-sgbienestar.onrender.com/dominio-sena/actualizar'
+export const actualizardominio = (dominioId, nuevoDominio) => {
+    return fetch(`${api0}/${dominioId}`, {
         method: 'PUT',
-        body: JSON.stringify(dominioEditada),
+        body: JSON.stringify(nuevoDominio),
         headers: {
             'Content-Type': 'application/json',
         },

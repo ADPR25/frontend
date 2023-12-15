@@ -43,3 +43,29 @@ export async function obtenermarca() {
         throw new Error(`Error al obtener EPS: ${error.message}`);
     }
 }
+
+
+
+const API2 = 'https://proyecto-backend-sgbienestar.onrender.com/marca/update';
+
+export const actualizarMarca = (id, nombre) => {
+    const url = `${API2}/${id}`;
+
+    return fetch(url, {
+        method: 'PUT', // Puedes usar 'PATCH' si solo necesitas actualizar ciertos campos
+        body: JSON.stringify(nombre),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al actualizar la marca');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            throw new Error(`Error al actualizar marca: ${error.message}`);
+        });
+};
+

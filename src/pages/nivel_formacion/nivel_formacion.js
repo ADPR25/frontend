@@ -12,10 +12,13 @@ import {
     OutlinedInput,
     Button,
 } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { crearnivelFormacion, eliminar_nivelFormacion, obtenernivelFormacion } from '../../api/nivel_formacion.ts';
-
+import EditarNivelFormacionModal from './editar.js';
+ 
 const NivelFormacion = () => {
+    const [editarModalOpen, setEditarModalOpen] = useState(false);
+    const [nivelFormacionSeleccionado, setNivelFormacionSeleccionado] = useState(null);
     const [nivelFormacion, setnivelFormacion] = useState([]);
     const [nuevanivelFormacion, setNuevanivelFormacion] = useState({
         nombre: '',
@@ -34,6 +37,25 @@ const NivelFormacion = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNuevanivelFormacion({ ...nuevanivelFormacion, [name]: value });
+    };
+
+    const handleEditarModalOpen = (nivel) => {
+        setNivelFormacionSeleccionado(nivel);
+        setEditarModalOpen(true);
+    };
+
+    const handleEditarModalClose = () => {
+        setNivelFormacionSeleccionado(null);
+        setEditarModalOpen(false);
+    };
+
+    const handleUpdateNivelFormacion = (nivelFormacionId, nivelFormacionEditado) => {
+        actualizarnivelFormacion(nivelFormacionId, nivelFormacionEditado)
+            .then(() => {
+                cargarnivelFormacion();
+                handleEditarModalClose();
+            })
+            .catch((error) => console.error('Error al actualizar nivel de formación:', error));
     };
 
     const handleCrearnivelFormacion = () => {
@@ -95,6 +117,7 @@ const NivelFormacion = () => {
                             <TableCell></TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Eliminar</TableCell>
+                            <TableCell>Editar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -103,9 +126,13 @@ const NivelFormacion = () => {
                                 <TableCell></TableCell>
                                 <TableCell>{nivelFormacion.nombre}</TableCell>
                                 <TableCell>
-                                    {/* Fix the typo here, change 'jornada' to 'nivelFormacion' */}
                                     <IconButton onClick={() => handleEliminarnivelFormacion(nivelFormacion._id)}>
                                         <DeleteOutline />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEditarModalOpen(nivelFormacion)}>
+                                        <EditOutlined />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -113,6 +140,14 @@ const NivelFormacion = () => {
                     </TableBody>
                 </Table>
             </Grid>
+            <EditarNivelFormacionModal
+                isOpen={editarModalOpen}
+                onClose={() => {
+                    handleEditarModalClose();
+                }}
+                nivelFormacion={nivelFormacionSeleccionado}
+                onUpdateNivelFormacion={handleUpdateNivelFormacion}
+            />
         </>
     );
 };
